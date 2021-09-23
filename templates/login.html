@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>삐빅 출근입니다</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+
+
+
+    <style>
+ nav{
+    	font-size: 12pt;
+    	font-family: 'PT Sans', Arial, Sans-serif;
+    	position: relative;
+    }
+    nav ul{
+    	padding: 0;
+    	margin: 0 auto;
+    	width: auto;
+    }
+    nav li{
+    }
+    nav a{
+    	line-height: 50px;
+      height: 50px;
+    }
+    nav li a{
+    	box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+    	-webkit-box-sizing: border-box;
+    }
+    nav li:last-child a{
+    	border-right: 0;
+        }
+    nav a:hover, nav a:active{
+    }
+    nav a#pull{
+    	display: none;
+    }
+      html {
+      -webkit-touch-callout:none;
+      -webkit-user-select:none;
+      -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+      }
+
+      ul{
+        /*list-style-type: none;*/
+        margin: 0;
+        padding: 0;
+        background-color: #778899;
+        text-align: center;
+
+      }
+      li{
+        /*position: relative;*/
+        display: inline-block;
+      }
+      li a{
+        color: #FFFFFF;
+        text-align: center;
+        padding: 14.5px 16px;
+        text-decoration: none;
+      }
+      li a:hover{
+        /*color: #597812;*/
+        color: #FFD400;
+        font-weight:normal;
+      }
+      .menu {
+       width: 5000px;
+       height: 50px;
+       text-align: center;
+       max-width: 100%;
+       background-position: center;
+       background-size: cover;
+       background-color: #A9A9A9;color: white;
+       position: absolute;z-index: 1;
+     }
+      .dd{
+          float: left;
+      }
+
+        .bb{
+            padding-top: 41%;
+            text-align: center;
+        }
+
+.ee{
+    padding-left: 700px;
+}
+
+    </style>
+
+
+
+</head>
+
+<body>
+
+
+
+<header>
+    <div class="menu" >
+      <nav class="clearfix">
+        <ul class="clearfix">
+            <img src="/static/bus2.png" align="left" width="100"height="50" alt="삐출">
+            <div class="dd">
+          <li><a href="http://www._____.com">Home</a></li> <!--""<-여기 부분에 URL 작성하면 됨-->
+          <li><a href="http://www._____.com/About">Schedule</a></li>
+          <li><a href="http://www._____.com/Project">Notice board</a></li></div>
+           <li><a class="ee" id="kakao-login-btn"></a>
+	<button class="api-btn" onclick="unlinkApp()">로그아웃</button></li>
+
+
+      </ul>
+      <a id="pull" href="#"> </a>
+
+
+    </nav>
+
+    </div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+<div class="aa">
+	<a id="kakao-login-btn"></a>
+
+	<div id="result"></div>
+    </div>
+
+<script type="text/javascript">
+  function unlinkApp() {
+    Kakao.API.request({
+      url: '/v1/user/unlink',
+      success: function(res) {
+        alert('success: ' + JSON.stringify(res))
+      },
+      fail: function(err) {
+        alert('fail: ' + JSON.stringify(err))
+      },
+    })
+  }
+</script>
+
+<script type="text/javascript">
+Kakao.init('25f19b760cfbf7b3b5f35028d7e6f47e');
+console.log(Kakao.isInitialized());
+
+  Kakao.Auth.createLoginButton({
+    container: '#kakao-login-btn',
+    success: function(authObj) {
+      Kakao.API.request({
+        url: '/v2/user/me',
+        success: function(result) {
+          $('#result').append(result);
+          id = result.id
+          connected_at = result.connected_at
+          kakao_account = result.kakao_account
+          $('#result').append(kakao_account);
+          resultdiv="<h2>로그인 성공 !!"
+          resultdiv += '<h4>id: '+id+'<h4>'
+          resultdiv += '<h4>connected_at: '+connected_at+'<h4>'
+          email ="";
+          gender = "";
+          if(typeof kakao_account != 'undefined'){
+        	  email = kakao_account.email;
+        	  gender = kakao_account.gender;
+          }
+          resultdiv += '<h4>email: '+email+'<h4>'
+          resultdiv += '<h4>gender: '+gender+'<h4>'
+          $('#result').append(resultdiv);
+
+        },
+        fail: function(error) {
+          alert(
+            'login success, but failed to request user information: ' +
+              JSON.stringify(error)
+          )
+        },
+      })
+    },
+    fail: function(err) {
+      alert('failed to login: ' + JSON.stringify(err))
+    },
+  })
+</script>
+
+</body>
