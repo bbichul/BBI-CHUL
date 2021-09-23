@@ -14,9 +14,9 @@
 * 김성훈  
 * 최대환  
 
-### 📌 기술 선택 이유! - <a href="https://github.com/rayrayj92/triport/wiki/%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0" >상세보기 - WIKI 이동</a>
+### 📌 기술 선택 이유! - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0" >상세보기 - WIKI 이동</a>
 
-### 📌 주요 기능 - <a href="https://github.com/rayrayj92/triport/wiki/%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0" >상세보기 - WIKI 이동</a> 
+### 📌 주요 기능 - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C" >상세보기 - WIKI 이동</a> 
 1.체크인/아웃기능  
 * 체크인
 * 체크아웃
@@ -29,4 +29,4 @@
 * 크롤링으로 명언 가져오기
 * 랜덤으로 명언 보여주기 
 
-### 📌 문제를 이렇게 해결했어요! - <a href="https://github.com/rayrayj92/triport/wiki/%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0" >상세보기 - WIKI 이동</a> 
+### 📌 문제를 이렇게 해결했어요! - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85" >상세보기 - WIKI 이동</a> 
