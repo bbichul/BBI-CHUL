@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            color: #333;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        #weather_info {
+            position: relative;
+            padding: 10px;
+            margin: 0 auto;
+            width: 1000px;
+            height: 500px;
+            /*background-image: url("https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2");*/
+            background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;
+            /*background-size: cover;*/
+            /*background-position: center;*/
+            border: 1px solid #999;
+            color: #fff;
+        }
+
+        h1 {
+            padding: 10px;
+            font-size: 1.8em;
+            background: #666;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        section {
+            padding: 10px 20px;
+            overflow: hidden;
+            color: #fff;
+            text-shadow: 1px 1px 1px #999;
+        }
+
+        .w_id {
+            text-align: left;
+        }
+
+        .temp {
+            float: left;
+            width: 33.3333%;
+            font-size: 5em;
+        }
+
+        figure img {
+            width: 80px;
+        }
+
+        aside {
+            overflow: hidden;
+        }
+
+        aside p {
+            font-size: 1.8em;
+            text-align: right;
+        }
+
+        #load_img {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%);
+        }
+
+        .icon {
+            width: 20%;
+        }
+
+        .aa {
+            font-size: 20px;
+
+        }
+        .weather-clear{
+               background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA5MDVfMjE4%2FMDAxNjMwODA2MDgzNjAy.irYLZ_62XbpldvwXnQdNFBAHJWAN-Lh7ng62eb_fer0g.U5GsCOEY22Bz-IZ6QCDzsbiSqg0H3o2Tog8VAHpzdkog.JPEG.aa005002%2F2.jpg&type=sc960_832");
+        }
+        .weather-clouds{
+            background-image: url("https://www.wired.com/wiredenterprise/wp-content/uploads//2013/02/clouds.jpg");
+        }
+        .weather-rain{
+              background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20160611_224%2Fyang6390_1465656827870wjikE_JPEG%2FNa1465656639455.jpg&type=sc960_832");
+        }
+        .weather-snow{
+              background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20160229_87%2Fn016shi_1456715134411cyufd_JPEG%2Fimage.jpeg&type=sc960_832");
+        }
+
+
+    </style>
+</head>
+<body>
+<script>
+
+
+
+    function getWeather(lat, lon) {
+        fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=8bd97449cfbe6250092e849b78668814&units=metric`
+        )
+            .then(function (response) {
+                return response.json();
+
+            })
+            .then(function (json) {
+
+                console.log(json);
+                let $country = json.sys.country;
+                let $temp = json.main.temp;  //현재온도
+                let $place = json.name;   // 사용자 위치
+                let $humidity = json.main.humidity; //강수량
+                let $sky = json.weather[0].main;
+
+                let $temp_max = json.main.temp_max;//최고온도
+                let $temp_min = json.main.temp_min;//최저온도
+                let icon = json.weather[0].icon;//날씨아이콘
+                let $wId = json.weather[0].id; // 날씨 상태 id 코드
+                let $icon = 'http://openweathermap.org/img/w/' + icon
+
+
+                console.log($temp, $place, $humidity, $sky,$wId)
+
+                // $('.temptemp').append(temp + "°C");
+
+                $('.csky').append($sky);
+                $('.temp').append($temp + "°C");
+                $('.humidity').append($humidity + "%");
+                $('.place').append($place);
+                 $('.place').append('/'+$country);
+                $('.temp_max').append($temp_max + "°C");
+                $('.temp_min').append($temp_min + "°C");
+                $('.icon').append('<img src=" ' + $icon + '.png ">');
+
+
+
+
+            });
+    }
+
+
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    function handleGeoSucc(position) {
+        console.log(position);
+        const latitude = position.coords.latitude;  // 경도
+        const longitude = position.coords.longitude;  // 위도
+        const coordsObj = {
+            latitude,
+            longitude
+        }
+
+        getWeather(latitude, longitude);
+    }
+
+    function handleGeoErr(err) {
+        console.log("geo err! " + err);
+    };
+
+    navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
+
+
+    if(weather === 'clouds'){
+
+    }
+</script>
+<!--<div class="place">현위치: </div>-->
+<!--<div class="temp">현재온도: </div>-->
+<!--<div class="csky">하늘상태: </div>-->
+<!--<div class="humidity">강수량: </div>-->
+
+<div id="weather_info">
+    <h1 class="place"></h1>
+
+    <section>
+        <p  class="csky"></p>
+        <figure class="icon"></figure>
+        <p class="temp"></p>
+        <aside>
+            <div class="aa">
+                <p class="temp_max">최고기온:&nbsp</p>
+                <p class="temp_min">최저기온:&nbsp</p>
+            </div>
+        </aside>
+    </section>
+    <img src="https://www.vedantaresources.com/SiteAssets/Images/loading.gif" alt="" id="load_img">
+</div>
+
+</body>
+</html>
