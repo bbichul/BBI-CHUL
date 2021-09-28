@@ -12,7 +12,7 @@ def home():
     return render_template('calender.html')
 
 
-# 날짜 클릭 함수
+# 날짜 클릭 함수입니다.
 @app.route('/clickDay', methods=['POST'])
 def clickedDay():
     receive_clickDate = request.form['dateGive']
