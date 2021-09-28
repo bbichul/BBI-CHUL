@@ -28,12 +28,14 @@
 <style>
 
 	* {
+
         margin: 0;
             padding: 0;
         box-sizing: border-box;
 	}
   	body {
-		height: 500px;
+        width: 1900px;
+		height: 510px;
         /*background-color: #E0E0E0;*/
         text-align: center;
         background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
@@ -53,10 +55,14 @@
 
     .container {
         margin: auto;
-        width: 100%;
-
+          padding-top: 120px;
+        /*width: 100%;*/
+         position: center;
         display: inline-block;
         vertical-align: middle;
+
+
+
     }
 
     .checkin-box {
@@ -111,9 +117,11 @@
         #weather_info {
             position: relative;
             padding: 10px;
-            margin-left:  1200px;
-            width: 700px;
-            height: 400px;
+            margin-right:  1200px;
+            margin-bottom: 600px;
+
+            /*width: 700px;*/
+            /*height: 400px;*/
             /*background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;*/
 
             /*background-image: url("https://i.imgur.com/Xh7wwnB.jpg");*/
@@ -171,14 +179,30 @@
  }
         .csky{
             font-size: 20px;
-            margin-right: 500px;
+            margin-right: 540px;
         }
+         .wise{
+             font-size: 20px;
+             font-weight: bolder;
+         }
+         .place{
+
+         }
 
 </style>
 
 
 </head>
 <body>
+ <audio autoplay controls>
+    <source src="../static/fire.mp3" type="audio/mp3">
+     <source src="../static/night.mp3" type="audio/mp3">
+</audio>
+  <audio autoplay controls>
+    <source src="../static/night.mp3" type="audio/mp3">
+</audio>
+
+
 <script>
     const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
 let i = getRandomNumberOf(10);
@@ -416,6 +440,7 @@ function buttonEvt() {
 
                 // $('.temptemp').append(temp + "°C");
 
+
                 $('.csky').append($sky);
                 $('.temp').append($temp + "°C");
                 $('.humidity').append($humidity + "%");
@@ -459,14 +484,15 @@ function buttonEvt() {
 
 
 </script>
+
     <div class="helper"></div><div class="container">
     <div class="checkin-box">
         <div class="table">
-            <span id="wise-box">
+            <span class="wise" id="wise-box">
             </span>
         </div>
 
-     <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start.png" width="200" height="200">
+     <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start2.gif" width="300" height="180">
 
     </div>
     <div class="checkout-box">
@@ -480,7 +506,7 @@ function buttonEvt() {
 <!--                    <i id="stopbtn" class="fa fa-stop" aria-hidden="true"></i>-->
                 </div>
             </div>
-        <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/working.gif" width="200" height="200">
+        <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/study2.gif" width="300" height="200">
     </div>
     <div id="Clockday">00/00/00</div>
     <div class="Clock" id="Clock">00:00</div>
@@ -498,8 +524,10 @@ function buttonEvt() {
         <p class="temp"></p>
         <aside>
             <div class="aa">
+
                 <p class="temp_max">최고기온:&nbsp</p>
                 <p class="temp_min">최저기온:&nbsp</p>
+                <p class="humidity">강수량:&nbsp</p>
             </div>
         </aside>
     </section>
