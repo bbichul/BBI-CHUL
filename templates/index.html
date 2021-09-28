@@ -21,94 +21,91 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
     <script src="../static/wise.js"></script>
 
-<style>
+    <style>
 
-	* {
+        * {
 
-        margin: 0;
+            margin: 0;
             padding: 0;
-        box-sizing: border-box;
-	}
-  	body {
-        width: 1900px;
-		height: 510px;
-        /*background-color: #E0E0E0;*/
-        text-align: center;
-        background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
-        background-position: center;
-        background-size: cover;
- 	}
+            box-sizing: border-box;
+        }
 
-    .helper {
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
+        body {
+            width: 1900px;
+            height: 510px;
+            /*background-color: #E0E0E0;*/
+            text-align: center;
+            background-image: url("https://i.pinimg.com/originals/78/e5/8c/78e58cc44f3eb9f22a7df0a684d4e5ac.jpg");
+            background-position: center;
+            background-size: cover;
+            overflow: hidden;
+        }
 
-        /* 설명을 위해서 */
-        /*width: 10px;*/
-        /*background-color: red;*/
-    }
+        .helper {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
 
-    .container {
-        margin: auto;
-          padding-top: 120px;
-        /*width: 100%;*/
-         position: center;
-        display: inline-block;
-        vertical-align: middle;
+            /* 설명을 위해서 */
+            /*width: 10px;*/
+            /*background-color: red;*/
+        }
 
-
-
-    }
-
-    .checkin-box {
-        width: 500px;
-        margin: auto;
-    }
+        .container {
+            margin: auto;
+            padding-top: 120px;
+            /*width: 100%;*/
+            position: center;
+            display: inline-block;
+            vertical-align: middle;
 
 
-    .checkout-box {
-        width: 500px;
-        margin: auto;
-    }
+        }
 
-    /*.checkout-img:hover {*/
-    /*    background-image: url('/static/start.png');*/
-    /*    height: 200px;*/
-    /*    width: 200px;*/
+        .checkin-box {
+            width: 500px;
+            margin: auto;
 
-    /*}*/
+        }
 
 
-	.timerBox{
-		width: 100%;
-        margin: auto;
-		/*outline: 2px solid black;*/
-	}
-	.timerBox .time{
-		font-size: 30pt;
-		color: #4C4C4C;
-		text-align: center;
-		font-family: sans-serif;
-	}
-	.btnBox{
-		margin: 20px auto;
-		text-align: center;
-	}
-	.btnBox .fa{
-		margin: 0px 5px;
-		font-size: 30pt;
-		color: #FAED7D;
-		cursor: pointer;
-	}
+        .timerBox {
+            width: 100%;
+            margin: auto;
+            /*outline: 2px solid black;*/
 
-    .Clock {
-        font-size: 80px;
-    }
+        }
+
+        .timerBox .time {
+            font-size: 40pt;
+            color: white;
+            text-align: center;
+           font-family: cursive;;
+
+
+
+        }
+
+        .btnBox {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .btnBox .fa {
+            margin: 0px 5px;
+            font-size: 30pt;
+            color: #FAED7D;
+            cursor: pointer;
+        }
+
+        .Clock {
+            font-size: 80px;
+        }
 
         p {
             margin: 0 0 10px;
@@ -116,10 +113,10 @@
 
         #weather_info {
             position: relative;
+            left: 110px;
             padding: 10px;
-            margin-right:  1200px;
-            margin-bottom: 600px;
-
+            margin-right: 1200px;
+            /*margin-bottom: 600px;*/
             /*width: 700px;*/
             /*height: 400px;*/
             /*background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;*/
@@ -176,125 +173,225 @@
 
         .aa {
             font-size: 15px;
- }
-        .csky{
+        }
+
+        .csky {
             font-size: 20px;
             margin-right: 540px;
         }
-         .wise{
-             font-size: 20px;
-             font-weight: bolder;
-         }
-         .place{
 
-         }
+        .checkin-img {
+            position: relative;
+            left: 500px;
+            bottom: 200px;
+        }
+        .checkout-img{
+             position: relative;
+            left: 500px;
+            bottom: 200px;
 
-</style>
+        }
+
+        /*.checkout-box {*/
+        /*    width: 500px;*/
+        /*    margin: auto;*/
+        /*    position: relative;*/
+        /*    left: 500px;*/
+        /*    bottom: 100px;*/
+        /*}*/
+
+        .place {
+
+        }
+
+        .audio {
+            position: fixed;
+            right: 1180px;
+            bottom: 200px;
+            margin: auto;
+        }
+
+        .vl {
+            border-left: 6px solid gray;
+            height: 400px;
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            top: 0;
+        }
+
+        .day {
+            position: fixed;
+            right: 375px;
+            bottom: 800px;
+            margin: auto;
+            color: white;
+        }
+
+        .Clock {
+            position: fixed;
+            right: 320px;
+            bottom: 700px;
+            color: white;
+        }
+
+        .wise {
+            font-size: 15px;
+            font-weight: bolder;
+            position: relative;
+            right: 500px;
+            color: white;
+
+        }
+
+    </style>
 
 
 </head>
 <body>
- <audio autoplay controls>
-    <source src="../static/fire.mp3" type="audio/mp3">
-     <source src="../static/night.mp3" type="audio/mp3">
-</audio>
-  <audio autoplay controls>
-    <source src="../static/night.mp3" type="audio/mp3">
-</audio>
+
+<div class="vl"></div>
+
+<div id="weather_info">
+    <h1 class="place"></h1>
+
+    <section>
+        <p class="csky"></p>
+        <figure class="icon"></figure>
+        <p class="temp"></p>
+        <aside>
+            <div class="aa">
+
+                <p class="temp_max">최고기온:&nbsp</p>
+                <p class="temp_min">최저기온:&nbsp</p>
+                <p class="humidity">강수량:&nbsp</p>
+            </div>
+        </aside>
+    </section>
+
+</div>
+<div class="helper"></div>
+<div class="container">
+    <div>
+            <span class="wise" id="wise-box">
+            </span>
+    </div>
+    <div class="checkin-box">
+
+
+        <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start2.gif" width="400" height="300">
+
+    </div>
+    <div class="checkout-box">
+        <div id='box' class="timer">
+            <div id='timerBox' class="timerBox">
+                <div id="time" class="time">00:00:00초 동안 업무중</div>
+            </div>
+            <div class="btnBox">
+                <!--                    <i id="startbtn" class="fa fa-play" aria-hidden="true"></i>-->
+                <!--                    <i id="pausebtn" class="fa fa-pause" aria-hidden="true"></i>-->
+                <!--                    <i id="stopbtn" class="fa fa-stop" aria-hidden="true"></i>-->
+            </div>
+        </div>
+        <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/study2.gif" width="400" height="300">
+    </div>
+    <div class="day" id="Clockday">00/00/00</div>
+    <div class="Clock" id="Clock">00:00</div>
+</div>
 
 
 <script>
     const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
-let i = getRandomNumberOf(10);
+    let i = getRandomNumberOf(10);
 
-$(document).ready(function () {
-    getWiseSy();
-    Clock()
-});
+    $(document).ready(function () {
+        getWiseSy();
+        Clock()
+    });
 
 
-function getWiseSy() {
-    $.ajax({
-        type: "GET",
-        url: "/wise",
-        data: {},
-        success: function (response) {
-            let wise_sy = response;
-            console.log(wise_sy)
-            let name = wise_sy[i]['sy_name']
-            let wise = wise_sy[i]['wise_sy']
-            let temp_html = `<p>${wise}</p>
+    function getWiseSy() {
+        $.ajax({
+            type: "GET",
+            url: "/wise",
+            data: {},
+            success: function (response) {
+                let wise_sy = response;
+                console.log(wise_sy)
+                let name = wise_sy[i]['sy_name']
+                let wise = wise_sy[i]['wise_sy']
+                let temp_html = `<p>${wise}</p>
                              <p>${name}</p>`
-            $('#wise-box').append(temp_html)
-            console.log(temp_html)
-        }
-    })
-}
+                $('#wise-box').append(temp_html)
+                console.log(temp_html)
+            }
+        })
+    }
 
 
-function check_in() {
-    let present_time = $("#Clock").text()
+    function check_in() {
+        let present_time = $("#Clock").text()
 
-    let date_list = $("#Clockday").text().split(' ')
-    let year = date_list[0]
-    let month = date_list[1]
-    let day = date_list[2]
-    let week = date_list[3]
-    $.ajax({
-        type: "POST",
-        url: "/check-in",
-        data: {
-            start_time: present_time,
-            status    : "출근",
-            year : year,
-            month: month,
-            day: day,
-            week: week,
-        },
-        success: function (response) {
-            // alert(response["msg"]);
-            // window.location.reload();
-        }
-    })
-}
-
-
-function check_out() {
-    let present_time = $("#Clock").text()
-    let study_time = $("#time").text()
-    $.ajax({
-        type: "POST",
-        url: "/check-out",
-        data: {
-            stop_time: present_time,
-            status: "퇴근",
-            study_time: study_time,
-        },
-        success: function (response) {
-            // let present_time =
-            // let study_time
-            alert(response["msg"]);
-            // window.location.reload();
-        }
-    })
-}
-
-<!--    이미지 클릭할때마다 바뀌는기능-->
-$(document).ready(function () {
-    $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
-    $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
-    $('.checkin-img').click(function () {
-        $('.checkin-box').hide(); //클릭 시 첫 번째 요소 숨김
-        $('.checkout-box').show(); //클릭 시 두 번째 요소 표시
-        $('.checkout-img').click(function () {
-            $('.checkout-box').hide(); //클릭 시 첫 번째 요소 숨김
-            $('.checkin-box').show(); //클릭 시 두 번째 요소 표시
+        let date_list = $("#Clockday").text().split(' ')
+        let year = date_list[0]
+        let month = date_list[1]
+        let day = date_list[2]
+        let week = date_list[3]
+        $.ajax({
+            type: "POST",
+            url: "/check-in",
+            data: {
+                start_time: present_time,
+                status: "출근",
+                year: year,
+                month: month,
+                day: day,
+                week: week,
+            },
+            success: function (response) {
+                // alert(response["msg"]);
+                // window.location.reload();
+            }
+        })
+    }
 
 
-            return false;
+    function check_out() {
+        let present_time = $("#Clock").text()
+        let study_time = $("#time").text()
+        $.ajax({
+            type: "POST",
+            url: "/check-out",
+            data: {
+                stop_time: present_time,
+                status: "퇴근",
+                study_time: study_time,
+            },
+            success: function (response) {
+                // let present_time =
+                // let study_time
+                alert(response["msg"]);
+                // window.location.reload();
+            }
+        })
+    }
+
+    <!--    이미지 클릭할때마다 바뀌는기능-->
+    $(document).ready(function () {
+        $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
+        $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
+        $('.checkin-img').click(function () {
+            $('.checkin-box').hide(); //클릭 시 첫 번째 요소 숨김
+            $('.checkout-box').show(); //클릭 시 두 번째 요소 표시
+            $('.checkout-img').click(function () {
+                $('.checkout-box').hide(); //클릭 시 첫 번째 요소 숨김
+                $('.checkin-box').show(); //클릭 시 두 번째 요소 표시
+
+
+                return false;
+            });
         });
     });
-});
 
     // 실시간 시계
     function Clock() {
@@ -307,6 +404,7 @@ $(document).ready(function () {
         var ss = Zero(date.getSeconds());
         var Week = Weekday();
         Write(YYYY, MM, DD, hh, mm, ss, Week);
+
         //시계에 1의자리수가 나올때 0을 넣어주는 함수 (ex : 1초 -> 01초)
         function Zero(num) {
             //삼항 연산자
@@ -320,96 +418,96 @@ $(document).ready(function () {
             return Week[Weekday];
         }
 
-            //시계부분을 써주는 함수
+        //시계부분을 써주는 함수
         function Write(YYYY, MM, DD, hh, mm, ss, Week) {
             var Clockday = document.getElementById("Clockday");
             var Clock = document.getElementById("Clock");
             Clockday.innerText = YYYY + '년 ' + MM + '월 ' + DD + '일 ' + Week + '요일';
-            Clock.innerText = hh + ':' + mm + ':' + ss; }
+            Clock.innerText = hh + ':' + mm + ':' + ss;
         }
-            setInterval(Clock, 1000);
-        //1초(1000)마다 Clock함수를 재실행 한다
+    }
 
-//타이머
-let time = 0;
-let starFlag = true;
-$(document).ready(function () {
-    buttonEvt();
-});
+    setInterval(Clock, 1000);
+    //1초(1000)마다 Clock함수를 재실행 한다
 
-function init() {
-    document.getElementById("time").innerHTML = "00:00:00초 동안 업무중";
-}
+    //타이머
+    let time = 0;
+    let starFlag = true;
+    $(document).ready(function () {
+        buttonEvt();
+    });
 
-function buttonEvt() {
-    let hour = 0;
-    let min = 0;
-    let sec = 0;
-    let timer;
+    function init() {
+        document.getElementById("time").innerHTML = "00:00:00초 동안 업무중";
+    }
 
-    // start btn
-    $("#startbtn").click(function () {
+    function buttonEvt() {
+        let hour = 0;
+        let min = 0;
+        let sec = 0;
+        let timer;
 
-        if (starFlag) {
-            // $(".fa").css("color", "#FAED7D")
-            // this.style.color = "#4C4C4C";
-            starFlag = false;
+        // start btn
+        $("#startbtn").click(function () {
 
-            if (time == 0) {
+            if (starFlag) {
+                // $(".fa").css("color", "#FAED7D")
+                // this.style.color = "#4C4C4C";
+                starFlag = false;
+
+                if (time == 0) {
+                    init();
+                }
+
+                timer = setInterval(function () {
+                    time++;
+
+                    min = Math.floor(time / 60);
+                    hour = Math.floor(min / 60);
+                    sec = time % 60;
+                    min = min % 60;
+
+                    var th = hour;
+                    var tm = min;
+                    var ts = sec;
+                    if (th < 10) {
+                        th = "0" + hour;
+                    }
+                    if (tm < 10) {
+                        tm = "0" + min;
+                    }
+                    if (ts < 10) {
+                        ts = "0" + sec;
+                    }
+
+                    document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중';
+                }, 1000);
+            }
+        });
+
+        // pause btn
+        $("#pausebtn").click(function () {
+            if (time != 0) {
+                // $(".fa").css("color", "#FAED7D")
+                // this.style.color = "#4C4C4C";
+                clearInterval(timer);
+                starFlag = true;
+            }
+        });
+
+        // stop btn
+        $("#stopbtn").click(function () {
+            if (time != 0) {
+                // $(".fa").css("color", "#FAED7D")
+                // this.style.color = "#4C4C4C";
+                clearInterval(timer);
+                starFlag = true;
+                time = time
+                time = 0;
                 init();
             }
-
-            timer = setInterval(function () {
-                time++;
-
-                min = Math.floor(time / 60);
-                hour = Math.floor(min / 60);
-                sec = time % 60;
-                min = min % 60;
-
-                var th = hour;
-                var tm = min;
-                var ts = sec;
-                if (th < 10) {
-                    th = "0" + hour;
-                }
-                if (tm < 10) {
-                    tm = "0" + min;
-                }
-                if (ts < 10) {
-                    ts = "0" + sec;
-                }
-
-                document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts +'초 동안 업무중';
-            }, 1000);
-        }
-    });
-
-    // pause btn
-    $("#pausebtn").click(function () {
-        if (time != 0) {
-            // $(".fa").css("color", "#FAED7D")
-            // this.style.color = "#4C4C4C";
-            clearInterval(timer);
-            starFlag = true;
-        }
-    });
-
-    // stop btn
-    $("#stopbtn").click(function () {
-        if (time != 0) {
-            // $(".fa").css("color", "#FAED7D")
-            // this.style.color = "#4C4C4C";
-            clearInterval(timer);
-            starFlag = true;
-            time= time
-            time = 0;
-            init();
-        }
-    });
-}
-
-
+        });
+    }
 
 
     function getWeather(lat, lon) {
@@ -436,7 +534,7 @@ function buttonEvt() {
                 let $icon = 'http://openweathermap.org/img/w/' + icon
 
 
-                console.log($temp, $place, $humidity, $sky,$wId)
+                console.log($temp, $place, $humidity, $sky, $wId)
 
                 // $('.temptemp').append(temp + "°C");
 
@@ -444,13 +542,11 @@ function buttonEvt() {
                 $('.csky').append($sky);
                 $('.temp').append($temp + "°C");
                 $('.humidity').append($humidity + "%");
-                $('.place').append($place);
-                 $('.place').append('/'+$country);
+                // $('.place').append($place);
+                //  $('.place').append('/'+$country);
                 $('.temp_max').append($temp_max + "°C");
                 $('.temp_min').append($temp_min + "°C");
                 $('.icon').append('<img src=" ' + $icon + '.png ">');
-
-
 
 
             });
@@ -482,58 +578,17 @@ function buttonEvt() {
     navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
 
 
-
 </script>
 
-    <div class="helper"></div><div class="container">
-    <div class="checkin-box">
-        <div class="table">
-            <span class="wise" id="wise-box">
-            </span>
-        </div>
 
-     <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start2.gif" width="300" height="180">
-
-    </div>
-    <div class="checkout-box">
-        <div id='box' class="timer">
-                <div id='timerBox' class="timerBox">
-                    <div id="time" class="time">00:00:00초 동안 업무중</div>
-                </div>
-                <div class="btnBox">
-<!--                    <i id="startbtn" class="fa fa-play" aria-hidden="true"></i>-->
-<!--                    <i id="pausebtn" class="fa fa-pause" aria-hidden="true"></i>-->
-<!--                    <i id="stopbtn" class="fa fa-stop" aria-hidden="true"></i>-->
-                </div>
-            </div>
-        <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/study2.gif" width="300" height="200">
-    </div>
-    <div id="Clockday">00/00/00</div>
-    <div class="Clock" id="Clock">00:00</div>
-    </div>
-
-
-
-
-<div id="weather_info">
-    <h1 class="place"></h1>
-
-    <section>
-        <p  class="csky"></p>
-        <figure class="icon"></figure>
-        <p class="temp"></p>
-        <aside>
-            <div class="aa">
-
-                <p class="temp_max">최고기온:&nbsp</p>
-                <p class="temp_min">최저기온:&nbsp</p>
-                <p class="humidity">강수량:&nbsp</p>
-            </div>
-        </aside>
-    </section>
-
+<div class="audio">
+    <audio autoplay controls>
+        <source src="../static/fire.mp3" type="audio/mp3">
+        <source src="../static/night.mp3" type="audio/mp3">
+    </audio>
+    <audio autoplay controls>
+        <source src="../static/night.mp3" type="audio/mp3">
+    </audio>
 </div>
-
-
 </body>
 </html>
