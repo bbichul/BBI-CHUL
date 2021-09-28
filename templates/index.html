@@ -1,7 +1,7 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
+    <title>삐빅 출근입니다</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -9,51 +9,124 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-    <title>날씨 api</title>
-    <style>
-        * {
-            margin: 0;
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <script src="../static/wise.js"></script>
+
+<style>
+
+	* {
+        margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
+        box-sizing: border-box;
+	}
+  	body {
+		height: 500px;
+        /*background-color: #E0E0E0;*/
+        text-align: center;
+        background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+        background-position: center;
+        background-size: cover;
+ 	}
 
-        body {
-            color: #333;
-        }
+    .helper {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+
+        /* 설명을 위해서 */
+        /*width: 10px;*/
+        /*background-color: red;*/
+    }
+
+    .container {
+        margin: auto;
+        width: 100%;
+
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .checkin-box {
+        width: 500px;
+        margin: auto;
+    }
+
+
+    .checkout-box {
+        width: 500px;
+        margin: auto;
+    }
+
+    /*.checkout-img:hover {*/
+    /*    background-image: url('/static/start.png');*/
+    /*    height: 200px;*/
+    /*    width: 200px;*/
+
+    /*}*/
+
+
+	.timerBox{
+		width: 100%;
+        margin: auto;
+		/*outline: 2px solid black;*/
+	}
+	.timerBox .time{
+		font-size: 30pt;
+		color: #4C4C4C;
+		text-align: center;
+		font-family: sans-serif;
+	}
+	.btnBox{
+		margin: 20px auto;
+		text-align: center;
+	}
+	.btnBox .fa{
+		margin: 0px 5px;
+		font-size: 30pt;
+		color: #FAED7D;
+		cursor: pointer;
+	}
+
+    .Clock {
+        font-size: 80px;
+    }
 
         p {
             margin: 0 0 10px;
         }
+
         #weather_info {
             position: relative;
             padding: 10px;
-            margin: 0 auto;
-            width: 1000px;
-            height: 500px;
-            /*background-image: url("https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2");*/
-            background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;
+            margin-left:  1200px;
+            width: 700px;
+            height: 400px;
+            /*background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;*/
+
+            /*background-image: url("https://i.imgur.com/Xh7wwnB.jpg");*/
             /*background-size: cover;*/
             /*background-position: center;*/
-            border: 1px solid #999;
+            /*border: 1px solid #999;*/
             color: #fff;
         }
 
         h1 {
             padding: 10px;
             font-size: 1.8em;
-            background: #666;
+            /*background: #666;*/
             text-align: center;
             opacity: 0.8;
         }
@@ -88,42 +161,230 @@
             text-align: right;
         }
 
-        #load_img {
-            display: none;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 100px;
-            height: 100px;
-            transform: translate(-50%, -50%);
-        }
 
         .icon {
             width: 20%;
         }
 
         .aa {
+            font-size: 15px;
+ }
+        .csky{
             font-size: 20px;
-
-        }
-        .weather-clear{
-               background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTA5MDVfMjE4%2FMDAxNjMwODA2MDgzNjAy.irYLZ_62XbpldvwXnQdNFBAHJWAN-Lh7ng62eb_fer0g.U5GsCOEY22Bz-IZ6QCDzsbiSqg0H3o2Tog8VAHpzdkog.JPEG.aa005002%2F2.jpg&type=sc960_832");
-        }
-        .weather-clouds{
-            background-image: url("https://www.wired.com/wiredenterprise/wp-content/uploads//2013/02/clouds.jpg");
-        }
-        .weather-rain{
-              background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20160611_224%2Fyang6390_1465656827870wjikE_JPEG%2FNa1465656639455.jpg&type=sc960_832");
-        }
-        .weather-snow{
-              background-image: url("https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20160229_87%2Fn016shi_1456715134411cyufd_JPEG%2Fimage.jpeg&type=sc960_832");
+            margin-right: 500px;
         }
 
+</style>
 
-    </style>
+
 </head>
 <body>
 <script>
+    const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
+let i = getRandomNumberOf(10);
+
+$(document).ready(function () {
+    getWiseSy();
+    Clock()
+});
+
+
+function getWiseSy() {
+    $.ajax({
+        type: "GET",
+        url: "/wise",
+        data: {},
+        success: function (response) {
+            let wise_sy = response;
+            console.log(wise_sy)
+            let name = wise_sy[i]['sy_name']
+            let wise = wise_sy[i]['wise_sy']
+            let temp_html = `<p>${wise}</p>
+                             <p>${name}</p>`
+            $('#wise-box').append(temp_html)
+            console.log(temp_html)
+        }
+    })
+}
+
+
+function check_in() {
+    let present_time = $("#Clock").text()
+
+    let date_list = $("#Clockday").text().split(' ')
+    let year = date_list[0]
+    let month = date_list[1]
+    let day = date_list[2]
+    let week = date_list[3]
+    $.ajax({
+        type: "POST",
+        url: "/check-in",
+        data: {
+            start_time: present_time,
+            status    : "출근",
+            year : year,
+            month: month,
+            day: day,
+            week: week,
+        },
+        success: function (response) {
+            // alert(response["msg"]);
+            // window.location.reload();
+        }
+    })
+}
+
+
+function check_out() {
+    let present_time = $("#Clock").text()
+    let study_time = $("#time").text()
+    $.ajax({
+        type: "POST",
+        url: "/check-out",
+        data: {
+            stop_time: present_time,
+            status: "퇴근",
+            study_time: study_time,
+        },
+        success: function (response) {
+            // let present_time =
+            // let study_time
+            alert(response["msg"]);
+            // window.location.reload();
+        }
+    })
+}
+
+<!--    이미지 클릭할때마다 바뀌는기능-->
+$(document).ready(function () {
+    $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
+    $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
+    $('.checkin-img').click(function () {
+        $('.checkin-box').hide(); //클릭 시 첫 번째 요소 숨김
+        $('.checkout-box').show(); //클릭 시 두 번째 요소 표시
+        $('.checkout-img').click(function () {
+            $('.checkout-box').hide(); //클릭 시 첫 번째 요소 숨김
+            $('.checkin-box').show(); //클릭 시 두 번째 요소 표시
+
+
+            return false;
+        });
+    });
+});
+
+    // 실시간 시계
+    function Clock() {
+        var date = new Date();
+        var YYYY = String(date.getFullYear())
+        var MM = String(date.getMonth() + 1)
+        var DD = Zero(date.getDate());
+        var hh = Zero(date.getHours());
+        var mm = Zero(date.getMinutes());
+        var ss = Zero(date.getSeconds());
+        var Week = Weekday();
+        Write(YYYY, MM, DD, hh, mm, ss, Week);
+        //시계에 1의자리수가 나올때 0을 넣어주는 함수 (ex : 1초 -> 01초)
+        function Zero(num) {
+            //삼항 연산자
+            return (num < 10 ? '0' + num : '' + num);
+        }
+
+        //요일을 추가해주는 함수
+        function Weekday() {
+            var Week = ['일', '월', '화', '수', '목', '금', '토'];
+            var Weekday = date.getDay();
+            return Week[Weekday];
+        }
+
+            //시계부분을 써주는 함수
+        function Write(YYYY, MM, DD, hh, mm, ss, Week) {
+            var Clockday = document.getElementById("Clockday");
+            var Clock = document.getElementById("Clock");
+            Clockday.innerText = YYYY + '년 ' + MM + '월 ' + DD + '일 ' + Week + '요일';
+            Clock.innerText = hh + ':' + mm + ':' + ss; }
+        }
+            setInterval(Clock, 1000);
+        //1초(1000)마다 Clock함수를 재실행 한다
+
+//타이머
+let time = 0;
+let starFlag = true;
+$(document).ready(function () {
+    buttonEvt();
+});
+
+function init() {
+    document.getElementById("time").innerHTML = "00:00:00초 동안 업무중";
+}
+
+function buttonEvt() {
+    let hour = 0;
+    let min = 0;
+    let sec = 0;
+    let timer;
+
+    // start btn
+    $("#startbtn").click(function () {
+
+        if (starFlag) {
+            // $(".fa").css("color", "#FAED7D")
+            // this.style.color = "#4C4C4C";
+            starFlag = false;
+
+            if (time == 0) {
+                init();
+            }
+
+            timer = setInterval(function () {
+                time++;
+
+                min = Math.floor(time / 60);
+                hour = Math.floor(min / 60);
+                sec = time % 60;
+                min = min % 60;
+
+                var th = hour;
+                var tm = min;
+                var ts = sec;
+                if (th < 10) {
+                    th = "0" + hour;
+                }
+                if (tm < 10) {
+                    tm = "0" + min;
+                }
+                if (ts < 10) {
+                    ts = "0" + sec;
+                }
+
+                document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts +'초 동안 업무중';
+            }, 1000);
+        }
+    });
+
+    // pause btn
+    $("#pausebtn").click(function () {
+        if (time != 0) {
+            // $(".fa").css("color", "#FAED7D")
+            // this.style.color = "#4C4C4C";
+            clearInterval(timer);
+            starFlag = true;
+        }
+    });
+
+    // stop btn
+    $("#stopbtn").click(function () {
+        if (time != 0) {
+            // $(".fa").css("color", "#FAED7D")
+            // this.style.color = "#4C4C4C";
+            clearInterval(timer);
+            starFlag = true;
+            time= time
+            time = 0;
+            init();
+        }
+    });
+}
+
 
 
 
@@ -196,14 +457,37 @@
     navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
 
 
-    if(weather === 'clouds'){
 
-    }
 </script>
-<!--<div class="place">현위치: </div>-->
-<!--<div class="temp">현재온도: </div>-->
-<!--<div class="csky">하늘상태: </div>-->
-<!--<div class="humidity">강수량: </div>-->
+    <div class="helper"></div><div class="container">
+    <div class="checkin-box">
+        <div class="table">
+            <span id="wise-box">
+            </span>
+        </div>
+
+     <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start.png" width="200" height="200">
+
+    </div>
+    <div class="checkout-box">
+        <div id='box' class="timer">
+                <div id='timerBox' class="timerBox">
+                    <div id="time" class="time">00:00:00초 동안 업무중</div>
+                </div>
+                <div class="btnBox">
+<!--                    <i id="startbtn" class="fa fa-play" aria-hidden="true"></i>-->
+<!--                    <i id="pausebtn" class="fa fa-pause" aria-hidden="true"></i>-->
+<!--                    <i id="stopbtn" class="fa fa-stop" aria-hidden="true"></i>-->
+                </div>
+            </div>
+        <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/working.gif" width="200" height="200">
+    </div>
+    <div id="Clockday">00/00/00</div>
+    <div class="Clock" id="Clock">00:00</div>
+    </div>
+
+
+
 
 <div id="weather_info">
     <h1 class="place"></h1>
@@ -219,8 +503,9 @@
             </div>
         </aside>
     </section>
-    <img src="https://www.vedantaresources.com/SiteAssets/Images/loading.gif" alt="" id="load_img">
+
 </div>
+
 
 </body>
 </html>
