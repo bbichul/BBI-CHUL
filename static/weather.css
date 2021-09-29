@@ -1,0 +1,211 @@
+  * {
+
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1900px;
+            height: 510px;
+            /*background-color: #E0E0E0;*/
+            text-align: center;
+            background-image: url("https://i.pinimg.com/originals/78/e5/8c/78e58cc44f3eb9f22a7df0a684d4e5ac.jpg");
+            background-position: center;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .helper {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+
+            /* 설명을 위해서 */
+            /*width: 10px;*/
+            /*background-color: red;*/
+        }
+
+        .container {
+            margin: auto;
+            padding-top: 120px;
+            /*width: 100%;*/
+            position: center;
+            display: inline-block;
+            vertical-align: middle;
+
+
+        }
+
+        .checkin-box {
+            width: 500px;
+            margin: auto;
+
+        }
+
+
+        .timerBox {
+            width: 100%;
+            margin: auto;
+            /*outline: 2px solid black;*/
+
+        }
+
+        .timerBox .time {
+            font-size: 40pt;
+            color: white;
+            text-align: center;
+           font-family: cursive;;
+
+
+
+        }
+
+        .btnBox {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .btnBox .fa {
+            margin: 0px 5px;
+            font-size: 30pt;
+            color: #FAED7D;
+            cursor: pointer;
+        }
+
+        .Clock {
+            font-size: 80px;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        #weather_info {
+            position: relative;
+            left: 110px;
+            padding: 10px;
+            margin-right: 1200px;
+            /*margin-bottom: 600px;*/
+            /*width: 700px;*/
+            /*height: 400px;*/
+            /*background : url(https://mblogthumb-phinf.pstatic.net/20130417_212/frenchaffair_1366187657714zwkaP_JPEG/tk3.jpg?type=w2) no-repeat #eee 30% / cover;*/
+
+            /*background-image: url("https://i.imgur.com/Xh7wwnB.jpg");*/
+            /*background-size: cover;*/
+            /*background-position: center;*/
+            /*border: 1px solid #999;*/
+            color: #fff;
+        }
+
+        h1 {
+            padding: 10px;
+            font-size: 1.8em;
+            /*background: #666;*/
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        section {
+            padding: 10px 20px;
+            overflow: hidden;
+            color: #fff;
+            text-shadow: 1px 1px 1px #999;
+        }
+
+        .temp {
+            float: left;
+            width: 33.3333%;
+            font-size: 5em;
+        }
+
+        figure img {
+            width: 80px;
+        }
+
+        aside {
+            overflow: hidden;
+        }
+
+        aside p {
+            font-size: 1.8em;
+            text-align: right;
+        }
+
+
+        .icon {
+            width: 20%;
+        }
+
+        .aa {
+            font-size: 15px;
+        }
+
+        .csky {
+            font-size: 20px;
+            margin-right: 540px;
+        }
+
+        .checkin-img {
+            position: relative;
+            left: 500px;
+            bottom: 200px;
+        }
+        .checkout-img{
+             position: relative;
+            left: 500px;
+            bottom: 200px;
+
+        }
+
+        /*.checkout-box {*/
+        /*    width: 500px;*/
+        /*    margin: auto;*/
+        /*    position: relative;*/
+        /*    left: 500px;*/
+        /*    bottom: 100px;*/
+        /*}*/
+
+        .place {
+
+        }
+
+        .audio {
+            position: fixed;
+            right: 1180px;
+            bottom: 200px;
+            margin: auto;
+        }
+
+        .vl {
+            border-left: 6px solid gray;
+            height: 400px;
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            top: 0;
+        }
+
+        .day {
+            position: fixed;
+            right: 375px;
+            bottom: 800px;
+            margin: auto;
+            color: white;
+        }
+
+        .Clock {
+            position: fixed;
+            right: 320px;
+            bottom: 700px;
+            color: white;
+        }
+
+        .wise {
+            font-size: 15px;
+            font-weight: bolder;
+            position: relative;
+            right: 500px;
+            color: white;
+
+        }
