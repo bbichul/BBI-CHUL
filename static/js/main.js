@@ -1,3 +1,9 @@
+/**
+* Template Name: Groovin - v4.5.0
+* Template URL: https://bootstrapmade.com/groovin-free-bootstrap-theme/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
 (function() {
   "use strict";
 
@@ -28,7 +34,7 @@
   }
 
   /**
-   * Easy on scroll event listener
+   * Easy on scroll event listener 
    */
   const onscroll = (el, listener) => {
     el.addEventListener('scroll', listener)
