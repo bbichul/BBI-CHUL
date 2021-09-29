@@ -4,7 +4,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 
 client = MongoClient('localhost', 27017)
-db = client.firstproject
+db = client.dbnbc
 
 
 @app.route('/')

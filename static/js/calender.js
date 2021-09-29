@@ -1,8 +1,7 @@
+//현재 날짜 초기화
 const date = new Date();
 
-
-
-
+//캘린더 렌더링 함수
 const renderCalendar = () => {
     const viewYear = date.getFullYear();
     const viewMonth = date.getMonth();
