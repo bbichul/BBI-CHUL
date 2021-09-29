@@ -12,7 +12,7 @@ db     = client.dbnbc
 
 @app.route('/')
 def home():
-    return render_template('nav.html')
+    return render_template('index.html')
 
 
 # 회원가입
