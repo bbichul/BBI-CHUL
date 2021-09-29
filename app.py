@@ -13,11 +13,11 @@ def home():
 @app.route('/check-in', methods=['POST'])
 def check_in():
     start_time = request.form['start_time']
-    status = request.form['status']
-    year = request.form['year']
-    month = request.form['month']
-    day = request.form['day']
-    week = request.form['week']
+    status     = request.form['status']
+    year       = request.form['year']
+    month      = request.form['month']
+    day        = request.form['day']
+    week       = request.form['week']
     # doc = {'name': 'bobby'}
     # db.user.insert_one(doc)
     # print(year, month, day, week)
