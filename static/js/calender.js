@@ -5,7 +5,7 @@ const date = new Date();
 const renderCalendar = () => {
     const viewYear = date.getFullYear();
     const viewMonth = date.getMonth();
-    let getMonth =''
+    let getMonth = ''
 
     // year-month 채우기
     document.querySelector('.year-month').textContent = `${viewYear}년 ${viewMonth + 1}월`;
@@ -48,17 +48,15 @@ const renderCalendar = () => {
             ? 'this'
             : 'other';
 
-        if ( condition == 'this'){   //viewMonth 는 condition이 변해도 그대로이기 때문에 other 변경.
+        if (condition == 'this') {   //viewMonth 는 condition이 변해도 그대로이기 때문에 other 변경.
             getMonth = viewMonth + 1;
-        }else if (condition == 'other' && date <= 10){
-            getMonth = viewMonth + 2 ;
-        }else{
+        } else if (condition == 'other' && date <= 10) {
+            getMonth = viewMonth + 2;
+        } else {
             getMonth = viewMonth;
         }
 
-    
 
-      
         dates[i] = `<div class="date"><button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date}</button></div>`;
     })
 
@@ -87,14 +85,49 @@ const goToday = () => {
 }
 
 
+//현재 날짜 표시 함수. 고장남.
+// const today = new Date();
+// if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
+//   for (let date of document.querySelectorAll('.this')) {
+//     if (+date.innerText === today.getDate()) {
+//       date.classList.add('today');
+//       break;
+//     }
+//   }
+// }
 
-  //현재 날짜 표시 함수. 고장남.
-  // const today = new Date();
-  // if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
-  //   for (let date of document.querySelectorAll('.this')) {
-  //     if (+date.innerText === today.getDate()) {
-  //       date.classList.add('today');
-  //       break;
-  //     }
-  //   }
-  // }
+
+//텍스트 박스와 캘린더에 필요한 달력고유ID
+let btn_year_month_day = ''
+
+function dayClick(obj) {
+    btn_year_month_day = $(obj).attr('id'); // 달력 날짜를 클릭 했을 때 받아온 날짜 ID 를 변수에 초기화.
+
+    $.ajax({
+        type: "POST",
+        url: "/click_day",
+        data: {dateGive: btn_year_month_day},
+        success: function (response) {
+            let receive_date_memo = response['resend_date_memo'];
+            $('#calenderNote').text(receive_date_memo);
+        }
+    })
+
+}
+
+
+//텍스트 업데이트 함수
+function updateText(obj) {
+    let varMemoText = $(obj).val();
+
+    $.ajax({
+        type: "POST",
+        url: "/change_memo_text",
+        data: {change_memo_give: varMemoText, key_class_give: btn_year_month_day},
+        success: function (response) {
+            console.log(response)
+        }
+    })
+
+    location.reload(); //현재 새로고침 안하면 메모 입력 시 반영 안 되는 버그로 넣어놨습니다.
+}

@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from flask import Flask, jsonify, render_template, request
+from flask   import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
@@ -13,40 +13,35 @@ def home():
 
 
 # 날짜 클릭 함수입니다.
-@app.route('/clickDay', methods=['POST'])
+@app.route('/click_day', methods=['POST'])
 def clickedDay():
-    receive_clickDate = request.form['dateGive']
+    receive_click_date = request.form['dateGive']
 
-    dateData = db.userdata.find_one({'date': receive_clickDate})
+    date_data = db.userdata.find_one({'date': receive_click_date})
 
-    if dateData is None:
-        resendDateMemo = ""
+    if date_data is None:
+        resend_date_memo = ""
     else:
-        resendDateMemo = dateData['Memo']
+        resend_date_memo = date_data['Memo']
 
-    print(resendDateMemo)
-
-    return jsonify({'resendDateMemo': resendDateMemo})
-
-    # 날짜 클릭 함수 종료
+    return jsonify({'resend_date_memo': resend_date_memo})
+# 날짜 클릭 함수 종료
 
 
 # 캘린더 메모 변경 함수
-@app.route('/changeMemoText', methods=['POST'])
+@app.route('/change_memo_text', methods=['POST'])
 def changedMemo():
-    receive_memo = request.form['changeMemoGive']
-    receive_keyClass = request.form['keyClassGive']
+    receive_memo = request.form['change_memo_give']
+    receive_key_class = request.form['key_class_give']
 
-    dateData = db.userdata.find_one({'date': receive_keyClass})
+    date_data = db.userdata.find_one({'date': receive_key_class})
 
-    if dateData is None:
-        db.userdata.insert_one({'date': receive_keyClass, 'Memo': receive_memo})
+    if date_data is None:
+        db.userdata.insert_one({'date': receive_key_class, 'Memo': receive_memo})
     else:
-        db.userdata.update_one({'date': receive_keyClass}, {'$set': {'Memo': receive_memo}})
+        db.userdata.update_one({'date': receive_key_class}, {'$set': {'Memo': receive_memo}})
 
-    return jsonify(receive_keyClass)
-
-
+    return jsonify(receive_key_class)
 # 캘린더 메모 변경 함수 종료
 
 if __name__ == '__main__':
