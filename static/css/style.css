@@ -1,3 +1,5 @@
+/*---------------------------공통---------------------------- */
+
 /**
 * Template Name: Groovin - v4.5.0
 * Template URL: https://bootstrapmade.com/groovin-free-bootstrap-theme/
@@ -11,6 +13,7 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
+  box-sizing: border-box;
 }
 
 a {
@@ -86,6 +89,7 @@ h1, h2, h3, h4, h5, h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /**
+* Desktop Navigation
 * Desktop Navigation 
 */
 .navbar {
@@ -215,6 +219,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**
+* Mobile Navigation
 * Mobile Navigation 
 */
 .mobile-nav-toggle {
@@ -313,6 +318,37 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
 }
 
+
+/* -----------------------------------------------------*/
+/*                로그인 모달창                            */
+/*------------------------------------------------------*/
+
+.modal-title {
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 500;
+    height: 44px;
+    line-height: 54px;
+
+}
+
+.input-box {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.input-box input {
+    display: block;
+    width: 100%;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+#cant-using {
+    color: red;
+}
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
