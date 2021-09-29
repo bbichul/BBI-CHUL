@@ -8,7 +8,7 @@ db = client.dbnbc
 # API 역할을 하는 부분
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('main.html')
 
 @app.route('/check-in', methods=['POST'])
 def check_in():
