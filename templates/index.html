@@ -1,41 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>삐빅 출근입니다</title>
-
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <!-- JS -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Vendor CSS Files -->
+    <link href="../static/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='weather.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='weather.js') }}"></script>
-
-
+    <!-- Template Main CSS File -->
+    <link href="../static/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='asd.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='asd.js') }}"></script>
+    <title>Title</title>
     <style>
 
 
+
     </style>
-
-
 </head>
 <body>
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between me-0">
+
+        <h1 class="logo"><a href="index.html">BBICHUL</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li><a class="nav-link scrollto" href="#about">About</a></li>
+                <li><a href="blog.html"></a></li>
+                <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="#">Drop Down 1</a></li>
+                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                            <ul>
+                                <li><a href="#">Deep Drop Down 1</a></li>
+                                <li><a href="#">Deep Drop Down 2</a></li>
+                                <li><a href="#">Deep Drop Down 3</a></li>
+                                <li><a href="#">Deep Drop Down 4</a></li>
+                                <li><a href="#">Deep Drop Down 5</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Drop Down 2</a></li>
+                        <li><a href="#">Drop Down 3</a></li>
+                        <li><a href="#">Drop Down 4</a></li>
+                    </ul>
+                </li>
+<!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
+                <li><a class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
+                </li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+<!-- Log in Modal -->
+                <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+                     aria-labelledby="logInModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="loginModalLabel">Log in</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-box">
+                                    <label>닉네임 : </label>
+                                    <!--                    <button type="button" class="button is-sparta" onclick="login()">중복확인</button>-->
+                                    <input type="text" id="login_nickname">
+                                    <!--                    <p id="help-id" class="help is-hidden">닉네임은 자유형식*꼭 중복확인을 해주세요!*</p>-->
+                                </div>
+                                <div class="input-box">
+                                    <label>비밀번호 : </label>
+                                    <input type="password" id="login_password" placeholder="비밀번호를 입력해주세요.">
+                                    <button type="button" id="login_password_eye">비밀번호 보기</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">회원가입</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+<!-- sign up Modal -->
+                <div class="modal fade" id="signupModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+                     aria-labelledby="logInModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="signupModalLabel">Sign up</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-box">
+                                    <label>닉네임 : </label>
+                                    <!--                    <button type="button" class="button is-sparta" onclick="login()">중복확인</button>-->
+                                    <input type="text" id="signup_nickname">
+                                    <!--                    <p id="help-id" class="help is-hidden">닉네임은 자유형식*꼭 중복확인을 해주세요!*</p>-->
+                                </div>
+                                <div class="input-box">
+                                    <label>비밀번호 : </label>
+                                    <input type="password" id="signup_password" placeholder="비밀번호를 입력해주세요.">
+                                    <button type="button" id="signup_password_eye">비밀번호 보기</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">가입완료</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
 <div class="vl"></div>
 
@@ -58,7 +166,7 @@
 
 </div>
 <div class="helper"></div>
-<div class="container">
+<div class="container con2" >
     <div>
         <p class="wise" id="wise-box">
 
