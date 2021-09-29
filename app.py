@@ -15,7 +15,7 @@ def home():
 # 날짜 클릭 함수입니다.
 @app.route('/click_day', methods=['POST'])
 def clickedDay():
-    receive_click_date = request.form['dateGive']
+    receive_click_date = request.form['date_give']
 
     date_data = db.userdata.find_one({'date': receive_click_date})
 

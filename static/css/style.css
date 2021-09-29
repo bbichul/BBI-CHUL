@@ -339,7 +339,7 @@ section.calAndText .dates {
 section.calAndText .date {
   width: calc(100% / 7);
   padding: 5px;
-  text-align: right;
+  text-align: left;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #333333;
 }

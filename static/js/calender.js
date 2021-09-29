@@ -106,7 +106,7 @@ function dayClick(obj) {
     $.ajax({
         type: "POST",
         url: "/click_day",
-        data: {dateGive: btn_year_month_day},
+        data: {date_give: btn_year_month_day},
         success: function (response) {
             let receive_date_memo = response['resend_date_memo'];
             $('#calenderNote').text(receive_date_memo);
