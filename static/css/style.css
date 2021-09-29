@@ -254,7 +254,7 @@
   display: block;
 }
 
-
+/*캘린더 CSS시작*/
 section.calAndText{
   background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
   background-position: center;
@@ -285,7 +285,7 @@ section.calAndText .main{
   overflow: hidden;
 }
 
-/*캘린더 CSS시작*/
+
 section.calAndText .header {
   display: flex;
   justify-content: space-between;
