@@ -1,6 +1,6 @@
 import jwt
 
-from my_settings  import SECRET
+# from my_settings  import SECRET
 from functools    import wraps
 from flask 		  import request, jsonify
 from pymongo       import MongoClient
