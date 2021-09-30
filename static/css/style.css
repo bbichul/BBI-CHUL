@@ -77,6 +77,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+   position: fixed;left:310px;
 }
 #header .logo a {
   color: #fff;
@@ -94,6 +95,7 @@ h1, h2, h3, h4, h5, h6 {
 */
 .navbar {
   padding: 0;
+  position: fixed;right: 300px;
 }
 .navbar ul {
   margin: 0;
@@ -357,7 +359,8 @@ section.calAndText .this:hover{
 
 
 section.calAndText .container{
-  width:1000px;
+  width:90%;
+  height:auto;
 }
 
 
