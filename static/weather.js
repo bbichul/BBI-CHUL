@@ -1,6 +1,7 @@
 const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
 let i = getRandomNumberOf(10);
 
+
 $(document).ready(function () {
     getWiseSy();
     Clock()
@@ -41,6 +42,13 @@ function getWiseSy() {
 }
 
 
+let date_list = $("#Clockday").text().split(' ')
+let year = date_list[0]
+let month = date_list[1]
+let day = date_list[2]
+let week = date_list[3]
+
+
 function check_in() {
     let present_time = $("#Clock").text()
     let date_list = $("#Clockday").text().split(' ')
@@ -49,9 +57,14 @@ function check_in() {
     let day = date_list[2]
     let week = date_list[3]
 
+    console.log(getCookie('access_token'))
+
     $.ajax({
         type: "POST",
         url: "/check-in",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
         data: {
             start_time: present_time,
             status: "출근",
@@ -70,14 +83,26 @@ function check_in() {
 
 function check_out() {
     let present_time = $("#Clock").text()
+    let date_list = $("#Clockday").text().split(' ')
+    let year = date_list[0]
+    let month = date_list[1]
+    let day = date_list[2]
+    let week = date_list[3]
     let study_time = $("#time").text()
     $.ajax({
         type: "POST",
         url: "/check-out",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
         data: {
             stop_time: present_time,
             status: "퇴근",
             study_time: study_time,
+            year: year,
+            month: month,
+            day: day,
+            week: week,
         },
         success: function (response) {
             // let present_time =

@@ -69,7 +69,9 @@
 <!--                    </ul>-->
 <!--                </li>-->
 <!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
-                <li><a class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
+                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">Log In</a>
+                </li>
+                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">Log Out</a>
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
@@ -94,7 +96,7 @@
                             <h2 class="animate__animated animate__fadeInDown">삐빅! 출석했습니다</h2>
                             <p class="animate__animated animate__fadeInUp">삐출과 함께라면 어디서든 출퇴근 시간 관리가 가능합니다. 매번 새롭게 바뀌는 명언을 읽으며 동기부여를 하고 집중에 도움을 주는 음악을 들으며 목표를 달성해보세요. 일주일 혹은 한달동안 얼마나 몰입했었는지 그래프로 확인도 가능합니다!</p>
                             <div>
-                                <a href="/main" class="btn-get-started animate__animated animate__fadeInUp scrollto">시작하기</a>
+                                <a onclick="main_login_check()" class="btn-get-started animate__animated animate__fadeInUp scrollto">시작하기</a>
                             </div>
                         </div>
                     </div>

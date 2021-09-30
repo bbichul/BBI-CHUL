@@ -26,6 +26,7 @@
 
     <!-- Nav Var CSS File, Calender JS -->
     <link href="../static/css/style.css" rel="stylesheet">
+    <script defer src="../static/js/modal.js"></script>
     <script defer src="../static/js/calender.js"></script>
 
 
@@ -65,8 +66,9 @@
 <!--                    </ul>-->
 <!--                </li>-->
 <!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
-
-                <li><a class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogOut</a>
+                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
+                </li>
+                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogOut</a>
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
