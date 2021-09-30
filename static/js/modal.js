@@ -1,6 +1,15 @@
+//새로고침마다 로그인 상태에 따라 로그인/아웃이 바뀜
 $(document).ready(function () {
-    // showReview();
+    console.log(getCookie('access_token'))
+    if(getCookie("access_token") == null){
+        $('#login-button').show()
+        $('#logout-button').hide()
+    } else {
+        $('#login-button').hide()
+        $('#logout-button').show()
+    }
 });
+
 
 
 // 비밀번호 숨기기/보기 기능
@@ -33,6 +42,16 @@ var getCookie = function(name) {
 var deleteCookie = function(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     }
+
+
+// 메인페이지 진입전 로그인 확인 기능
+function main_login_check() {
+    if(getCookie("access_token") == null){
+        alert('로그인 해주세요')
+        location.href ="/";
+    } else { location.href = "/main"; }
+}
+
 
 // 회원가입 기능
 function sign_up() {
@@ -84,6 +103,7 @@ function login() {
             if (response['msg'] == "SUCCESS") {
                 alert('로그인에 성공하셨습니다.')
                 $('#login_close').click()
+                window.location.reload();
                 setCookie("access_token", response["access_token"], 1)
             } else if (response['msg'] == "INVALID_NICKNAME") {
                 alert("닉네임이 틀렸습니다.")
@@ -94,6 +114,13 @@ function login() {
     });
 }
 
+
+//로그아웃
+function log_out() {
+        deleteCookie('access_token')
+        alert('로그아웃 되었습니다')
+        location.href ="/";
+    }
 
 // 회원가입시 닉네임 중복확인 기능
 function nickname_check() {
@@ -117,17 +144,3 @@ function nickname_check() {
     });
 }
 
-
-// 데코레이터 테스트기능 (추후 삭제 예정)
-function test() {
-   $.ajax({
-        type: "POST",
-        url: "/test",
-        headers: {'Authorization' : getCookie("access_token")},
-        data: {
-        },
-        success: function (response) {
-                alert(response['msg'])
-        }
-    });
-}

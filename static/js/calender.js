@@ -105,6 +105,9 @@ function dayClick(obj) {
 
     $.ajax({
         type: "POST",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
         url: "/click_day",
         data: {date_give: btn_year_month_day},
         success: function (response) {
@@ -122,6 +125,9 @@ function updateText(obj) {
 
     $.ajax({
         type: "POST",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
         url: "/change_memo_text",
         data: {change_memo_give: varMemoText, key_class_give: btn_year_month_day},
         success: function (response) {
