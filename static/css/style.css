@@ -77,7 +77,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-   position: fixed;left:310px;
 }
 #header .logo a {
   color: #fff;
@@ -95,7 +94,6 @@ h1, h2, h3, h4, h5, h6 {
 */
 .navbar {
   padding: 0;
-  position: fixed;right: 300px;
 }
 .navbar ul {
   margin: 0;
@@ -326,7 +324,6 @@ section.calAndText{
   background-position: center;
   background-size: cover;
   height: 100vw;
-
 }
 
 section.calAndText .other {
@@ -357,12 +354,10 @@ section.calAndText .this:hover{
   background-color: rgba(255,255,255,0.4);
 }
 
-
 section.calAndText .container{
   width:70%;
   height:auto;
 }
-
 
 section.calAndText .calendar {
   padding-top: 100px;
@@ -371,7 +366,6 @@ section.calAndText .calendar {
 section.calAndText .noteBox{
   padding-top: 170px;
 }
-
 
 section.calAndText .header {
   display: flex;
