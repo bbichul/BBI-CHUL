@@ -34,7 +34,7 @@
 
 <body>
 
-<header id="header" class="d-flex align-items-center">
+<header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
 
         <h1 class="logo"><a href="/">BBICHUL</a></h1>
@@ -109,10 +109,13 @@
             </div>
 
             <div class="col-3">
-
                 <div class="noteBox">
-                    <div>Memo</div>
-                    <textarea id="calenderNote" onchange="updateText(this)" cols="30" rows="17"></textarea>
+                    <!--박스 설명, 선택한 날짜-->
+                    <div class="forms d-flex justify-content-between">
+                        <h4>memo</h4>
+                        <span class="select-date"></span>
+                    </div>
+                    <textarea id="calenderNote" onchange="updateText(this)" cols="30" rows="17" placeholder="일정을 입력하세요."></textarea>
                 </div>
             </div>
         </div>

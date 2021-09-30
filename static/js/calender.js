@@ -102,6 +102,8 @@ let btn_year_month_day = ''
 
 function dayClick(obj) {
     btn_year_month_day = $(obj).attr('id'); // 달력 날짜를 클릭 했을 때 받아온 날짜 ID 를 변수에 초기화.
+    let memo_text_day =  btn_year_month_day.replace("Y", "년 ").replace("M","월 ") + "일";
+    $('.select-date').text(memo_text_day);
 
     $.ajax({
         type: "POST",

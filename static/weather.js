@@ -57,8 +57,6 @@ function check_in() {
     let day = date_list[2]
     let week = date_list[3]
 
-    console.log(getCookie('access_token'))
-
     $.ajax({
         type: "POST",
         url: "/check-in",
