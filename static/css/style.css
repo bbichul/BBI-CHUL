@@ -323,6 +323,7 @@ section.calAndText{
   background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
   background-position: center;
   background-size: cover;
+  height: 100vw;
 
 }
 
@@ -350,6 +351,9 @@ section.calAndText .this:hover{
   background-color: rgba(255,255,255,0.1);
 }
 
+#calenderNote{
+  background-color: rgba(255,255,255,0.3);
+}
 
 
 section.calAndText .container{
@@ -363,12 +367,6 @@ section.calAndText .calendar {
 
 section.calAndText .noteBox{
   padding-top: 170px;
-}
-
-section.calAndText .main{
-  background-color: orange;
-  border-radius: 10px;
-  overflow: hidden;
 }
 
 
