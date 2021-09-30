@@ -137,18 +137,19 @@ def nickname_check():
 @login_required
 def clickedDay():
 
-    user_nickname = request.user['nick_name']
-
+    user_nickname      = request.user['nick_name']
     receive_click_date = request.form['date_give']
 
     user_data = db.calender.find_one({'nick_name': user_nickname})
+    try:
+        date_data = user_data['date'][receive_click_date]
 
-    if user_data is None:
+        resend_date_memo = date_data
+
+        return jsonify({'resend_date_memo': resend_date_memo})
+    except KeyError:
         resend_date_memo = ""
-    else:
-        resend_date_memo = user_data['date'][receive_click_date]
-
-    return jsonify({'resend_date_memo': resend_date_memo})
+        return jsonify({'resend_date_memo': resend_date_memo})
 # 날짜 클릭 함수 종료
 
 
