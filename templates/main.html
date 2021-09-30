@@ -30,13 +30,12 @@
     <!-- Template Main CSS File -->
     <link href="../static/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='weather.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='weather.js') }}"></script>
+    <script defer type="text/javascript" src="{{ url_for('static', filename='weather.js') }}"></script>
+    <script defer src="../static/js/modal.js"></script>
+    <script defer src="../static/js/main.js"></script>
+
     <title>삐빅! 출석했습니다</title>
-    <style>
 
-
-
-    </style>
 </head>
 <body>
 <header id="header" class="fixed-top d-flex align-items-center">
@@ -133,73 +132,71 @@
     </div>
     </div>
 
-    <!-- Log in Modal -->
-    <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-         aria-labelledby="logInModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Log in</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-box">
-                        <label>닉네임 : </label>
-                        <!--                    <button type="button" class="button is-sparta" onclick="login()">중복확인</button>-->
-                        <input type="text" id="login_nickname">
-                        <!--                    <p id="help-id" class="help is-hidden">닉네임은 자유형식*꼭 중복확인을 해주세요!*</p>-->
-                    </div>
-                    <div class="input-box">
-                        <label>비밀번호 : </label>
-                        <input type="password" id="login_password" placeholder="비밀번호를 입력해주세요.">
-                        <button type="button" id="login_password_eye">비밀번호 보기</button>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">회원가입
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Log in Modal -->
+<div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+aria-labelledby="logInModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+   <div class="modal-content">
+       <div class="modal-header">
+           <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+           <button id="login_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">x</span>
+           </button>
+       </div>
+       <div class="modal-body">
+           <div class="input-box">
+               <label>닉네임</label>
+               <input type="text" id="login_nickname">
+           </div>
+           <div class="input-box">
+               <label>비밀번호</label>
+               <input type="password" id="login_password" placeholder="비밀번호를 입력해주세요.">
+               <button type="button" id="login_password_eye">비밀번호 보기</button>
+           </div>
+       </div>
+       <div class="modal-footer">
+           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal" onclick="hide_nickname()">회원가입</button>
+           <button type="button" class="btn btn-secondary" onclick="login()">확인</button>
+       </div>
+   </div>
+</div>
+</div>
 
 <!-- sign up Modal -->
-                <div class="modal fade" id="signupModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-                     aria-labelledby="logInModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="signupModalLabel">Sign up</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true"></span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="input-box">
-                                    <label>닉네임 : </label>
-                                    <!--                    <button type="button" class="button is-sparta" onclick="login()">중복확인</button>-->
-                                    <input type="text" id="signup_nickname">
-                                    <!--                    <p id="help-id" class="help is-hidden">닉네임은 자유형식*꼭 중복확인을 해주세요!*</p>-->
-                                </div>
-                                <div class="input-box">
-                                    <label>비밀번호 : </label>
-                                    <input type="password" id="signup_password" placeholder="비밀번호를 입력해주세요.">
-                                    <button type="button" id="signup_password_eye">비밀번호 보기</button>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">가입완료</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="modal fade" id="signupModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+aria-labelledby="logInModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+   <div class="modal-content">
+       <div class="modal-header">
+           <h5 class="modal-title" id="signupModalLabel">회원가입</h5>
+           <button id="signup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">x</span>
+           </button>
+       </div>
+       <div class="modal-body">
+           <div class="input-box">
+               <label>닉네임</label>
+               <input type="text" id="signup_nickname">
+               <p id="can-using">사용해도 되는 닉네임 입니다.</p>
+               <p id="cant-using">이미 사용중인 닉네임 입니다.</p>
+               <button type="button" onclick="nickname_check()">중복확인</button>
+           </div>
+           <div class="input-box">
+               <label>비밀번호</label>
+               <input type="password" id="signup_password" placeholder="비밀번호를 입력해주세요.">
+               <p>영어 또는 숫자로 6글자 이상으로 작성해주세요</p>
+               <button type="button" id="signup_password_eye">비밀번호 보기</button>
+           </div>
+       </div>
+       <div class="modal-footer">
+           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="sign_up()">가입완료</button>
+       </div>
+   </div>
+</div>
+</div>
 
-    <script src="../static/js/main.js"></script>
+
 </body>
 </html>
