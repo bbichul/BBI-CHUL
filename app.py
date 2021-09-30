@@ -9,19 +9,22 @@ app    = Flask(__name__)
 client = MongoClient('localhost', 27017)
 db     = client.dbnbc
 
-# API 역할을 하는 부분
-
+# 시작페이자
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('start_page.html')
 
+
+# 메인페이지
 @app.route('/main')
 def main():
-    return render_template('main.html')
+    return render_template('main_page.html')
 
+
+# 캘린더페이지
 @app.route('/calender')
 def calender():
-    return render_template('calender.html')
+    return render_template('calender_page.html')
 
 
 # 체크인
@@ -41,7 +44,6 @@ def check_in():
         f'{year}.{month}.{day}.start_time': start_time,
         f'{year}.{month}.{day}.week'      : week,
     }})
-
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -67,6 +69,7 @@ def check_out():
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
 
+# 명언 랜덤 제공 GET
 @app.route('/wise', methods=['GET'])
 def read_wise_sy():
     wise = list(db.wise_sy.find({}, {'_id': False}))
@@ -128,15 +131,13 @@ def nickname_check():
     user = db.user.find_one({'nick_name': nick_name})
     if user is None:
         return jsonify({"msg": "사용할 수 있는 닉네임입니다."})
-
     return jsonify({'msg': '중복되는 닉네임입니다. 다시 입력해주세요.'})
 
 
-# 날짜 클릭 함수입니다.
+# 날짜 클릭
 @app.route('/click_day', methods=['POST'])
 @login_required
 def clickedDay():
-
     user_nickname      = request.user['nick_name']
     receive_click_date = request.form['date_give']
 
@@ -150,14 +151,12 @@ def clickedDay():
     except KeyError:
         resend_date_memo = ""
         return jsonify({'resend_date_memo': resend_date_memo})
-# 날짜 클릭 함수 종료
 
 
-# 캘린더 메모 변경 함수
+# 캘린더 메모 변경
 @app.route('/change_memo_text', methods=['POST'])
 @login_required
 def changedMemo():
-
     user_nickname     = request.user['nick_name']
     receive_memo      = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
@@ -171,7 +170,6 @@ def changedMemo():
     else:
         db.calender.update_one({'nick_name': user_nickname},{
             '$set': {f'date.{receive_key_class}': receive_memo}})
-
     return jsonify(receive_key_class)
 
 
