@@ -1,4 +1,4 @@
-   #header {
+#header {
   background: rgba(0, 0, 0, 0.75);
   transition: all 0.5s;
   z-index: 997;
@@ -12,7 +12,6 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-    position: fixed;left:310px;
 }
 #header .logo a {
   color: #fff;
@@ -24,13 +23,11 @@
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
-/**
-* Desktop Navigation
+/*
 * Desktop Navigation
 */
 .navbar {
   padding: 0;
-    position: fixed;right: 300px;
 }
 .navbar ul {
   margin: 0;
@@ -155,8 +152,7 @@
   }
 }
 
-/**
-* Mobile Navigation
+/*
 * Mobile Navigation
 */
 .mobile-nav-toggle {
@@ -287,85 +283,21 @@
     color: red;
 }
 
-
-
+/* -----------------------------------------------------*/
+/*                날씨, 타이머 부분                         */
+/*------------------------------------------------------*/
 
 body {
-    width: 1900px;
-    height: 510px;
-    /*background-color: #E0E0E0;*/
-    text-align: center;
-    background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
-  background-position: center;
-  background-size: cover;
-    overflow: hidden;
-}
-
-.helper {
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-    /* 설명을 위해서 */
-    /*width: 10px;*/
-    /*background-color: red;*/
-}
-
-.container.con2{
-
-    /*width: 100%;*/
-    position: center;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.checkin-box {
-    width: 500px;
-    margin: auto;
-}
-
-
-.timerBox {
     width: 100%;
-    margin: auto;
-    /*outline: 2px solid black;*/
-}
-
-.timerBox .time {
-    font-size: 40pt;
-    color: white;
-    position: fixed;
-    left: 1160px;
-    bottom: 130px;
-    font-family: cursive;;
-
-}
-
-.btnBox {
-    margin: 20px auto;
-    text-align: center;
-}
-
-.btnBox .fa {
-    margin: 0px 5px;
-    font-size: 30pt;
-    color: #FAED7D;
-    cursor: pointer;
-}
-
-.Clock {
-    font-size: 80px;
+    height: auto;
+    background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+    background-position: center;
+    background-size: cover;
+    overflow: scroll;
 }
 
 p {
     margin: 0 0 10px;
-}
-
-#weather_info {
-    position: relative;
-    left: 110px;bottom: -120px;
-    padding: 10px;
-    margin-right: 1200px;
-    color: #fff;
 }
 
 h1 {
@@ -375,38 +307,46 @@ h1 {
     opacity: 0.8;
 }
 
+.body_wrapper {
+    position: relative;
+    margin-top: 80px;
+}
+
+/*
+* 날씨, 명언, 오디오화면
+*/
+
+.left_body {
+    position: relative;
+    margin-top: 5px;
+    display: inline-block;
+    width: 49.6%;
+    border-right: 6px solid gray;
+    overflow: hidden;
+}
+
+#weather_info {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
 section {
-    padding: 10px 20px;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    padding-left: 60px;
     overflow: hidden;
     color: #fff;
     text-shadow: 1px 1px 1px #999;
-}
-
-.temp {
-    float: left;
-    width: 33.3333%;
-    font-size: 5em;
 }
 
 figure img {
     width: 80px;
 }
 
-aside {
-    overflow: hidden;
-}
-
-aside p {
-    font-size: 1.8em;
-    text-align: right;
-}
-
 .icon {
     width: 20%;
-}
-
-.aa {
-    font-size: 15px;
 }
 
 .csky {
@@ -414,59 +354,92 @@ aside p {
     margin-right: 540px;
 }
 
-.checkin-img {
+.fig {
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
     position: relative;
-    left: 500px;
-    bottom: 150px;
 }
 
-.checkout-img {
+.temp {
+    display: inline-block;
     position: relative;
-    left: 500px;
-    bottom: 160px;
+    overflow: hidden;
+    float: left;
+    width: fit-content;
+    font-size: 50px;
+}
+
+.aa {
+    overflow: hidden;
+    text-align: right;
+    margin-right: 60px;
+    height: fit-content;
+    position: relative;
+    font-size: 15px;
+}
+
+.wise {
+    padding: 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    font-size: 20px;
+    font-weight: bolder;
+    color: white;
+    width: 100%;
+}
+
+#wise-box {
+    text-align: center;
 }
 
 .audio {
-    position: fixed;
-    right: 1180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: 100px;
     margin: auto;
 }
+.audio audio:nth-child(1) {
+    margin-bottom: 30px;
+}
 
-.vl {
-    border-left: 6px solid gray;
-    height: 500px;
-    position: absolute;
-    left: 50%;
-    margin-left: -3px;
-    top: 0;
+/*
+* 날짜, 시간, 출퇴근 화면
+*/
 
+.right_body{
+    text-align: center;
+    width: 49.6%;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
 }
 
 .day {
-    position: fixed;
-    right: 375px;
-    bottom: 770px;
-    margin: auto;
     color: white;
 }
 
 .Clock {
-    position: fixed;
-    right: 320px;
-    bottom: 670px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 70px;
     color: white;
 }
 
-.wise {
-    font-size: 20px;
-    font-weight: bolder;
-    position: fixed;
-    left: 230px;
-    bottom: 220px;
+.checkin-box {
+    margin: auto;
+}
+
+.timerBox {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.timerBox .time {
+    font-size: 40pt;
     color: white;
-    /*margin: 120px 0px 120px 0px;*/
-    width: 400px;
-
-
+    font-family: cursive;;
 }
