@@ -354,12 +354,12 @@ section.calAndText .this:hover{
 }
 
 #calenderNote{
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.4);
 }
 
 
 section.calAndText .container{
-  width:90%;
+  width:70%;
   height:auto;
 }
 

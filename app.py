@@ -136,14 +136,17 @@ def nickname_check():
 @app.route('/click_day', methods=['POST'])
 @login_required
 def clickedDay():
+
+    user_nickname = request.user['nick_name']
+
     receive_click_date = request.form['date_give']
 
-    date_data = db.userdata.find_one({'date': receive_click_date})
+    user_data = db.calender.find_one({'nick_name': user_nickname})
 
-    if date_data is None:
+    if user_data is None:
         resend_date_memo = ""
     else:
-        resend_date_memo = date_data['Memo']
+        resend_date_memo = user_data['date'][receive_click_date]
 
     return jsonify({'resend_date_memo': resend_date_memo})
 # 날짜 클릭 함수 종료
@@ -153,15 +156,20 @@ def clickedDay():
 @app.route('/change_memo_text', methods=['POST'])
 @login_required
 def changedMemo():
-    receive_memo = request.form['change_memo_give']
+
+    user_nickname     = request.user['nick_name']
+    receive_memo      = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
 
-    date_data = db.userdata.find_one({'date': receive_key_class})
+    user_data = db.calender.find_one({'nick_name': user_nickname})
 
-    if date_data is None:
-        db.userdata.insert_one({'date': receive_key_class, 'Memo': receive_memo})
+    if user_data is None:
+        db.calender.insert_one({'nick_name': user_nickname})
+        db.calender.update_one({'nick_name': user_nickname}, {
+            '$set': {f'date.{receive_key_class}': receive_memo}})
     else:
-        db.userdata.update_one({'date': receive_key_class}, {'$set': {'Memo': receive_memo}})
+        db.calender.update_one({'nick_name': user_nickname},{
+            '$set': {f'date.{receive_key_class}': receive_memo}})
 
     return jsonify(receive_key_class)
 
