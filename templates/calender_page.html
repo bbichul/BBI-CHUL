@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>근태 및 기록 캘린더</title>
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
+    </script>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+    <!-- Vendor CSS Files -->
+    <link href="../static/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Nav Var CSS File, Calender JS -->
+    <link href="../static/css/style.css" rel="stylesheet">
+    <script defer src="../static/js/modal.js"></script>
+    <script defer src="../static/js/calender_page.js"></script>
+    <script defer src="../static/js/start_page.js"></script>
+
+
+</head>
+
+<body>
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+        <h1 class="logo"><a href="/">BBICHUL</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="start_page.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto" href="/main">main</a></li>
+                <li><a class="nav-link scrollto" href="/#about">About</a></li>
+
+<!--                불필요 라인 주석 처리 추후 사용 가능성 있어서 지우지 않았습니다.-->
+<!--                <li><a href="blog.html">Blog</a></li>-->
+<!--                <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>-->
+<!--                    <ul>-->
+<!--                        <li><a href="#">Drop Down 1</a></li>-->
+<!--                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i-->
+<!--                                class="bi bi-chevron-right"></i></a>-->
+<!--                            <ul>-->
+<!--                                <li><a href="#">Deep Drop Down 1</a></li>-->
+<!--                                <li><a href="#">Deep Drop Down 2</a></li>-->
+<!--                                <li><a href="#">Deep Drop Down 3</a></li>-->
+<!--                                <li><a href="#">Deep Drop Down 4</a></li>-->
+<!--                                <li><a href="#">Deep Drop Down 5</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li><a href="#">Drop Down 2</a></li>-->
+<!--                        <li><a href="#">Drop Down 3</a></li>-->
+<!--                        <li><a href="#">Drop Down 4</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
+                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
+                </li>
+                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogOut</a>
+                </li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+
+
+<section class="calAndText">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <div class="calendar">
+                    <div class="header">
+                        <div class="year-month"></div>
+                        <div class="nav">
+                            <button class="nav-btn go-prev" onclick="prevMonth()">&lt;</button>
+                            <button class="nav-btn go-today" onclick="goToday()">Month</button>
+                            <button class="nav-btn go-next" onclick="nextMonth()">&gt;</button>
+                        </div>
+                    </div>
+                    <div class="main">
+                        <div class="days">
+                            <div class="day">일</div>
+                            <div class="day">월</div>
+                            <div class="day">화</div>
+                            <div class="day">수</div>
+                            <div class="day">목</div>
+                            <div class="day">금</div>
+                            <div class="day">토</div>
+                        </div>
+                        <div class="dates"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="noteBox">
+                    <!--박스 설명, 선택한 날짜-->
+                    <div class="forms d-flex justify-content-between">
+                        <h4>memo</h4>
+                        <span class="select-date"></span>
+                    </div>
+                    <textarea id="calenderNote" onchange="updateText(this)" cols="30" rows="17" placeholder="일정을 입력하세요."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- cal And Text End-->
+
+
+</body>
+
+</html>
