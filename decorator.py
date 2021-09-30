@@ -1,6 +1,6 @@
 import jwt
 
-# from my_settings  import SECRET
+from my_settings  import SECRET
 from functools    import wraps
 from flask 		  import request, jsonify
 from pymongo       import MongoClient
@@ -10,20 +10,27 @@ client = MongoClient('localhost', 27017)
 db = client.dbnbc
 
 def login_required(func):
-    @wraps(func)                   								# 2)
+    @wraps(func)
     def decorated_function(*args, **kwargs):
-        access_token = request.headers.get('Authorization') 	# 3)
-        if access_token:  							# 4)
-            token_payload = jwt.decode(access_token, SECRET, algorithms='HS256')
+        try:
+            access_token = request.headers.get('Authorization')
 
-            # if not User.objects.filter(id=token_payload['_id']).exists():
-            #     return jsonify({'INVALID_TOKEN'})
-            user_id = ObjectId(token_payload['id'])
-            user = db.user.find_one({"_id": user_id})
-            print(user)
-            request.user = user
-            return func(*args, **kwargs)
+            # 로그인한 사용자
+            if access_token:
+                token_payload = jwt.decode(access_token, SECRET, algorithms='HS256')
 
-        return jsonify({'msg': "need_login"} ,status = 401) 						# 9)
+                # request.user 에 로그인한 사용자 정보 생성
+                user_id      = ObjectId(token_payload['id'])
+                user         = db.user.find_one({"_id": user_id})
+                request.user = user
+
+                return func(*args, **kwargs)
+
+            # 로그인 하지 않은 사용자
+            return jsonify({'msg': "need_login"})
+
+        # 정상적이지 않은 토큰이 들오올시
+        except jwt.DecodeError:
+            return jsonify({'msg': "need_login"})
 
     return decorated_function
