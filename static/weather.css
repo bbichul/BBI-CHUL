@@ -1,4 +1,4 @@
-#header {
+   #header {
   background: rgba(0, 0, 0, 0.75);
   transition: all 0.5s;
   z-index: 997;
@@ -293,6 +293,7 @@ body {
     background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
     background-position: center;
     background-size: cover;
+    background-attachment: fixed;
     overflow: scroll;
 }
 
