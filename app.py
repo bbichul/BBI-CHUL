@@ -24,8 +24,9 @@ def calender():
     return render_template('calender.html')
 
 
-
+# 체크인
 @app.route('/check-in', methods=['POST'])
+@login_required
 def check_in():
     start_time = request.form['start_time']
     status     = request.form['status']
@@ -33,48 +34,44 @@ def check_in():
     month      = request.form['month']
     day        = request.form['day']
     week       = request.form['week']
-    # doc = {'name': 'bobby'}
-    # db.user.insert_one(doc)
-    # print(year, month, day, week)
 
-    # 바꾸기 - 예시
-    db.user.update_one({'name': 'bobby'}, {'$set': {
+    user_nickname = request.user['nick_name']
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        # f'{date[:4]}.{date[5]}.start_time': start_time
-        'date.year': year,
-        'date.month': month,
-        'date.week': week,
-        'date.day': day,
-        'date.start_time': start_time,
+        f'{year}.{month}.{day}.start_time': start_time,
+        f'{year}.{month}.{day}.week'      : week,
     }})
 
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
-@app.route('/check-out', methods=['POST'])
-def check_out():
-    stop_time = request.form['stop_time']
-    status = request.form['status']
-    study_time = request.form['study_time'][:8]
-    # date = request.form['date']
-    # date = db.user.find_one({'name':'bobby'})[]
 
-    db.user.update_one({'name': 'bobby'}, {'$set': {
+# 체크아웃
+@app.route('/check-out', methods=['POST'])
+@login_required
+def check_out():
+    year       = request.form['year']
+    month      = request.form['month']
+    day        = request.form['day']
+    week       = request.form['week']
+    stop_time  = request.form['stop_time']
+    status     = request.form['status']
+    study_time = request.form['study_time'][:8]
+
+    user_nickname = request.user['nick_name']
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        'date.stop_time': stop_time,
-        'date.study_time': study_time
+        f'{year}.{month}.{day}.stop_time': stop_time,
+        f'{year}.{month}.{day}.study_time': study_time,
+        f'{year}.{month}.{day}.week': week,
     }})
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
-@app.route('/review', methods=['GET'])
-def read_reviews():
-    sample_receive = request.args.get('sample_give')
-    print(sample_receive)
-    return jsonify({'msg': '이 요청은 GET!'})
 
 @app.route('/wise', methods=['GET'])
 def read_wise_sy():
     wise = list(db.wise_sy.find({}, {'_id': False}))
     return jsonify(wise)
+
 
 # 회원가입
 @app.route('/sign-up', methods=['POST'])
@@ -107,7 +104,7 @@ def sign_up():
 @app.route('/login', methods=['POST'])
 def login():
     nick_name = request.form['nick_name']
-    password = request.form['password']
+    password  = request.form['password']
 
     # 닉네임 확인
     user = db.user.find_one({'nick_name': nick_name})
@@ -135,14 +132,9 @@ def nickname_check():
     return jsonify({'msg': '중복되는 닉네임입니다. 다시 입력해주세요.'})
 
 
-# 데코레이터 테스트 (추후 삭제 예정)
-@app.route('/test', methods=['POST'])
-@login_required
-def test():
-    return jsonify({'msg': 'success decorator'})
-
 # 날짜 클릭 함수입니다.
 @app.route('/click_day', methods=['POST'])
+@login_required
 def clickedDay():
     receive_click_date = request.form['date_give']
 
@@ -159,6 +151,7 @@ def clickedDay():
 
 # 캘린더 메모 변경 함수
 @app.route('/change_memo_text', methods=['POST'])
+@login_required
 def changedMemo():
     receive_memo = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
@@ -171,8 +164,6 @@ def changedMemo():
         db.userdata.update_one({'date': receive_key_class}, {'$set': {'Memo': receive_memo}})
 
     return jsonify(receive_key_class)
-# 캘린더 메모 변경 함수 종료
-
 
 
 if __name__ == '__main__':
