@@ -714,3 +714,4 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,visualstudio,visualstudiocode,macos,linux,windows,python
 
 my_settings.py
+dbwise.py

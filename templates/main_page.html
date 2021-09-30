@@ -29,10 +29,10 @@
 
     <!-- Template Main CSS File -->
     <link href="../static/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='weather.css') }}">
-    <script defer type="text/javascript" src="{{ url_for('static', filename='weather.js') }}"></script>
+    <link href="../static/css/main_page.css" rel="stylesheet">
+    <script defer src="../static/js/main_page.js"></script>
     <script defer src="../static/js/modal.js"></script>
-    <script defer src="../static/js/main.js"></script>
+    <script defer src="../static/js/start_page.js"></script>
 
     <title>삐빅! 출석했습니다</title>
 
@@ -43,7 +43,6 @@
 
         <h1 class="logo"><a href="/">BBICHUL</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
         <nav id="navbar" class="navbar">
             <ul>
@@ -106,11 +105,11 @@
         </div>
         <div class="audio">
             <audio autoplay controls>
-                <source src="../static/fire.mp3" type="audio/mp3">
-                <source src="../static/night.mp3" type="audio/mp3">
+                <source src="../static/audio/fire.mp3" type="audio/mp3">
+                <source src="../static/audio/night.mp3" type="audio/mp3">
             </audio>
             <!--            <audio autoplay controls>-->
-            <!--                <source src="../static/night.mp3" type="audio/mp3">-->
+            <!--                <source src="../static/night.audio" type="audio/audio">-->
             <!--            </audio>-->
         </div>
     </div>
@@ -118,12 +117,12 @@
         <div class="day" id="Clockday">00/00/00</div>
         <div class="Clock" id="Clock">00:00</div>
         <div class="checkin-box">
-            <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/start2.gif" width="400"
+            <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/img/start.gif" width="400"
                  height="300">
         </div>
         <div class="checkout-box">
             <div id='box' class="timer">
-                <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/study2.gif" width="400"
+                <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/img/study.gif" width="400"
                      height="300">
                 <div id='timerBox' class="timerBox">
                     <div id="time" class="time">00:00:00초 동안 업무중</div>
