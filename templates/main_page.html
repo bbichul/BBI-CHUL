@@ -105,26 +105,44 @@
             </p>
         </div>
         <div class="audio">
-            <audio autoplay controls>
-                <source src="../static/audio/fire.mp3" type="audio/mp3">
-                <source src="../static/audio/night.mp3" type="audio/mp3">
-            </audio>
-            <!--            <audio autoplay controls>-->
-            <!--                <source src="../static/night.audio" type="audio/audio">-->
-            <!--            </audio>-->
+
+<audio controls id="myaudio">
+	<source id="main">
+	<source src="../static/audio/fire.mp3">
+	<source src="../static/audio/night.mp3">
+<!--	<source src="http://upload.wikimedia.org/wikipedia/commons/3/32/C-major.ogg">-->
+<!--	<source src="http://upload.wikimedia.org/wikipedia/commons/4/4b/D-major.ogg">-->
+
+</audio>
+<span id='play-next' class="track">⏭️</span>
+
         </div>
     </div>
         <div class="right_body">
         <div class="day" id="Clockday">00/00/00</div>
         <div class="Clock" id="Clock">00:00</div>
+
+
         <div class="checkin-box">
-            <img id="startbtn" class="checkin-img" onclick="check_in()" src="/static/img/start.gif" width="400"
+            <img   src="/static/img/start.gif" width="400"
                  height="300">
+            <input type='button' class="checkin-img" id="startbtn"
+         value='시작'
+         onclick="check_in()">
         </div>
-        <div class="checkout-box">
+
+
+
+            <div class="checkout-box">
             <div id='box' class="timer">
-                <img id="stopbtn" class="checkout-img" onclick="check_out()" src="/static/img/study.gif" width="400"
+                <img    src="/static/img/study.gif" width="400"
                      height="300">
+                 <input type='button'
+         value='중지'
+         onclick='alert("안녕하세요")'/>
+                 <input type='button' class="checkout-img"id="stopbtn"
+         value='끝'
+         onclick="check_out()">
                 <div id='timerBox' class="timerBox">
                     <div id="time" class="time">00:00:00초 동안 업무중</div>
                 </div>
