@@ -17,16 +17,25 @@
 ### 📌 기술 선택 이유! - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%EA%B8%B0%EC%88%A0-%EC%84%A0%ED%83%9D-%EC%9D%B4%EC%9C%A0" >상세보기 - WIKI 이동</a>
 
 ### 📌 주요 기능 - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C" >상세보기 - WIKI 이동</a> 
-1.체크인/아웃기능  
-* 체크인
-* 체크아웃
-
-
-2.소셜로그인기능
+1.소셜 로그인 기능  
 * 카카오 소셜 로그인
+* 로그인한 아이디 기반 체크인
+* 로그인한 아이디 기반 체크아웃
+* 일시정지 가능
+* 체크인/아웃 시간 측정 및 그래프로 평균 공부 시간 확인
 
-3.명언 랜덤 생성기능
-* 크롤링으로 명언 가져오기
-* 랜덤으로 명언 보여주기 
+2.캘린더 기능
+* 팀 및 개인 캘린더로 스케쥴 관리
+* 캘린더에 메모 작성
+
+3.날씨, 명언, bgm 기능
+* openweathermap api 사용해 현재 위치 정보에 맞는 날씨 가져와 보여주기
+* 크롤링으로 명언 가져와 랜덤으로 보여주기
+* 집중에 도움을 줄 수 있는 bgm 재생
+
+4.팀페이지
+* 팀원들의 실시간 출결 현황
+* 그래프로 팀평균 공부 시간 및 기여도 확인
+* 체크리스트
 
 ### 📌 문제를 이렇게 해결했어요! - <a href="https://github.com/Dae-Hwan/sparta-project/wiki/%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85" >상세보기 - WIKI 이동</a> 
