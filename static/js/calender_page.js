@@ -1,5 +1,5 @@
 //현재 날짜 초기화
-const date = new Date();
+let date = new Date();
 
 //캘린더 렌더링 함수
 const renderCalendar = () => {
@@ -57,26 +57,54 @@ const renderCalendar = () => {
         }
 
 
-        dates[i] = `<div class="date"><button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date}</button></div>`;
+        dates[i] = `<div class="date">
+                        <button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date} <span id="${viewYear}Y${getMonth}M${date}text" class="date-on-text">ㅇㅇ</span></button>
+                    </div>`;
+
     })
 
     // Dates 그리기
     document.querySelector('.dates').innerHTML = dates.join('');
 }
 
+//시작 시 입력 된 메모 가져와 달력 본체에 입력하는 함수
+function getMemo(){
+    $.ajax({
+    type: "GET",
+    headers: {
+        Authorization: getCookie('access_token')
+    },
+    url: "/take-memo",
+    data: {},
+    success: function(response){
+        let take_text = response['give_text'];
+
+        for (let key in take_text) {
+            let text_key = key+'text';
+
+
+
+        }
+    }
+  })
+}
+
 renderCalendar();
+getMemo();
 
 
 const prevMonth = () => {
     date.setDate(1);
     date.setMonth(date.getMonth() - 1);
     renderCalendar();
+    getMemo();
 }
 
 const nextMonth = () => {
     date.setDate(1);
     date.setMonth(date.getMonth() + 1);
     renderCalendar();
+    getMemo();
 }
 
 const goToday = () => {
@@ -102,15 +130,15 @@ let btn_year_month_day = ''
 
 function dayClick(obj) {
     btn_year_month_day = $(obj).attr('id'); // 달력 날짜를 클릭 했을 때 받아온 날짜 ID 를 변수에 초기화.
-    let memo_text_day =  btn_year_month_day.replace("Y", "년 ").replace("M","월 ") + "일";
+    let memo_text_day = btn_year_month_day.replace("Y", "년 ").replace("M", "월 ") + "일";
     $('.select-date').text(memo_text_day);
 
     $.ajax({
         type: "POST",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
-        url: "/click_day",
+        url: "/click-day",
         data: {date_give: btn_year_month_day},
         success: function (response) {
             let receive_date_memo = response['resend_date_memo'];
@@ -128,9 +156,9 @@ function updateText(obj) {
     $.ajax({
         type: "POST",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
-        url: "/change_memo_text",
+        url: "/change-memo-text",
         data: {change_memo_give: varMemoText, key_class_give: btn_year_month_day},
         success: function (response) {
             console.log(response)

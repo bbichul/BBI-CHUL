@@ -1,6 +1,6 @@
 /*캘린더 CSS시작*/
 section.calAndText{
-  background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+  background-image: url("../img/main_backgroung.jpg");
   background-position: center;
   background-size: cover;
   height: 100vw;
@@ -42,6 +42,7 @@ section.calAndText .container{
 section.calAndText .calendar {
   padding-top: 100px;
 }
+
 
 section.calAndText .noteBox{
   padding-top: 170px;
@@ -103,6 +104,11 @@ section.calAndText .date {
   text-align: left;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #333333;
+  position : relative;
+}
+
+section.calAndText .date .date-on-text{
+  font-size: 70%;
 }
 
 section.calAndText .day:nth-child(7n + 1),

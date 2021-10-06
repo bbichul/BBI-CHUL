@@ -135,7 +135,7 @@ def nickname_check():
 
 
 # 날짜 클릭
-@app.route('/click_day', methods=['POST'])
+@app.route('/click-day', methods=['POST'])
 @login_required
 def clickedDay():
     user_nickname      = request.user['nick_name']
@@ -154,7 +154,7 @@ def clickedDay():
 
 
 # 캘린더 메모 변경
-@app.route('/change_memo_text', methods=['POST'])
+@app.route('/change-memo-text', methods=['POST'])
 @login_required
 def changedMemo():
     user_nickname     = request.user['nick_name']
@@ -171,6 +171,18 @@ def changedMemo():
         db.calender.update_one({'nick_name': user_nickname},{
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
+
+@app.route('/take-memo', methods=['GET'])
+@login_required
+def show_diary():
+    user_nickname = request.user['nick_name']
+
+    find_db_id = list(db.calender.find({'nick_name' : user_nickname}))
+
+    text_data = find_db_id[0]['date']
+
+    return jsonify({'give_text': text_data})
+
 
 
 if __name__ == '__main__':
