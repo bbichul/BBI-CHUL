@@ -1,9 +1,10 @@
-import re, bcrypt, jwt
+import re, bcrypt, jwt, pymongo
 
+from datetime import datetime, date, timedelta
 from my_settings import SECRET
-from decorator   import login_required
-from flask       import Flask, render_template, jsonify, request
-from pymongo     import MongoClient
+from decorator import login_required
+from flask import Flask, render_template, jsonify, request
+from pymongo import MongoClient
 
 app    = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -27,6 +28,11 @@ def calender():
     return render_template('calender_page.html')
 
 
+# 마이페이지
+@app.route('/my-page')
+def my_page():
+    return render_template('my_page.html')
+
 # 체크인
 @app.route('/check-in', methods=['POST'])
 @login_required
@@ -39,10 +45,10 @@ def check_in():
     week       = request.form['week']
 
     user_nickname = request.user['nick_name']
+    today = date.today()
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        f'{year}.{month}.{day}.start_time': start_time,
-        f'{year}.{month}.{day}.week'      : week,
+        f'start_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': start_time
     }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
@@ -60,11 +66,12 @@ def check_out():
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
+    today = date.today()
+
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        f'{year}.{month}.{day}.stop_time': stop_time,
-        f'{year}.{month}.{day}.study_time': study_time,
-        f'{year}.{month}.{day}.week': week,
+        f'stop_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': stop_time,
+        f'study_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': study_time
     }})
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
@@ -97,7 +104,8 @@ def sign_up():
     decode_password = encode_password.decode("utf-8")
     doc = {
         'nick_name': nick_name,
-        'password': decode_password
+        'password': decode_password,
+        'status': 'empty',
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -172,7 +180,38 @@ def changedMemo():
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
+# 마이페이지
+@app.route('/my-info', methods=['GET'])
+@login_required
+def my_info():
+    user_nickname = request.user['nick_name']
+    user_data = db.user.find_one({'nick_name': user_nickname})
+    today = date.today()
+    today_start_time = user_data['start_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    today_stop_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    today_study_time = user_data['study_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    # sum_study_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    # study_hour = int(study_time.split(":")[0])
+    # study_minute = int(study_time.split(":")[1])
+    # study_second = int(study_time.split(":")[2])
+    # avg_start_time =
+    # 'sum_study_time': sum_study_time + (study_hour*3600) + (study_minute*60) + study_second,
+
+    # print(list(db.user.aggregate([{'$group': {
+    #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
+    # print(today.weekday)
+    # print(list(db.user.aggregate([{'$group': {
+    #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
+
+    return jsonify({
+        'today_start_time': today_start_time,
+        'today_stop_time': today_stop_time,
+        'today_study_time':today_study_time
+        # 'avg_start_time': ,
+        # 'avg_stop_time': gg,
+        # 'avg_stuudy_time': gg,
+    })
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
