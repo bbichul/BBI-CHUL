@@ -187,21 +187,34 @@ def my_info():
     user_nickname = request.user['nick_name']
     user_data = db.user.find_one({'nick_name': user_nickname})
     today = date.today()
-    today_start_time = user_data['start_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    today_stop_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    # today_start_time = user_data['start_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
+    # today_stop_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
     today_study_time = user_data['study_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    # sum_study_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    # study_hour = int(study_time.split(":")[0])
-    # study_minute = int(study_time.split(":")[1])
-    # study_second = int(study_time.split(":")[2])
-    # avg_start_time =
-    # 'sum_study_time': sum_study_time + (study_hour*3600) + (study_minute*60) + study_second,
-
     # print(list(db.user.aggregate([{'$group': {
     #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
     # print(today.weekday)
-    # print(list(db.user.aggregate([{'$group': {
-    #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
+    sum_start_time = 0
+    time_date = 0
+    for day in user_data['start_time']:
+        day_start_time = user_data['start_time'][day].split(':')
+        day_start_hour = int(day_start_time[0])
+        day_start_minute = int(day_start_time[1])
+        day_start_second = int(day_start_time[2])
+        temp = day_start_hour*60*60 + day_start_minute*60 + day_start_second
+        sum_start_time += temp
+        time_date += 1
+
+    ss = (sum_start_time / time_date)
+    start_hours = ss // 3600
+    ss = ss - start_hours*3600
+    start_minutes = ss // 60
+    ss = ss - start_minutes*60
+    start_seconds = ss
+
+    print(f'{int(start_hours)}:{int(start_minutes)}:{int(start_seconds)}')
+
+    # for document in (list(db.user.aggregate([{'$group': {'_id': {'all_avg_start_time': "$start_time"}, 'sum':{'$avg': "$start_time"}}}]))):
+    #     print(document)
 
     return jsonify({
         'today_start_time': today_start_time,
