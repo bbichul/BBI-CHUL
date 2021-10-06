@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -36,10 +36,10 @@
 
     <!-- Nav Var CSS File, Calender JS -->
     <link href="../static/css/style.css" rel="stylesheet">
-    <link href="../static/css/calender.css" rel="stylesheet">
+    <link href="../static/css/my_page.css" rel="stylesheet">
 
     <script defer src="../static/js/modal.js"></script>
-    <script defer src="../static/js/calender_page.js"></script>
+    <script defer src="../static/js/my_page.js"></script>
     <script defer src="../static/js/start_page.js"></script>
 
 
@@ -59,7 +59,6 @@
                 <li><a class="nav-link scrollto active" href="/">Home</a></li>
                 <li><a class="nav-link scrollto" href="/main">main</a></li>
                 <li><a class="nav-link scrollto" href="/#about">About</a></li>
-                <li><a class="nav-link scrollto" href="/my-page">My Page</a></li>
 
 <!--                불필요 라인 주석 처리 추후 사용 가능성 있어서 지우지 않았습니다.-->
 <!--                <li><a href="blog.html">Blog</a></li>-->
@@ -92,50 +91,17 @@
 
     </div>
 </header><!-- End Header -->
-
-
-<section class="calAndText">
-    <div class="container">
-        <div class="row">
-            <div class="col-9">
-                <div class="calendar">
-                    <div class="header">
-                        <div class="year-month"></div>
-                        <div class="nav">
-                            <button class="nav-btn go-prev" onclick="prevMonth()">&lt;</button>
-                            <button class="nav-btn go-today" onclick="goToday()">Month</button>
-                            <button class="nav-btn go-next" onclick="nextMonth()">&gt;</button>
-                        </div>
-                    </div>
-                    <div class="main">
-                        <div class="days">
-                            <div class="day">일</div>
-                            <div class="day">월</div>
-                            <div class="day">화</div>
-                            <div class="day">수</div>
-                            <div class="day">목</div>
-                            <div class="day">금</div>
-                            <div class="day">토</div>
-                        </div>
-                        <div class="dates"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="noteBox">
-                    <!--박스 설명, 선택한 날짜-->
-                    <div class="forms d-flex justify-content-between">
-                        <h4>memo</h4>
-                        <span class="select-date"></span>
-                    </div>
-                    <textarea id="calenderNote" onchange="updateText(this)" cols="30" rows="17" placeholder="일정을 입력하세요."></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> <!-- cal And Text End-->
-
+<div id="my-page">
+    <div>오늘공부시작시간</div>
+    <div>오늘공부종료시간</div>
+    <div>오늘공부총시간</div>
+    <div>평균공부시작시간</div>
+    <div>평균공부종료시간</div>
+    <div>평균공부시간</div>
+    <div>월별 출근시간</div>
+    <div>월별 퇴근시간</div>
+    <div>월별 평균 공부시간</div>
+</div>
 
 </body>
 
