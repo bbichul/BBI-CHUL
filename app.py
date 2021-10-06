@@ -7,7 +7,7 @@ from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
 app    = Flask(__name__)
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://test:test@13.125.139.74', 27017)
 db     = client.dbnbc
 
 # 시작페이자
@@ -211,6 +211,15 @@ def my_info():
         # 'avg_stop_time': gg,
         # 'avg_stuudy_time': gg,
     })
+
+# 팀페이지
+@app.route('/team-page', methods=['GET'])
+@login_required
+def team_info():
+    user_nickname = request.user['nick_name']
+    user_data = db.user.find_one({'nick_name': user_nickname})
+
+    return jsonify()
 
 
 if __name__ == '__main__':
