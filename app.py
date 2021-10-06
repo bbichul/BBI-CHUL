@@ -46,10 +46,24 @@ def check_in():
 
     user_nickname = request.user['nick_name']
     today = date.today()
-    db.user.update_one({'nick_name': user_nickname}, {'$set': {
-        'status': status,
-        f'start_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': start_time
-    }})
+
+    # 만약 time 콜렉션에 값이 없으면
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'}) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}',
+            'status': status,
+        }
+        db.time.insert_one(doc)
+
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'}, {'$set': {
+            'status': status
+        }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -68,11 +82,14 @@ def check_out():
     user_nickname = request.user['nick_name']
     today = date.today()
 
-    db.user.update_one({'nick_name': user_nickname}, {'$set': {
-        'status': status,
-        f'stop_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': stop_time,
-        f'study_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': study_time
-    }})
+    # 만약 time 콜렉션에 값이 없으면
+    db.time.update_one({
+        'nick_name': user_nickname,
+        'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'},
+        {'$set': {
+            'status': status,
+            'study_time': study_time,
+        }})
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
 
