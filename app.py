@@ -48,7 +48,6 @@ def check_in():
     today = date.today()
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        f'start_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': start_time
     }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
@@ -70,8 +69,8 @@ def check_out():
 
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
-        f'stop_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': stop_time,
-        f'study_time.{today.year}/{today.month}/{today.day}/{today.weekday()}': study_time
+        'study_time': study_time,
+        'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'
     }})
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
