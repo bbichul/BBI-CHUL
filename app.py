@@ -1,5 +1,6 @@
-import re, bcrypt, jwt
+import re, bcrypt, jwt, pymongo
 
+from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
@@ -28,6 +29,11 @@ def calender():
     return render_template('calender_page.html')
 
 
+# 마이페이지
+@app.route('/my-page')
+def my_page():
+    return render_template('my_page.html')
+
 # 체크인
 @app.route('/check-in', methods=['POST'])
 @login_required
@@ -40,11 +46,36 @@ def check_in():
     week = request.form['week']
 
     user_nickname = request.user['nick_name']
-    db.user.update_one({'nick_name': user_nickname}, {'$set': {
-        'status': status,
-        f'{year}.{month}.{day}.start_time': start_time,
-        f'{year}.{month}.{day}.week': week,
-    }})
+    today = date.today()
+
+    # 만약 time 콜렉션에 값이 없으면
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()
+    }) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday(),
+            'status': status,
+        }
+        db.time.insert_one(doc)
+
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday()},
+            {'$set': {
+            'status': status
+        }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -61,12 +92,19 @@ def check_out():
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
-    db.user.update_one({'nick_name': user_nickname}, {'$set': {
-        'status': status,
-        f'{year}.{month}.{day}.stop_time': stop_time,
-        f'{year}.{month}.{day}.study_time': study_time,
-        f'{year}.{month}.{day}.week': week,
-    }})
+    today = date.today()
+
+    # 만약 time 콜렉션에 값이 없으면
+    db.time.update_one({
+        'nick_name': user_nickname,
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()},
+        {'$set': {
+            'status': status,
+            'study_time': study_time,
+        }})
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
 
@@ -98,7 +136,7 @@ def sign_up():
     decode_password = encode_password.decode("utf-8")
     doc = {
         'nick_name': nick_name,
-        'password': decode_password
+        'password': decode_password,
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -172,6 +210,48 @@ def changed_memo():
         db.calender.update_one({'nick_name': user_nickname}, {
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
+
+# 마이페이지(미완성)
+# @app.route('/my-info', methods=['GET'])
+# @login_required
+# def my_info():
+#     user_nickname = request.user['nick_name']
+#     today = date.today()
+#     today_study_time = db.time.find_one({'nick_name': user_nickname, 'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'})['study_time']
+#
+#     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+#
+#     sum_study_time = 0
+#     time_date = 0
+#     for user_day_data in user_data:
+#         day_study_time = user_day_data['study_time'].split(':')
+#         day_study_hour = int(day_study_time[0])
+#         day_study_minute = int(day_study_time[1])
+#         day_study_second = int(day_study_time[2])
+#         temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
+#         sum_study_time += temp
+#         time_date += 1
+#
+#     ss = (sum_study_time / time_date)
+#     study_hours = ss // 3600
+#     ss = ss - study_hours*3600
+#     study_minutes = ss // 60
+#     ss = ss - study_minutes*60
+#     study_seconds = ss
+#
+#     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
+#
+#     monthly_user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+#     for i in monthly_user_data:
+#         print(i)
+#
+#     print(today_study_time, avg_study_time)
+#     return jsonify({
+#         'today_study_time':today_study_time,
+#         'avg_study_time': avg_study_time,
+#         # 'month_day_study_time': month_day_study_time
+#         # 'avg_study_time': today_study_time
+#     })
 
 
 @app.route('/take-memo', methods=['GET'])
