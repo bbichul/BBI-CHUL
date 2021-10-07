@@ -25,6 +25,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
+    <!--  chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+            integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Vendor CSS Files -->
     <link href="../static/vendor/animate.css/animate.min.css" rel="stylesheet">
@@ -42,6 +46,8 @@
     <script defer src="../static/js/my_page.js"></script>
     <script defer src="../static/js/start_page.js"></script>
 
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 
 </head>
 
@@ -97,8 +103,15 @@
     <div>월별 평균 공부시간</div>
     <div>한달간격 일별 공부시간</div>
     <div>하루평균공부시간</div>
+       <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="myChartOne"></canvas>
+            </div>
+        </div>
+    </div>
+
+<!--    <canvas id="myChart"></canvas>-->
 </div>
-
 </body>
-
 </html>
