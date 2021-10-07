@@ -50,10 +50,17 @@ def check_in():
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
         'nick_name': user_nickname,
-        'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'}) is None:
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()
+    }) is None:
         doc = {
             'nick_name': user_nickname,
-            'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}',
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday(),
             'status': status,
         }
         db.time.insert_one(doc)
@@ -61,7 +68,11 @@ def check_in():
     else:
         db.time.update_one({
             'nick_name': user_nickname,
-            'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'}, {'$set': {
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday()},
+            {'$set': {
             'status': status
         }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
@@ -85,7 +96,10 @@ def check_out():
     # 만약 time 콜렉션에 값이 없으면
     db.time.update_one({
         'nick_name': user_nickname,
-        'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'},
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()},
         {'$set': {
             'status': status,
             'study_time': study_time,
@@ -122,7 +136,6 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
-        'status': 'empty',
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -197,37 +210,47 @@ def changedMemo():
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
-# 마이페이지
-@app.route('/my-info', methods=['GET'])
-@login_required
-def my_info():
-    user_nickname = request.user['nick_name']
-    user_data = db.user.find_one({'nick_name': user_nickname})
-    today = date.today()
-    today_start_time = user_data['start_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    today_stop_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    today_study_time = user_data['study_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    # sum_study_time = user_data['stop_time'][f'{today.year}/{today.month}/{today.day}/{today.weekday()}']
-    # study_hour = int(study_time.split(":")[0])
-    # study_minute = int(study_time.split(":")[1])
-    # study_second = int(study_time.split(":")[2])
-    # avg_start_time =
-    # 'sum_study_time': sum_study_time + (study_hour*3600) + (study_minute*60) + study_second,
-
-    # print(list(db.user.aggregate([{'$group': {
-    #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
-    # print(today.weekday)
-    # print(list(db.user.aggregate([{'$group': {
-    #     '_id': {'start_time':f"${today.year}년.{today.month}월.{today.day}일.start_time"}, 'sum':{'$sum': 1}}}])))
-
-    return jsonify({
-        'today_start_time': today_start_time,
-        'today_stop_time': today_stop_time,
-        'today_study_time':today_study_time
-        # 'avg_start_time': ,
-        # 'avg_stop_time': gg,
-        # 'avg_stuudy_time': gg,
-    })
+# 마이페이지(미완성)
+# @app.route('/my-info', methods=['GET'])
+# @login_required
+# def my_info():
+#     user_nickname = request.user['nick_name']
+#     today = date.today()
+#     today_study_time = db.time.find_one({'nick_name': user_nickname, 'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'})['study_time']
+#
+#     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+#
+#     sum_study_time = 0
+#     time_date = 0
+#     for user_day_data in user_data:
+#         day_study_time = user_day_data['study_time'].split(':')
+#         day_study_hour = int(day_study_time[0])
+#         day_study_minute = int(day_study_time[1])
+#         day_study_second = int(day_study_time[2])
+#         temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
+#         sum_study_time += temp
+#         time_date += 1
+#
+#     ss = (sum_study_time / time_date)
+#     study_hours = ss // 3600
+#     ss = ss - study_hours*3600
+#     study_minutes = ss // 60
+#     ss = ss - study_minutes*60
+#     study_seconds = ss
+#
+#     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
+#
+#     monthly_user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+#     for i in monthly_user_data:
+#         print(i)
+#
+#     print(today_study_time, avg_study_time)
+#     return jsonify({
+#         'today_study_time':today_study_time,
+#         'avg_study_time': avg_study_time,
+#         # 'month_day_study_time': month_day_study_time
+#         # 'avg_study_time': today_study_time
+#     })
 
 
 if __name__ == '__main__':
