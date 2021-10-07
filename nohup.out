@@ -1,0 +1,13 @@
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+Traceback (most recent call last):
+  File "app.py", line 200, in <module>
+    app.run('0.0.0.0', port=5000, debug=True)
+  File "/Users/daehwan/Desktop/sparta/bustajo/sparta-project/venv/lib/python3.8/site-packages/flask/app.py", line 922, in run
+    run_simple(t.cast(str, host), port, self, **options)
+  File "/Users/daehwan/Desktop/sparta/bustajo/sparta-project/venv/lib/python3.8/site-packages/werkzeug/serving.py", line 982, in run_simple
+    s.bind(server_address)
+OSError: [Errno 48] Address already in use

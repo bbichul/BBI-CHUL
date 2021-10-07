@@ -1,0 +1,11 @@
+#my-page {
+    background-image: url("../img/background.png");
+    background-position: center;
+    background-size: cover;
+    margin-top: 80px;
+    background-color: blue;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: 900px;
+}
