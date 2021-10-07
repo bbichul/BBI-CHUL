@@ -1,5 +1,7 @@
-//현재 날짜 초기화
+//달력에 필요한 변수들 선언, 초기화
 let date = new Date();
+let calender_status; //현재 선택한 캘린더 이름 저장.
+let btn_year_month_day = ''; //텍스트 박스와 캘린더 연동 위한 달력 버튼 ID 값 저장
 
 //캘린더 렌더링 함수
 const renderCalendar = () => {
@@ -58,7 +60,7 @@ const renderCalendar = () => {
 
 
         dates[i] = `<div class="date">
-                        <button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date} <span id="${viewYear}Y${getMonth}M${date}text" class="date-on-text">ㅇㅇ</span></button>
+                        <button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date}<span id="${viewYear}Y${getMonth}M${date}text" class="date-on-text"></span></button>
                     </div>`;
 
     })
@@ -80,14 +82,17 @@ function getMemo(){
         let take_text = response['give_text'];
 
         for (let key in take_text) {
-            let text_key = key+'text';
+            let text_id = key+'text';
+            let load_text = take_text[key];
 
-
+            $('#'+text_id).text(load_text);
 
         }
     }
   })
 }
+
+
 
 renderCalendar();
 getMemo();
@@ -124,9 +129,6 @@ const goToday = () => {
 //   }
 // }
 
-
-//텍스트 박스와 캘린더에 필요한 달력고유ID
-let btn_year_month_day = ''
 
 function dayClick(obj) {
     btn_year_month_day = $(obj).attr('id'); // 달력 날짜를 클릭 했을 때 받아온 날짜 ID 를 변수에 초기화.

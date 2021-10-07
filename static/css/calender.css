@@ -28,6 +28,7 @@ section.calAndText .this{
 
 section.calAndText .this:hover{
   background-color: rgba(255,255,255,0.1);
+  /*transition: 0.3s;*/
 }
 
 #calenderNote{
@@ -104,11 +105,11 @@ section.calAndText .date {
   text-align: left;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #333333;
-  position : relative;
 }
 
 section.calAndText .date .date-on-text{
   font-size: 70%;
+  overflow: scroll;
 }
 
 section.calAndText .day:nth-child(7n + 1),

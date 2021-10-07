@@ -1,13 +1,14 @@
 import re, bcrypt, jwt
 
 from my_settings import SECRET
-from decorator   import login_required
-from flask       import Flask, render_template, jsonify, request
-from pymongo     import MongoClient
+from decorator import login_required
+from flask import Flask, render_template, jsonify, request
+from pymongo import MongoClient
 
-app    = Flask(__name__)
+app = Flask(__name__)
 client = MongoClient('localhost', 27017)
-db     = client.dbnbc
+db = client.dbnbc
+
 
 # 시작페이자
 @app.route('/')
@@ -32,17 +33,17 @@ def calender():
 @login_required
 def check_in():
     start_time = request.form['start_time']
-    status     = request.form['status']
-    year       = request.form['year']
-    month      = request.form['month']
-    day        = request.form['day']
-    week       = request.form['week']
+    status = request.form['status']
+    year = request.form['year']
+    month = request.form['month']
+    day = request.form['day']
+    week = request.form['week']
 
     user_nickname = request.user['nick_name']
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'status': status,
         f'{year}.{month}.{day}.start_time': start_time,
-        f'{year}.{month}.{day}.week'      : week,
+        f'{year}.{month}.{day}.week': week,
     }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
@@ -51,12 +52,12 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-    year       = request.form['year']
-    month      = request.form['month']
-    day        = request.form['day']
-    week       = request.form['week']
-    stop_time  = request.form['stop_time']
-    status     = request.form['status']
+    year = request.form['year']
+    month = request.form['month']
+    day = request.form['day']
+    week = request.form['week']
+    stop_time = request.form['stop_time']
+    status = request.form['status']
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
@@ -79,8 +80,8 @@ def read_wise_sy():
 # 회원가입
 @app.route('/sign-up', methods=['POST'])
 def sign_up():
-    nick_name           = request.form['nick_name']
-    password            = request.form['password']
+    nick_name = request.form['nick_name']
+    password = request.form['password']
     password_validation = re.compile('^[a-zA-Z0-9]{6,}$')
 
     # 닉네임 중복확인
@@ -92,7 +93,7 @@ def sign_up():
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
 
     # 비밀번호 암호화
-    byte_password   = password.encode("utf-8")
+    byte_password = password.encode("utf-8")
     encode_password = bcrypt.hashpw(byte_password, bcrypt.gensalt())
     decode_password = encode_password.decode("utf-8")
     doc = {
@@ -107,7 +108,7 @@ def sign_up():
 @app.route('/login', methods=['POST'])
 def login():
     nick_name = request.form['nick_name']
-    password  = request.form['password']
+    password = request.form['password']
 
     # 닉네임 확인
     user = db.user.find_one({'nick_name': nick_name})
@@ -137,54 +138,62 @@ def nickname_check():
 # 날짜 클릭
 @app.route('/click-day', methods=['POST'])
 @login_required
-def clickedDay():
-    user_nickname      = request.user['nick_name']
+def clicked_day():
+    user_nickname = request.user['nick_name']
     receive_click_date = request.form['date_give']
 
-    user_data = db.calender.find_one({'nick_name': user_nickname})
-    try:
-        date_data = user_data['date'][receive_click_date]
+    user_data = db.calender.find_one({'nick_name': user_nickname})['date']
 
-        resend_date_memo = date_data
+    if user_data.get(receive_click_date) is None:
 
-        return jsonify({'resend_date_memo': resend_date_memo})
-    except KeyError:
         resend_date_memo = ""
-        return jsonify({'resend_date_memo': resend_date_memo})
+
+    else:
+        resend_date_memo = user_data.get(receive_click_date)
+
+    return jsonify({'resend_date_memo': resend_date_memo})
 
 
 # 캘린더 메모 변경
 @app.route('/change-memo-text', methods=['POST'])
 @login_required
-def changedMemo():
-    user_nickname     = request.user['nick_name']
-    receive_memo      = request.form['change_memo_give']
+def changed_memo():
+    user_nickname = request.user['nick_name']
+    receive_memo = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
 
-    user_data = db.calender.find_one({'nick_name': user_nickname})
+    find_db_id = db.calender.find_one({'nick_name': user_nickname})
 
-    if user_data is None:
+    if find_db_id is None:
         db.calender.insert_one({'nick_name': user_nickname})
         db.calender.update_one({'nick_name': user_nickname}, {
             '$set': {f'date.{receive_key_class}': receive_memo}})
     else:
-        db.calender.update_one({'nick_name': user_nickname},{
+        db.calender.update_one({'nick_name': user_nickname}, {
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
+
 @app.route('/take-memo', methods=['GET'])
 @login_required
-def show_diary():
+def get_calender_memo():
     user_nickname = request.user['nick_name']
 
-    find_db_id = list(db.calender.find({'nick_name' : user_nickname}))
+    find_db_id = db.calender.find_one({'nick_name': user_nickname})
 
-    text_data = find_db_id[0]['date']
+    if find_db_id.get('date') is None:
+        pass
+    else :
+        text_data = find_db_id.get('date')
 
     return jsonify({'give_text': text_data})
 
 
 
+@app.route('/set-memo', methods=['GET'])
+@login_required
+def set_calender_memo():
+    user_nickname = request.user['nick_name']
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
