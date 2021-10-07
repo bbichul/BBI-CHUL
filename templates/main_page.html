@@ -110,6 +110,7 @@
 	<source id="main">
 	<source src="../static/audio/fire.mp3">
 	<source src="../static/audio/night.mp3">
+    <source src="../static/audio/nife.mp3">
 <!--	<source src="http://upload.wikimedia.org/wikipedia/commons/3/32/C-major.ogg">-->
 <!--	<source src="http://upload.wikimedia.org/wikipedia/commons/4/4b/D-major.ogg">-->
 
@@ -124,12 +125,12 @@
 
 
         <div class="checkin-box">
-            <img   src="/static/img/start.gif" width="400"
+            <img  src="/static/img/start.gif" width="400"
                  height="300">
+               </div>
             <input type='button' class="checkin-img" id="startbtn"
          value='시작'
          onclick="check_in()">
-        </div>
 
 
 
@@ -137,18 +138,35 @@
             <div id='box' class="timer">
                 <img    src="/static/img/study.gif" width="400"
                      height="300">
-                 <input type='button'
+                 <input type='button' id="pausebtn"
          value='중지'
-         onclick='alert("안녕하세요")'/>
+         onclick='stopCount()'/>
                  <input type='button' class="checkout-img"id="stopbtn"
          value='끝'
          onclick="check_out()">
+
                 <div id='timerBox' class="timerBox">
                     <div id="time" class="time">00:00:00초 동안 업무중</div>
                 </div>
             </div>
-        </div>
+            </div>
+
+<!--            -->
+<!--            -->
+<!--        <div class="st-box">-->
+<!--            <img   src="/static/img/start.gif" width="400"-->
+<!--                 height="300">-->
+<!--            <input type='button' class="checkin-img" id="startbtn"-->
+<!--         value='재시작'-->
+<!--         onclick="check_in()">-->
+<!--            <input type='button' class="checkin-img" id="startbtn"-->
+<!--         value="종료"-->
+<!--         onclick="check_in()">-->
+<!--        </div>-->
+
+
     </div>
+
     </div>
 
 <!-- Log in Modal -->

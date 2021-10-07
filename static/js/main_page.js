@@ -81,6 +81,26 @@ function check_in() {
     })
 }
 
+function stopCount()
+  {
+
+  }
+
+
+// function removeCheck() {
+//
+//  if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+//
+//      document.removefrm.submit();
+//
+//  }else{   //취소
+//
+//      return false;
+//
+//  }
+//
+// }
+
 
 function check_out() {
     let present_time = $("#Clock").text()
@@ -204,6 +224,14 @@ function buttonEvt() {
         }
     });
 
+      $("#pausebtn").click(function(){
+    if(time != 0){
+      // $(".fa").css("color","#FAED7D")
+      // this.style.color = "#4C4C4C";
+      clearInterval(timer);
+      starFlag = true;
+    }
+  });
     // stop btn
     $("#stopbtn").click(function () {
         if (time != 0) {
@@ -333,3 +361,4 @@ navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
 		$("#myaudio")[0].load();
 		$("#myaudio")[0].play();
 	});
+
