@@ -1,9 +1,20 @@
+//처음들어왔을때 select-box가 현재 년,월로 찍히게 하기
+$("#year").val(2021);
+$("#month").val(10);
+
+
 $(document).ready(function () {
     my_info()
-    $("#month").val(10);
-    // $("select[name=year] option:eq(0)").attr("selected", "selected");
-    // $("select[name=month] option:eq(9)").attr("selected", "selected");
     post_study_time_graph()
+    post_weekly_avg_graph()
+});
+
+//select-box에서 월이 바뀌면 날짜에 맞는 그래프를 다시불러옴
+$("select[name=month]").change(function(){
+    $("select[name=year]").val();
+    $(this).val();
+    post_study_time_graph()
+    post_weekly_avg_graph()
 });
 
 function my_info() {
@@ -36,7 +47,7 @@ function post_study_time_graph() {
     // });
     $.ajax({
         type: "POST",
-        url: "/graph",
+        url: "/line-graph",
         headers: {
             Authorization:  getCookie('access_token')
         },
@@ -48,9 +59,9 @@ function post_study_time_graph() {
             let day_list = response['day_list']
             let day_time_list = response['day_time_list']
 
-            let myChartOne = document.getElementById('myChartOne').getContext('2d');
-            let barChart = new Chart(myChartOne, {
-                type: 'bar', //pie, line,
+            let study_time_graph = document.getElementById('study_time_graph').getContext('2d');
+            let barChart = new Chart(study_time_graph, {
+                type: 'line', //pie, line,
                 data: {
                     labels: day_list,
                     datasets: [{
@@ -86,7 +97,7 @@ function post_study_time_graph() {
                                 //     labelString: '1h = 1000'
                                 // },
                                 beginAtZero: true,
-                                stepSize: 7200,
+                                stepSize: 3600,
                                 // max: 7200,
                             }
                         }]
@@ -98,32 +109,108 @@ function post_study_time_graph() {
     })
 }
 
-// let myChartOne = document.getElementById('myChartOne').getContext('2d');
-// let barChart = new Chart(myChartOne, {
+function post_weekly_avg_graph() {
+    $.ajax({
+        type: "POST",
+        url: "/bar-graph",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            year: $("select[name=year]").val(),
+            month: $("select[name=month]").val()
+        },
+        success: function (response) {
+            let monday = response['monday']
+            let tuesday = response['tuesday']
+            let wednesday = response['wednesday']
+            let thursday = response['thursday']
+            let friday = response['friday']
+            let saturday = response['saturday']
+            let sunday = response['sunday']
+
+
+            let weekly_avg_graph = document.getElementById('weekly_avg_graph').getContext('2d');
+            let barChart = new Chart(weekly_avg_graph, {
+                type: 'bar', //pie, line,
+                data: {
+                    labels: ['월', '화', '수', '목', '금', '토', '일'],
+                    datasets: [{
+                        label: "요일별 평균 공부시간",
+                        data: [monday, tuesday, wednesday, thursday, friday, saturday, sunday],
+                        backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'],
+                    }]
+                },
+                options: {
+                    legend: {
+                        // display:true,
+                        align: top
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                callback: function(label, index, labels) {
+                                    return parseInt(label/3600) +'h';
+                                    },
+                                // scaleLabel: {
+                                //     display: true,
+                                //     labelString: '1h = 1000'
+                                // },
+                                beginAtZero: true,
+                                stepSize: 3600,
+                                // max: 7200,
+                            }
+                        }]
+                    }
+                }
+            });
+
+        }
+    })
+}
+
+// let weekly_avg_graph = document.getElementById('weekly_avg_graph').getContext('2d');
+// let barChart = new Chart(weekly_avg_graph, {
 //     type: 'bar', //pie, line,
 //     data: {
-//         labels: ['10/1', '10/2', '10/3', '10/4', '10/5', '10/6', '최대환'],
+//         labels: ['월', '화', '수', '목', '금', '토', '일'],
 //         datasets: [{
-//             label: "날짜",
-//             data: [5,7,14,21,6,14, 24],
-//             backgroundColor: ['white','rgb(255, 99, 132)','rgb(255, 9, 1)','yellow', 'green'],
-//             borderColor: 'rgb(255, 99, 132)',
-//             borderWidth: 5,
-//             hoverBorderWidth: 10,
+//             label: "요일별 평균 공부시간",
+//             data: [11,7,14,21,6,14, 20],
+//             backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'],
+//             // borderColor: 'rgb(255, 99, 132)',
+//             // borderWidth: 5,
+//             // hoverBorderWidth: 10,
 //             // fill: false,
 //             // lineTension: 0.1,
 //         }]
 //     },
 //     options: {
-//         title: {
-//             display: true,
-//             text: '월별 공부시간',
-//             fontSize: 30,
-//             fontColor: 'green'
-//             },
+//         // title: {
+//         //     display: true,
+//         //     text: '요일별 평균 공부시간',
+//         //     fontSize: 30,
+//         //     fontColor: 'green'
+//         //     },
 //         legend: {
 //             // display:true,
 //             align: top
+//         },
+//         scales: {
+//             yAxes: [{
+//                 ticks: {
+//                     callback: function(label, index, labels) {
+//                         return parseInt(label/3600) +'h';
+//                         },
+//                     // scaleLabel: {
+//                     //     display: true,
+//                     //     labelString: '1h = 1000'
+//                     // },
+//                     beginAtZero: true,
+//                     stepSize: 3600,
+//                     // max: 7200,
+//                 }
+//             }]
 //         }
 //     }
 // });

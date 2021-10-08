@@ -34,19 +34,8 @@
 /* 진행바*/
 .progress-graph {
     border: 2px solid red;
-    height: 50%;
-    padding: 30px;
-}
-
-/* 월별 공부시간 그래프*/
-.bar-graph {
-    border: 2px solid red;
-    height: 50%;
-    padding: 30px;
-}
-
-canvas {
-    background-color: whitesmoke;
+    /*height: 30%;*/
+    padding: 50px;
 }
 
 .progress-title{
@@ -56,12 +45,12 @@ canvas {
     margin: 0 0 10px;
 }
 .progress-outer{
-    width: 60%;
+    width: 100%;
     background: #fff;
     padding: 5px 60px 5px 5px;
     border: 5px solid #bebfbf;
     border-radius: 45px;
-    margin-bottom: 20px;
+    margin: 0px;
     position: relative;
 }
 .progress{
@@ -85,4 +74,29 @@ canvas {
 }
 @keyframes animate-positive{
     0%{ width: 0; }
+}
+
+/* 월별 공부시간 그래프*/
+.select-box {
+    border: 2px solid red;
+    display: block;
+    height: 4%;
+    padding: 0px;
+}
+
+.bar-graph {
+    border: 2px solid red;
+    height: 48%;
+    padding: 0px;
+}
+
+.line-graph {
+    border: 2px solid red;
+    height: 48%;
+    padding: 0px;
+}
+
+canvas {
+    background-color: whitesmoke;
+    height: 400px;
 }

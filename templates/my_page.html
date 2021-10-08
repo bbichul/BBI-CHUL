@@ -104,11 +104,10 @@
         <div>월별 평균 공부시간</div>
         <div>한달간격 일별 공부시간</div>
         <div>하루평균공부시간</div>
-    </div>
-    <div class="right">
+
         <div class="progress-graph">
             <div class="row">
-                <div class="col-md-6">
+                <div>
                     <h3 class="progress-title">목표 공부시간</h3>
                     <div class="progress-outer">
                         <div class="progress">
@@ -116,10 +115,17 @@
                             <div class="progress-value"><span>45</span>%</div>
                         </div>
                     </div>
+                    <h6>누적공부시간</h6>
+                    <h6>남은공부시간</h6>
+                    <h6>남은일자시간</h6>
+                    <h6>기간 설정</h6>
+                    <h6>목표시간 정하기</h6>
                 </div>
             </div>
         </div>
-        <div class="bar-graph">
+    </div>
+    <div class="right">
+        <div class="select-box">
             <select name='year' class="form-select" aria-label="Default select example">
     <!--            <option selected>Year</option>-->
                 <option value=2021>2021년</option>
@@ -139,9 +145,20 @@
                 <option value=11>11월</option>
                 <option value=12>12월</option>
             </select>
+        </div>
+        <div class="bar-graph">
             <div class="row">
-                <div class="col-md-12">
-                    <canvas id="myChartOne"></canvas>
+<!--                <div class="col-md-12">-->
+                <div>
+                    <canvas id="weekly_avg_graph"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="line-graph">
+            <div class="row">
+<!--                <div class="col-md-12">-->
+                <div>
+                    <canvas id="study_time_graph"></canvas>
                 </div>
             </div>
         </div>

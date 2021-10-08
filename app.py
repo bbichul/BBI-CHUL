@@ -253,47 +253,73 @@ def get_my_info():
     })
 
 # 월별 시간그래프(미완성)
-@app.route('/graph', methods=['POST'])
+@app.route('/line-graph', methods=['POST'])
 @login_required
 def post_study_time_graph():
     user_nickname = request.user['nick_name']
     year = int(request.form['year'])
     month = int(request.form['month'])
 
-# 파이썬 스케줄러 자동 실행
-# today = date.today()
-# @app.route('/check-in', methods=['POST'])
-# @login_required
-#
-# def job():
-#     doc = {
-#         'nick_name': None,
-#         'year': today.year,
-#         'month': today.month,
-#         'day': today.day,
-#         'weekday': today.weekday(),
-#         'study_time': None
-#
-#     }
-#     db.sche.insert_one(doc)
-#     print("I'm working...")
-#
-#
-# # 10초에 한번씩 실행
-# schedule.every(15).seconds.do(job)
-
     monthly_user_data = list(db.time.find({
         'nick_name': user_nickname,
         'year': year,
         'month': month}, {'_id': False}).sort("day", 1))
 
+    # 만약 데이터가 없는 날짜는 0으로 처리한다.
     day_list = []
     day_time_list = []
+    for i in range(31):
+        day_list.append(i)
+        day_time_list.append(0)
+    # print(monthly_user_data[0]['day'])
+
     for day in monthly_user_data:
-        day_list.append(day['day'])
-        day_time_list.append(day['study_time'])
-    print(day_list, day_time_list)
+        # day_list.append(day['day'])
+        day_time_list[day['day']] = day['study_time']
     return jsonify({'day_list': day_list, 'day_time_list': day_time_list})
+
+# 주별평균 공부시간 그래프
+@app.route('/bar-graph', methods=['POST'])
+@login_required
+def post_weekly_avg_graph():
+    user_nickname = request.user['nick_name']
+    year = int(request.form['year'])
+    month = int(request.form['month'])
+
+    weekday_avg_study_time_list = []
+    for i in range(7):
+        weekday_user_data = list(db.time.find({
+            'nick_name': user_nickname,
+            'year': year,
+            'month': month,
+            'weekday': i}, {'_id': False}))
+
+        # 만약 데이터가 없는 날짜는 0으로 처리한다.
+        weekday_avg_study_time_list.append(0)
+
+        # 평균구하기
+        weekday_sum = 0
+        day_count = 0
+        for day in weekday_user_data:
+            weekday_sum += int(day['study_time'])
+            day_count += 1
+
+        try:
+            weekday_avg_study_time = weekday_sum // day_count
+        except ZeroDivisionError:
+            weekday_avg_study_time = 0
+        weekday_avg_study_time_list[i] = weekday_avg_study_time
+    print(weekday_avg_study_time_list)
+    return jsonify({
+        'monday': weekday_avg_study_time_list[0],
+        'tuesday': weekday_avg_study_time_list[1],
+        'wednesday': weekday_avg_study_time_list[2],
+        'thursday': weekday_avg_study_time_list[3],
+        'friday': weekday_avg_study_time_list[4],
+        'saturday': weekday_avg_study_time_list[5],
+        'sunday': weekday_avg_study_time_list[6],
+    })
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
