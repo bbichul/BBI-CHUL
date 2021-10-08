@@ -1,0 +1,23 @@
+.body-wrapper {
+    position: relative;
+    margin-top: 80px;
+}
+
+.left-body {
+    text-align: center;
+    position: relative;
+    margin-top: 5px;
+    display: inline-block;
+    width: 49.6%;
+    border-right: 6px solid gray;
+    overflow: hidden;
+}
+
+.right-body{
+    text-align: center;
+    width: 49.6%;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
+}

@@ -30,9 +30,11 @@
     <!-- Template Main CSS File -->
     <link href="../static/css/style.css" rel="stylesheet">
     <link href="../static/css/main_page.css" rel="stylesheet">
+    <link href="../static/css/team_page.css" rel="stylesheet">
 
     <script defer src="../static/js/modal.js"></script>
     <script defer src="../static/js/start_page.js"></script>
+    <script defer src="../static/js/team_page.js"></script>
 
     <title>삐빅! 출석했습니다</title>
 
@@ -83,14 +85,61 @@
 
 </header><!-- End Header -->
 
-<div class="body_wrapper">
-    <div class="left_body">
-        <div>실시간 출석 현황</div>
-        <div>체크리스트</div>
+<div class="body-wrapper">
+    <div class="not-exist">
+        <p id="team-alert"></p>
+        <button id="team-check-btn" onclick="create_team()">팀 만들기</button>
     </div>
-    <div class="right_body">
-        <div>팀원별 평균 공부시간</div>
-        <div>팀 기여도</div>
+    <div class="team-exist">
+        <div class="left-body">
+            <div>실시간 출석 현황</div>
+            <div class="list-box">
+                <h1>To Do List</h1>
+                <div class="write-box">
+                    <input type="text" class="text-basic">
+                    <button type="button" id="btnAdd" onclick="addList()">추가</button>
+                </div>
+                <table class="list-table">
+                    <colgroup>
+                        <col width="10%">
+                        <col width="90%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>check</th>
+                        <th>To do List</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listBody">
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="btn-chk">
+                        </td>
+                        <td>
+                            청소하기
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="btn-chk">
+                        </td>
+                        <td>
+                            숙제하기
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="btn-area">
+                    <button type="button" id="DeleteSel" onclick="delSelected()">선택 삭제</button>
+                    <button type="button" id="btnDelLast" onclick="delLastEle()">마지막 항목 삭제</button>
+                    <button type="button" id="btnDelAll" onclick="delAllEle()">전체 삭제</button>
+                </div>
+            </div>
+        </div>
+        <div class="right-body">
+            <div>mildstone</div>
+            <div>팀 기여도</div>
+        </div>
     </div>
 </div>
 

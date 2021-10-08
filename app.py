@@ -7,7 +7,7 @@ from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
 app    = Flask(__name__)
-client = MongoClient('mongodb://test:test@13.125.139.74', 27017)
+client = MongoClient('localhost', 27017)
 db     = client.dbnbc
 
 # 시작페이자
@@ -33,16 +33,21 @@ def calender():
 def my_page():
     return render_template('my_page.html')
 
+# 팀페이지
+@app.route('/team-page')
+def team_page():
+    return render_template('team_page.html')
+
 # 체크인
 @app.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
     start_time = request.form['start_time']
     status     = request.form['status']
-    year       = request.form['year']
-    month      = request.form['month']
-    day        = request.form['day']
-    week       = request.form['week']
+    # year       = request.form['year']
+    # month      = request.form['month']
+    # day        = request.form['day']
+    # week       = request.form['week']
 
     user_nickname = request.user['nick_name']
     today = date.today()
@@ -136,6 +141,7 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
+        'team': None
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -210,57 +216,50 @@ def changedMemo():
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
-# 마이페이지(미완성)
-# @app.route('/my-info', methods=['GET'])
-# @login_required
-# def my_info():
-#     user_nickname = request.user['nick_name']
-#     today = date.today()
-#     today_study_time = db.time.find_one({'nick_name': user_nickname, 'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'})['study_time']
-#
-#     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
-#
-#     sum_study_time = 0
-#     time_date = 0
-#     for user_day_data in user_data:
-#         day_study_time = user_day_data['study_time'].split(':')
-#         day_study_hour = int(day_study_time[0])
-#         day_study_minute = int(day_study_time[1])
-#         day_study_second = int(day_study_time[2])
-#         temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
-#         sum_study_time += temp
-#         time_date += 1
-#
-#     ss = (sum_study_time / time_date)
-#     study_hours = ss // 3600
-#     ss = ss - study_hours*3600
-#     study_minutes = ss // 60
-#     ss = ss - study_minutes*60
-#     study_seconds = ss
-#
-#     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
-#
-#     monthly_user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
-#     for i in monthly_user_data:
-#         print(i)
-#
-#     print(today_study_time, avg_study_time)
-#     return jsonify({
-#         'today_study_time':today_study_time,
-#         'avg_study_time': avg_study_time,
-#         # 'month_day_study_time': month_day_study_time
-#         # 'avg_study_time': today_study_time
-#     })
-
 # 팀페이지
-@app.route('/team-page', methods=['GET'])
+
+# 소속 체크
+@app.route('/team', methods=['GET'])
 @login_required
-def team_info():
+def team_check():
     user_nickname = request.user['nick_name']
-    user_data = db.user.find_one({'nick_name': user_nickname})
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+    # team = db.user.find({'team': {$exists: false}})
+    # print(team)
+    # if team is not None:
+    #     print('b')
+    #     return jsonify(team)
+    # else:
+    #     print('c')
+    #     return None
 
-    return jsonify()
-
+# # 팀 만들기
+# @app.route('/create-team', methods=['POST'])
+# @login_required
+# def create_team():
+#     team_name = request.form['team_name']
+#
+#     # 팀이름 중복확인
+#     if db.team.find_one({'team_name': team_name}) is not None:
+#         return jsonify({'msg': '중복된 팀명'})
+#
+#     doc = {
+#         'team_name': team_name
+#     }
+#     db.team.insert_one(doc)
+#     return jsonify({'msg': '저장완료'})
+#
+# # 팀명 중복체크
+# @app.route('/teamname', methods=['POST'])
+# @login_required
+# def teamname_check():
+#     team_name = request.form['team_name']
+#     team = db.team.find_one({'team_name': team_name})
+#     if team is None:
+#         return jsonify({"msg": "사용할 수 있는 팀명입니다."})
+#     return jsonify({'msg': '중복되는 팀명입니다. 다시 입력해주세요.'})
+#
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

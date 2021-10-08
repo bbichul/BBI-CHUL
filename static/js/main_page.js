@@ -51,11 +51,11 @@ let week = date_list[3]
 
 function check_in() {
     let present_time = $("#Clock").text()
-    let date_list = $("#Clockday").text().split(' ')
-    let year = date_list[0]
-    let month = date_list[1]
-    let day = date_list[2]
-    let week = date_list[3]
+    // let date_list = $("#Clockday").text().split(' ')
+    // let year = date_list[0]
+    // let month = date_list[1]
+    // let day = date_list[2]
+    // let week = date_list[3]
 
     $.ajax({
         type: "POST",
@@ -66,10 +66,10 @@ function check_in() {
         data: {
             start_time: present_time,
             status: "출근",
-            year: year,
-            month: month,
-            day: day,
-            week: week,
+            // year: year,
+            // month: month,
+            // day: day,
+            // week: week,
         },
         success: function (response) {
             // alert(response["msg"]);
