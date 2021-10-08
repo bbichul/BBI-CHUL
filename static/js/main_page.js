@@ -18,12 +18,10 @@ $(document).ready(function () {
             $('.checkin-box').show(); //클릭 시 두 번째 요소 표시
 
 
-
             return false;
         });
     });
 });
-
 
 
 function getWiseSy() {
@@ -64,7 +62,7 @@ function check_in() {
         type: "POST",
         url: "/check-in",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
         data: {
             start_time: present_time,
@@ -81,10 +79,9 @@ function check_in() {
     })
 }
 
-function stopCount()
-  {
+function stopCount() {
 
-  }
+}
 
 
 // function removeCheck() {
@@ -110,12 +107,12 @@ function check_out() {
     let day = date_list[2]
     let week = date_list[3]
     let study_time = $("#time").text()
-    console.log(year,month,day,week,study_time)
+    console.log(year, month, day, week, study_time)
     $.ajax({
         type: "POST",
         url: "/check-out",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
         data: {
             stop_time: present_time,
@@ -227,14 +224,14 @@ function buttonEvt() {
         }
     });
 
-      $("#pausebtn").click(function(){
-    if(time != 0){
-      // $(".fa").css("color","#FAED7D")
-      // this.style.color = "#4C4C4C";
-      clearInterval(timer);
-      starFlag = true;
-    }
-  });
+    $("#pausebtn").click(function () {
+        if (time != 0) {
+            // $(".fa").css("color","#FAED7D")
+            // this.style.color = "#4C4C4C";
+            clearInterval(timer);
+            starFlag = true;
+        }
+    });
     // stop btn
     $("#stopbtn").click(function () {
         if (time != 0) {
@@ -347,21 +344,21 @@ function handleGeoErr() {
             $('.temp_min').append($temp_min + "°C");
             $('.icon').append('<img src=" ' + $icon + '.png ">');
 
- alert('위치정보가서울로설정되었습니다')
+            alert('위치정보가서울로설정되었습니다')
         });
 };
 
 navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
 
-	var index = 1;
-	$('#play-next').click(function() {
-		index++;
-		if(index > $('#myaudio source').length) index=2;
-		console.log( index + '번째 소스 재생' );
+var index = 1;
+$('#play-next').click(function () {
+    index++;
+    if (index > $('#myaudio source').length) index = 2;
+    console.log(index + '번째 소스 재생');
 
-		$('#myaudio source#main').attr('src',
-			$('#myaudio source:nth-child('+index+')').attr('src'));
-		$("#myaudio")[0].load();
-		$("#myaudio")[0].play();
-	});
+    $('#myaudio source#main').attr('src',
+        $('#myaudio source:nth-child(' + index + ')').attr('src'));
+    $("#myaudio")[0].load();
+    $("#myaudio")[0].play();
+});
 

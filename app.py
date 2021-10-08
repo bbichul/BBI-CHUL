@@ -1,17 +1,19 @@
 import re, bcrypt, jwt, pymongo
-
+import schedule
+import time
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
+
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 db = client.dbnbc
 
 
-# 시작페이자
+# 시작페이지
 @app.route('/')
 def index():
     return render_template('start_page.html')
@@ -40,13 +42,12 @@ def my_page():
 def check_in():
     start_time = request.form['start_time']
     status = request.form['status']
-    # year = request.form['year']
-    # month = request.form['month']
-    # day = request.form['day']
-    # week = request.form['week']
+
 
     user_nickname = request.user['nick_name']
     today = date.today()
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -62,20 +63,12 @@ def check_in():
             'month': today.month,
             'day': today.day,
             'weekday': today.weekday(),
-            'status': status,
+
         }
         db.time.insert_one(doc)
 
-    else:
-        db.time.update_one({
-            'nick_name': user_nickname,
-            'year': today.year,
-            'month': today.month,
-            'day': today.day,
-            'weekday': today.weekday()},
-            {'$set': {
-            'status': status
-        }})
+
+
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -83,17 +76,14 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-    # year = request.form['year']
-    # month = request.form['month']
-    # day = request.form['day']
-    # week = request.form['week']
-    # stop_time = request.form['stop_time']
+
     status = request.form['status']
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
     today = date.today()
 
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # study_time.split(':')
     study_hour = int(study_time.split(':')[0])
@@ -102,16 +92,7 @@ def check_out():
     total_sec = study_hour*60*60 + study_min*60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
-    db.time.update_one({
-        'nick_name': user_nickname,
-        'year': today.year,
-        'month': today.month,
-        'day': today.day,
-        'weekday': today.weekday()},
-        {'$set': {
-            'status': status,
-            # 'study_time':  total_sec,
-        }})
+
     db.time.update_one({
         'nick_name': user_nickname,
         'year': today.year,
@@ -119,11 +100,11 @@ def check_out():
         'day': today.day,
         'weekday': today.weekday()},
         {'$inc': {
-            # 'status': status,
+
             'study_time':  total_sec,
         }})
 
-    # db.time.update_one({"nick_name": user_nickname}, {'$inc': {'study_time': today.day}})
+
 
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
@@ -156,6 +137,7 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
+        'status': None
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -278,6 +260,28 @@ def post_study_time_graph():
     year = int(request.form['year'])
     month = int(request.form['month'])
 
+# 파이썬 스케줄러 자동 실행
+# today = date.today()
+# @app.route('/check-in', methods=['POST'])
+# @login_required
+#
+# def job():
+#     doc = {
+#         'nick_name': None,
+#         'year': today.year,
+#         'month': today.month,
+#         'day': today.day,
+#         'weekday': today.weekday(),
+#         'study_time': None
+#
+#     }
+#     db.sche.insert_one(doc)
+#     print("I'm working...")
+#
+#
+# # 10초에 한번씩 실행
+# schedule.every(15).seconds.do(job)
+
     monthly_user_data = list(db.time.find({
         'nick_name': user_nickname,
         'year': year,
@@ -293,3 +297,7 @@ def post_study_time_graph():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+# 스케줄러
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
