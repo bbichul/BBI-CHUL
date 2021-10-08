@@ -7,7 +7,7 @@
     display: inline-block;
     vertical-align: middle;
     width: 100%;
-    height: 900px;
+    height: 850px;
 }
 
 .form-select {
@@ -76,7 +76,6 @@
     0%{ width: 0; }
 }
 
-/* 월별 공부시간 그래프*/
 .select-box {
     border: 2px solid red;
     display: block;
@@ -84,19 +83,23 @@
     padding: 0px;
 }
 
+/* 요일별 평균 공부시간 그래프*/
 .bar-graph {
     border: 2px solid red;
     height: 48%;
-    padding: 0px;
+    padding: 0% 10%;
 }
 
+/* 월별 공부시간 그래프*/
 .line-graph {
     border: 2px solid red;
     height: 48%;
-    padding: 0px;
+    padding: 0% 10%;
 }
 
 canvas {
     background-color: whitesmoke;
-    height: 400px;
+    /*height: 300px;*/
+    /*width: 100px;*/
+    /*margin-right: 0;*/
 }

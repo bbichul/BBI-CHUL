@@ -42,9 +42,6 @@ function my_info() {
 
 
 function post_study_time_graph() {
-    // $("select[name=month]").change(function(){
-    //   console.log($(this).val());
-    // });
     $.ajax({
         type: "POST",
         url: "/line-graph",
@@ -61,18 +58,13 @@ function post_study_time_graph() {
 
             let study_time_graph = document.getElementById('study_time_graph').getContext('2d');
             let barChart = new Chart(study_time_graph, {
-                type: 'line', //pie, line,
+                type: 'line',
                 data: {
                     labels: day_list,
                     datasets: [{
                         label: "초",
                         data: day_time_list,
                         backgroundColor: 'skyblue',
-                        // borderColor: 'blue',
-                        // borderWidth: 5,
-                        // hoverBorderWidth: 10,
-                        // fill: false,
-                        // lineTension: 0.1,
                     }]
                 },
                 options: {
@@ -92,13 +84,8 @@ function post_study_time_graph() {
                                 callback: function(label, index, labels) {
                                     return parseInt(label/3600) +'h';
                                     },
-                                // scaleLabel: {
-                                //     display: true,
-                                //     labelString: '1h = 1000'
-                                // },
                                 beginAtZero: true,
                                 stepSize: 3600,
-                                // max: 7200,
                             }
                         }]
                     }
@@ -132,7 +119,7 @@ function post_weekly_avg_graph() {
 
             let weekly_avg_graph = document.getElementById('weekly_avg_graph').getContext('2d');
             let barChart = new Chart(weekly_avg_graph, {
-                type: 'bar', //pie, line,
+                type: 'bar',
                 data: {
                     labels: ['월', '화', '수', '목', '금', '토', '일'],
                     datasets: [{
@@ -143,7 +130,6 @@ function post_weekly_avg_graph() {
                 },
                 options: {
                     legend: {
-                        // display:true,
                         align: top
                     },
                     scales: {
@@ -152,13 +138,8 @@ function post_weekly_avg_graph() {
                                 callback: function(label, index, labels) {
                                     return parseInt(label/3600) +'h';
                                     },
-                                // scaleLabel: {
-                                //     display: true,
-                                //     labelString: '1h = 1000'
-                                // },
                                 beginAtZero: true,
                                 stepSize: 3600,
-                                // max: 7200,
                             }
                         }]
                     }

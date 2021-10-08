@@ -252,7 +252,7 @@ def get_my_info():
         # 'avg_study_time': today_study_time
     })
 
-# 월별 시간그래프(미완성)
+# 월별 시간그래프
 @app.route('/line-graph', methods=['POST'])
 @login_required
 def post_study_time_graph():
@@ -271,14 +271,12 @@ def post_study_time_graph():
     for i in range(31):
         day_list.append(i)
         day_time_list.append(0)
-    # print(monthly_user_data[0]['day'])
 
     for day in monthly_user_data:
-        # day_list.append(day['day'])
         day_time_list[day['day']] = day['study_time']
     return jsonify({'day_list': day_list, 'day_time_list': day_time_list})
 
-# 주별평균 공부시간 그래프
+# 요일별평균 공부시간 그래프
 @app.route('/bar-graph', methods=['POST'])
 @login_required
 def post_weekly_avg_graph():
