@@ -75,24 +75,52 @@
 
 <section class="calAndText">
 
+    <div class="select-calender">
+        <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                캘린더 선택
+            </a>
 
-    <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-           data-bs-toggle="dropdown" aria-expanded="false">
-            캘린더 선택
-        </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div id="select_cal_list">
+                    <li>
+                        <button class="dropdown-item">Action</button>
+                    </li>
+                </div>
+                <li><span class="dropdown-item">-----------</span>
+                <li id="append_calender">
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">캘린더 추가하기 +
+                    </button>
 
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <div>
-                <li id="team_cal_one"><button class="dropdown-item">Action</button></li>
-                <li id="private_cal_one"><button class="dropdown-item">Another action</button></li>
+                </li>
+            </ul>
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="add-calender-group" id="radio1" value="1" checked>
+                            <label class="btn btn-outline-primary" for="radio1">팀 캘린더 추가하기</label>
+
+                            <input type="radio" class="btn-check" name="add-calender-group" id="radio2" value="2">
+                            <label class="btn btn-outline-primary" for="radio2">개인 캘린더 추가하기</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" onclick="addCalender()">추가</button>
+                    </div>
+                </div>
             </div>
-            <li><span class="dropdown-item">-----------</span>
-            <li id="append_calender"><a class="dropdown-item">캘린더 추가하기 +</a></li>
-        </ul>
+        </div>
 
     </div>
-
 
     <div class="container">
         <div class="row">
