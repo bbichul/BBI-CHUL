@@ -1,17 +1,19 @@
 import re, bcrypt, jwt, pymongo
-
+import schedule
+import time
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
+
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 db = client.dbnbc
 
 
-# 시작페이자
+# 시작페이지
 @app.route('/')
 def index():
     return render_template('start_page.html')
@@ -40,13 +42,12 @@ def my_page():
 def check_in():
     start_time = request.form['start_time']
     status = request.form['status']
-    # year = request.form['year']
-    # month = request.form['month']
-    # day = request.form['day']
-    # week = request.form['week']
+
 
     user_nickname = request.user['nick_name']
     today = date.today()
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -62,20 +63,12 @@ def check_in():
             'month': today.month,
             'day': today.day,
             'weekday': today.weekday(),
-            'status': status,
+
         }
         db.time.insert_one(doc)
 
-    else:
-        db.time.update_one({
-            'nick_name': user_nickname,
-            'year': today.year,
-            'month': today.month,
-            'day': today.day,
-            'weekday': today.weekday()},
-            {'$set': {
-            'status': status
-        }})
+
+
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -83,17 +76,14 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-    # year = request.form['year']
-    # month = request.form['month']
-    # day = request.form['day']
-    # week = request.form['week']
-    # stop_time = request.form['stop_time']
+
     status = request.form['status']
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
     today = date.today()
 
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # study_time.split(':')
     study_hour = int(study_time.split(':')[0])
@@ -102,16 +92,7 @@ def check_out():
     total_sec = study_hour*60*60 + study_min*60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
-    db.time.update_one({
-        'nick_name': user_nickname,
-        'year': today.year,
-        'month': today.month,
-        'day': today.day,
-        'weekday': today.weekday()},
-        {'$set': {
-            'status': status,
-            # 'study_time':  total_sec,
-        }})
+
     db.time.update_one({
         'nick_name': user_nickname,
         'year': today.year,
@@ -119,11 +100,11 @@ def check_out():
         'day': today.day,
         'weekday': today.weekday()},
         {'$inc': {
-            # 'status': status,
+
             'study_time':  total_sec,
         }})
 
-    # db.time.update_one({"nick_name": user_nickname}, {'$inc': {'study_time': today.day}})
+
 
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
@@ -156,6 +137,7 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
+        'status': None
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -230,48 +212,33 @@ def changedMemo():
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
-# 마이페이지(미완성)
-# @app.route('/my-info', methods=['GET'])
+
+# 파이썬 스케줄러 자동 실행
+# today = date.today()
+# @app.route('/check-in', methods=['POST'])
 # @login_required
-# def my_info():
-#     user_nickname = request.user['nick_name']
-#     today = date.today()
-#     today_study_time = db.time.find_one({'nick_name': user_nickname, 'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'})['study_time']
 #
-#     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+# def job():
+#     doc = {
+#         'nick_name': None,
+#         'year': today.year,
+#         'month': today.month,
+#         'day': today.day,
+#         'weekday': today.weekday(),
+#         'study_time': None
 #
-#     sum_study_time = 0
-#     time_date = 0
-#     for user_day_data in user_data:
-#         day_study_time = user_day_data['study_time'].split(':')
-#         day_study_hour = int(day_study_time[0])
-#         day_study_minute = int(day_study_time[1])
-#         day_study_second = int(day_study_time[2])
-#         temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
-#         sum_study_time += temp
-#         time_date += 1
+#     }
+#     db.sche.insert_one(doc)
+#     print("I'm working...")
 #
-#     ss = (sum_study_time / time_date)
-#     study_hours = ss // 3600
-#     ss = ss - study_hours*3600
-#     study_minutes = ss // 60
-#     ss = ss - study_minutes*60
-#     study_seconds = ss
 #
-#     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
-#
-#     monthly_user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
-#     for i in monthly_user_data:
-#         print(i)
-#
-#     print(today_study_time, avg_study_time)
-#     return jsonify({
-#         'today_study_time':today_study_time,
-#         'avg_study_time': avg_study_time,
-#         # 'month_day_study_time': month_day_study_time
-#         # 'avg_study_time': today_study_time
-#     })
+# # 10초에 한번씩 실행
+# schedule.every(15).seconds.do(job)
 
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+# 스케줄러
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
