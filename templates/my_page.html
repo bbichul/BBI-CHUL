@@ -98,15 +98,51 @@
     </div>
 </header><!-- End Header -->
 <div id="my-page">
-    <div>오늘공부시간</div>
-    <div>하루평균공부시간</div>
-    <div>월별 평균 공부시간</div>
-    <div>한달간격 일별 공부시간</div>
-    <div>하루평균공부시간</div>
-       <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <canvas id="myChartOne"></canvas>
+    <div class="left">
+        <div>오늘공부시간</div>
+        <div>하루평균공부시간</div>
+        <div>월별 평균 공부시간</div>
+        <div>한달간격 일별 공부시간</div>
+        <div>하루평균공부시간</div>
+    </div>
+    <div class="right">
+        <div class="progress-graph">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="progress-title">목표 공부시간</h3>
+                    <div class="progress-outer">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-danger" style="width:50%;"></div>
+                            <div class="progress-value"><span>45</span>%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bar-graph">
+            <select name='year' class="form-select" aria-label="Default select example">
+    <!--            <option selected>Year</option>-->
+                <option value=2021>2021년</option>
+            </select>
+            <select name='month' id='month' class="form-select" aria-label="Default select example">
+    <!--            <option selected>Month</option>-->
+                <option value=1>1월</option>
+                <option value=2>2월</option>
+                <option value=3>3월</option>
+                <option value=4>4월</option>
+                <option value=5>5월</option>
+                <option value=6>6월</option>
+                <option value=7>7월</option>
+                <option value=8>8월</option>
+                <option value=9>9월</option>
+                <option value=10>10월</option>
+                <option value=11>11월</option>
+                <option value=12>12월</option>
+            </select>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="myChartOne"></canvas>
+                </div>
             </div>
         </div>
     </div>

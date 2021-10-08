@@ -236,24 +236,21 @@ def changedMemo():
 def get_my_info():
     user_nickname = request.user['nick_name']
     today = date.today()
-    today_study_time = db.time.find_one({
-        'nick_name': user_nickname,
-        'year': today.year,
-        'month': today.month,
-        'day': today.day,
-        'weekday': today.weekday(),
-    })['study_time']
+    # today_study_time = db.time.find_one({
+    #     'nick_name': user_nickname,
+    #     'year': today.year,
+    #     'month': today.month,
+    #     'day': today.day,
+    #     'weekday': today.weekday(),
+    # })['study_time']
 
     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
 
     sum_study_time = 0
     time_date = 0
     for user_day_data in user_data:
-        day_study_time = user_day_data['study_time'].split(':')
-        day_study_hour = int(day_study_time[0])
-        day_study_minute = int(day_study_time[1])
-        day_study_second = int(day_study_time[2])
-        temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
+        day_study_time = user_day_data['study_time']
+        temp = day_study_time
         sum_study_time += temp
         time_date += 1
 
@@ -266,16 +263,8 @@ def get_my_info():
 
     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
 
-    monthly_user_data = list(db.time.find({
-        'nick_name': user_nickname,
-        'year': today.year,
-        'month': today.month}, {'_id': False}))
-    for i in monthly_user_data:
-        print(i)
-
-    print(today_study_time, avg_study_time)
     return jsonify({
-        'today_study_time':today_study_time,
+        # 'today_study_time':today_study_time,
         'avg_study_time': avg_study_time,
         # 'month_day_study_time': month_day_study_time
         # 'avg_study_time': today_study_time
@@ -286,8 +275,21 @@ def get_my_info():
 @login_required
 def post_study_time_graph():
     user_nickname = request.user['nick_name']
-    year = request.form['year']
-    month = request.form['month']
+    year = int(request.form['year'])
+    month = int(request.form['month'])
+
+    monthly_user_data = list(db.time.find({
+        'nick_name': user_nickname,
+        'year': year,
+        'month': month}, {'_id': False}).sort("day", 1))
+
+    day_list = []
+    day_time_list = []
+    for day in monthly_user_data:
+        day_list.append(day['day'])
+        day_time_list.append(day['study_time'])
+    print(day_list, day_time_list)
+    return jsonify({'day_list': day_list, 'day_time_list': day_time_list})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
