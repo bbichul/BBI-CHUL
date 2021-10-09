@@ -63,11 +63,9 @@ def check_in():
             'month': today.month,
             'day': today.day,
             'weekday': today.weekday(),
-
+            'study_time': 0
         }
         db.time.insert_one(doc)
-
-
 
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
@@ -137,7 +135,10 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
-        'status': None
+        'status': None,
+        'string_start_date': None,
+        'string_end_date': None,
+        'goal_hour': 0
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -307,7 +308,7 @@ def post_weekly_avg_graph():
         except ZeroDivisionError:
             weekday_avg_study_time = 0
         weekday_avg_study_time_list[i] = weekday_avg_study_time
-    print(weekday_avg_study_time_list)
+
     return jsonify({
         'monday': weekday_avg_study_time_list[0],
         'tuesday': weekday_avg_study_time_list[1],
@@ -316,6 +317,73 @@ def post_weekly_avg_graph():
         'friday': weekday_avg_study_time_list[4],
         'saturday': weekday_avg_study_time_list[5],
         'sunday': weekday_avg_study_time_list[6],
+    })
+
+# 목표시 공부시간
+@app.route('/goal', methods=['POST'])
+@login_required
+def post_goal_modal():
+    user_nickname = request.user['nick_name']
+    string_start_date = request.form['string_start_date']
+    string_end_date = request.form['string_end_date']
+    goal_hour = int(request.form['goal_hour'])
+    # 만약 목표시간을 설정하는게 처음이라면
+    # if db.user.find_one({'nick_name': user_nickname}) is None:
+    #     doc = {
+    #         'nick_name': user_nickname,
+    #         'string_start_date': string_start_date,
+    #         'string_end_date': string_end_date,
+    #     }
+    #     db.goal.insert_one(doc)
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {
+        'string_start_date': string_start_date,
+        'string_end_date': string_end_date,
+        'goal_hour': goal_hour
+    }})
+
+    return jsonify({'msg': '성공'})
+
+
+@app.route('/goal', methods=['GET'])
+@login_required
+def get_goal_modal():
+    user_nickname = request.user['nick_name']
+    user_data = db.user.find_one({'nick_name': user_nickname})
+
+    string_start_date = user_data['string_start_date']
+    string_end_date = user_data['string_end_date']
+    goal_hour = user_data['goal_hour']
+
+    # 그사이에 있는 날짜들을 불러와야됨
+    start_date = datetime.strptime(string_start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(string_end_date, "%Y-%m-%d")
+    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date-start_date).days+1)]
+
+    study_time_sum = 0
+    for i in dates:
+        data_split_list = i.split('-')
+        year = int(data_split_list[0])
+        month = int(data_split_list[1])
+        day = int(data_split_list[2])
+
+        user_time_data = db.time.find_one({
+            'nick_name': user_nickname,
+            'year': year,
+            'month': month,
+            'day': day})
+
+        if user_time_data is None:
+            continue
+
+        study_time_sum += user_time_data['study_time']
+    done_hour = study_time_sum // 3600
+
+    return jsonify({
+        'string_start_date': string_start_date,
+        'string_end_date': string_end_date,
+        'goal_hour': goal_hour,
+        'done_hour': done_hour
     })
 
 

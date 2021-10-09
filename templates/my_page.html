@@ -97,74 +97,184 @@
 
     </div>
 </header><!-- End Header -->
-<div id="my-page">
-    <div class="left">
-        <div>오늘공부시간</div>
-        <div>하루평균공부시간</div>
-        <div>월별 평균 공부시간</div>
-        <div>한달간격 일별 공부시간</div>
-        <div>하루평균공부시간</div>
 
-        <div class="progress-graph">
-            <div class="row">
-                <div>
-                    <h3 class="progress-title">목표 공부시간</h3>
-                    <div class="progress-outer">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-danger" style="width:50%;"></div>
-                            <div class="progress-value"><span>45</span>%</div>
+<div id="my-page">
+    <div id="record-container">
+        <div class="left">
+            <div id="my-page-menu">공부시간 | 개인정보</div>
+            <div class="during-date-box">
+                <div class="start-date-box"></div>
+                <span class="link-date">~</span>
+                <div class="end-date-box"></div>
+            </div>
+            <div class="d-day-box"></div>
+            <div class="progress-graph">
+
+                <div class="row">
+                    <div>
+                        <h3 class="progress-title">목표 공부시간</h3>
+                        <button id="progress-button" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">생성
+                        </button>
+                        <div class="progress-outer">
+                            <div class="progress">
+                                <div id="percent-bar" class="progress-bar progress-bar-striped progress-bar-danger"
+                                     style="width:10%;"></div>
+
+                                <div class="progress-value"></div>
+                            </div>
                         </div>
                     </div>
-                    <h6>누적공부시간</h6>
-                    <h6>남은공부시간</h6>
-                    <h6>남은일자시간</h6>
-                    <h6>기간 설정</h6>
-                    <h6>목표시간 정하기</h6>
+                </div>
+                <div class="resolution">
+                    <h3 class="resolution-title">각오</h3>
+                    <button id='resolution-button' type="button" class="btn btn-secondary btn-sm"
+                            data-bs-target="#exampleModal">수정
+                    </button>
+                </div>
+            </div>
+            <div id="avg-container">
+                <div>하루평균공부시간</div>
+                <div>한달간격 일별 공부시간</div>
+                <div>하루평균공부시간</div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="select-box">
+                <select name='year' class="form-select" aria-label="Default select example">
+                    <!--            <option selected>Year</option>-->
+                    <option value=2021>2021년</option>
+                </select>
+                <select name='month' id='month' class="form-select" aria-label="Default select example">
+                    <!--            <option selected>Month</option>-->
+                    <option value=1>1월</option>
+                    <option value=2>2월</option>
+                    <option value=3>3월</option>
+                    <option value=4>4월</option>
+                    <option value=5>5월</option>
+                    <option value=6>6월</option>
+                    <option value=7>7월</option>
+                    <option value=8>8월</option>
+                    <option value=9>9월</option>
+                    <option value=10>10월</option>
+                    <option value=11>11월</option>
+                    <option value=12>12월</option>
+                </select>
+            </div>
+            <div class="bar-graph">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--                <div>-->
+                        <canvas id="weekly_avg_graph"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="line-graph">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--                <div>-->
+                        <canvas id="study_time_graph"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="right">
-        <div class="select-box">
-            <select name='year' class="form-select" aria-label="Default select example">
-    <!--            <option selected>Year</option>-->
-                <option value=2021>2021년</option>
-            </select>
-            <select name='month' id='month' class="form-select" aria-label="Default select example">
-    <!--            <option selected>Month</option>-->
-                <option value=1>1월</option>
-                <option value=2>2월</option>
-                <option value=3>3월</option>
-                <option value=4>4월</option>
-                <option value=5>5월</option>
-                <option value=6>6월</option>
-                <option value=7>7월</option>
-                <option value=8>8월</option>
-                <option value=9>9월</option>
-                <option value=10>10월</option>
-                <option value=11>11월</option>
-                <option value=12>12월</option>
-            </select>
-        </div>
-        <div class="bar-graph">
-            <div class="row">
-                <div class="col-md-12">
-<!--                <div>-->
-                    <canvas id="weekly_avg_graph"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="line-graph">
-            <div class="row">
-                <div class="col-md-12">
-<!--                <div>-->
-                    <canvas id="study_time_graph"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!--    <canvas id="myChart"></canvas>-->
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">목표 시간 설정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <label class="nativeDatePicker">시작일:
+                        <input type="date" name="start-date">
+                        <span class="validity"></span>
+                    </label>
+
+                    <fieldset class="fallbackDatePicker" hidden>
+                        <legend class="fallbackLabel">시작일:</legend>
+
+                        <label>
+                            Day:
+                            <select name="calendar-day"></select>
+                        </label>
+
+                        <label>
+                            Month:
+                            <select name="calendar-month">
+                                <option>January</option>
+                                <option>February</option>
+                                <option>March</option>
+                                <option>April</option>
+                                <option>May</option>
+                                <option>June</option>
+                                <option>July</option>
+                                <option>August</option>
+                                <option>September</option>
+                                <option>October</option>
+                                <option>November</option>
+                                <option>December</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Year:
+                            <select name="calendar-year"></select>
+                        </label>
+                    </fieldset>
+                </form>
+                <form>
+                    <label class="nativeDatePicker">종료일:
+                        <input type="date" name="end-date">
+                        <span class="validity"></span>
+                    </label>
+
+                    <fieldset class="fallbackDatePicker" hidden>
+                        <legend class="fallbackLabel">종료일:</legend>
+
+                        <label>
+                            Day:
+                            <select name="day"></select>
+                        </label>
+
+                        <label>
+                            Month:
+                            <select name="month">
+                                <option>January</option>
+                                <option>February</option>
+                                <option>March</option>
+                                <option>April</option>
+                                <option>May</option>
+                                <option>June</option>
+                                <option>July</option>
+                                <option>August</option>
+                                <option>September</option>
+                                <option>October</option>
+                                <option>November</option>
+                                <option>December</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Year:
+                            <select name="year"></select>
+                        </label>
+                    </fieldset>
+                </form>
+                <p>목표시간:<input name="goal_hour" placeholder="ex) 50">시간</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="close_goal_time" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="post_goal_modal()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
