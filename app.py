@@ -174,35 +174,55 @@ def nickname_check():
     return jsonify({'msg': '중복되는 닉네임입니다. 다시 입력해주세요.'})
 
 
-# 달력 선택 버튼 가져오기
-@app.route('/get-calender-selector', methods=['GET'])
+# 캘린더 페이지 진입 시 개인정보를 가져옴.
+@app.route('/get-info', methods=['GET'])
 @login_required
-def calender_selector():
-
+def get_info():
     login_user = request.user['nick_name']
 
+    find_user_id = db.user.find_one({'nick_name': login_user})
 
-    user_data = db.user.find_one({'nick_name' : login_user})
-    nick_name = user_data['nick_name']
-    team_name = user_data['team_name']
+    is_include_team = 0
+    nick_name = find_user_id.get('nick_name')  # 유저 이름을 검색합니다.
+    team_name = find_user_id.get('team_name')  # 팀 이름을 검색합니다.
 
-    find_db_id = db.calender.find_one({'nick_name': nick_name})
-    find_db_team = db.calenderTeam.find_one({'team_name': team_name})
+    user_info = {
+        'nick_name': nick_name
+    }
 
-    calender_idx = []
-    calender_idx.append(nick_name)
-    calender_idx.append(team_name)
+    #유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+    # 개인캘린더가 없을 시 하나 추가
+    if find_cal_private is None:
+        db.calender.insert_one({'nick_name': nick_name, 'calender_count': 1, 'private_cal1': ''})
 
-    for index in find_db_id:
-        if 'calender' in index:
-            calender_idx.append(index)
-    for index in find_db_team:
-        if 'teamCal' in index:
-            calender_idx.append(index)
+    # 유저정보에 팀이 없다면 개인 캘린더만 가짐
+    if team_name is None:
+        user_info['is_include_team'] = is_include_team
+    else:
+        # 유저정보에 팀이 있다면 넘겨줄 유저 인포에 팀 이름을 추가함
+        is_include_team = 1
+        user_info['is_include_team'] = is_include_team
+        user_info['team_name'] = team_name
+        # 해당 팀 이름으로 팀 캘린더 목록을 찾아서 없으면 캘린더를 하나 생성함.
+        if find_cal_team is None:
+            db.calenderTeam.insert_one({'team_name': team_name, 'calender_count': 1, 'team_cal1': ''})
 
+    # 캘린더 DB에 정보가 있는지 검색
+    calender_info = []
+    for index_cal_private in find_cal_private:
+        if 'private_cal' in index_cal_private:
+            calender_info.append(index_cal_private)
 
-    return jsonify({'send_cal_idx': calender_idx})
+    if team_name is not None:
+        for index_cal_team in find_cal_team:
+            if 'team_cal' in index_cal_team:
+                calender_info.append(index_cal_team)
 
+    user_info['calender_info'] = calender_info
+
+    return jsonify(user_info)
 
 
 # 달력 추가하기 함수
@@ -219,22 +239,32 @@ def add_calender():
     nick_name = find_db_id['nick_name']
     team_name = find_db_id['team_name']
 
-    # JS로부터 넘겨받은 is_private가 true 면 개인 달력 추가
-    if is_private == 'true':
+    # JS로부터 넘겨받은 is_private가 1이면 개인 달력 추가
+    if is_private == '1':
         find_private = db.calender.find_one({'nick_name': nick_name})
-        calender_count = find_private['cal_count'] + 1
+        calender_count = find_private['calender_count'] + 1
 
         db.calender.update_one({'nick_name': nick_name}, {
-            '$set': {'cal_count': calender_count, f'calender{calender_count}': ''}})
-    elif is_private == 'false':
+            '$set': {'calender_count': calender_count, f'private_cal{calender_count}': ''}})
+    elif is_private == '0':
+        # is_private가 0이면 개인 달력 추가
         find_team = db.calenderTeam.find_one({'team_name': team_name})
-        calender_count = find_team['cal_count'] + 1
+        calender_count = find_team['calender_count'] + 1
 
         db.calenderTeam.update_one({'team_name': team_name}, {
-            '$set': {'cal_count': calender_count, f'teamCal{calender_count}': ''}})
+            '$set': {'calender_count': calender_count, f'team_cal{calender_count}': ''}})
 
     return jsonify({'msg': '캘린더가 추가 되었습니다.'})
 
+#팀 달력, 개인 달력 선택 버튼
+@app.route('/select-calender', methods=['POST'])
+@login_required
+def select_calender():
+    receive_select_calender =request.form['select_cal_give']
+
+    print(receive_select_calender)
+
+    return jsonify({'msg': '캘린더가 추가 되었습니다.'})
 
 # 메모 가져와서 달력과 메모 연동.
 @app.route('/take-memo', methods=['GET'])
@@ -261,6 +291,9 @@ def get_calender_memo():
             pass
         else:
             text_data = find_db_team.get('date')
+
+
+
 
     return jsonify({'give_text': text_data})
 

@@ -1,15 +1,15 @@
 $(document).ready(function () {
-    getCalenderInfo()
+    getInfo()
 });
-
 
 //달력에 필요한 변수들 선언, 초기화
 let date = new Date();
-
-let is_private = false; // 개인/팀 캘린더 기본 값 false로 팀 캘린더
-
 let btn_year_month_day = ''; //텍스트 박스와 캘린더 연동 위한 달력 버튼 ID 값 저장
 
+let is_include_team = 0; //소속된 팀이 존재하지 않을 때 0값으로 개인 캘린더 만을 엽니다.
+let nick_name;
+let team_name;
+let selected_cal_now = 'P1';
 
 //캘린더 렌더링 함수
 const renderCalendar = () => {
@@ -77,6 +77,100 @@ const renderCalendar = () => {
     document.querySelector('.dates').innerHTML = dates.join('');
 }
 
+
+//캘린더 페이지 접속 시 가져오는 정보
+function getInfo() {
+
+    $.ajax({
+        type: "GET",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        url: "/get-info",
+        data: {},
+        success: function (response) {
+
+            nick_name = response['nick_name']
+            team_name = response['team_name']
+            is_include_team = response['is_include_team']
+            let calender_info = response['calender_info']
+
+            if (is_include_team == 1)
+                selected_cal_now = 'T1';
+
+            let count, team_count ;
+            for (let i = 0; i < calender_info.length; i++) {
+
+                if (calender_info[i].indexOf('team_cal') == 0) {
+
+                    team_count = calender_info[i].split('cal')[1]
+
+                    let temp_html = `<li>
+                        <button onclick="setCalender(this)" class="dropdown-item" value="T${team_count}">팀 ${team_name}의 캘린더 ${team_count}</button>
+                    </li>`
+
+                    $('#team-selected').append(temp_html)
+                } else if (calender_info[i].indexOf('private_cal') == 0) {
+
+                    count = calender_info[i].split('cal')[1]
+                    let temp_html = `<li>
+                        <button onclick="setCalender(this)" class="dropdown-item" value="P${count}">${nick_name}의 캘린더 ${count}</button>
+                    </li>`
+                    $('#private-selected').append(temp_html)
+                }
+            }
+        }
+    })
+}
+
+
+//달력 추가하기
+function addCalender() {
+    let add_btn_checked = $('input[name="add-calender-group"]:checked').val();
+    let is_private;
+
+    if (add_btn_checked == 1) {
+        is_private = 0;
+    } else if (add_btn_checked == 2) {
+        is_private = 1;
+    }
+
+    $.ajax({
+        type: "POST",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        url: "/add-calender",
+        data: {isPrivate_give: is_private},
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload();
+        }
+    })
+}
+
+//선택한 캘린더로 세팅합니다.
+function setCalender(obj) {
+    let select_calender_id = $(obj).attr('value');
+
+    selected_cal_now = select_calender_id;
+
+    $.ajax({
+        type: "POST",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        url: "/select-calender",
+        data: {select_cal_give: selected_cal_now},
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload();
+        }
+    })
+
+}
+
+
 //시작 시 입력 된 메모 가져와 달력 본체에 입력하는 함수
 function getMemo() {
 
@@ -101,87 +195,8 @@ function getMemo() {
     })
 }
 
-function getInfo(){
 
-}
 
-//팀 캘린더로 세팅합니다.
-function setMemoTeam() {
-    let is_private = false;
-
-}
-
-//개인 캘린더로 세팅 합니다.
-function setMemoPrivate() {
-
-    let is_private = true;
-
-}
-
-//달력 선택 버튼 세팅
-function getCalenderInfo() {
-    $.ajax({
-        type: "GET",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        url: "/get-calender-selector",
-        data: {},
-        success: function (response) {
-            let cal_index = response['send_cal_idx'];
-
-            let nick_name = cal_index[0];
-            let team_name = cal_index[1];
-            let count = 1, team_count = 1;
-
-            for (let i = 2; i < cal_index.length; i++) {
-                if (cal_index[i].indexOf('calender') != -1) {
-
-                    let temp_html = `<li>
-                        <button class="dropdown-item">${nick_name}의 캘린더 ${count}</button>
-                    </li>`
-
-                    $('#select_cal_list').append(temp_html)
-
-                    count++;
-
-                } else if ((cal_index[i].indexOf('calender') == -1)) {
-                    let temp_html = `<li>
-                        <button class="dropdown-item">팀 ${team_name}의 캘린더 ${team_count}</button>
-                    </li>`
-
-                    $('#select_cal_list').append(temp_html)
-
-                    team_count++;
-                }
-            }
-        }
-    })
-}
-
-function addCalender() {
-    let add_btn_checked = $('input[name="add-calender-group"]:checked').val();
-
-    if (add_btn_checked == 1) {
-        is_private = false;
-    } else if (add_btn_checked == 2) {
-        is_private = true;
-    }
-
-    $.ajax({
-        type: "POST",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        url: "/add-calender",
-        data: {isPrivate_give: is_private},
-        success: function (response) {
-            alert(response['msg'])
-            window.location.reload();
-        }
-    })
-
-}
 
 
 renderCalendar();
