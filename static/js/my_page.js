@@ -240,22 +240,3 @@ function post_weekly_avg_graph() {
         }
     })
 }
-
-
-// $(document).ready(function(){
-//     $('.progress-value > span').each(function(){
-//         $(this).prop('Counter',0).animate({
-//             Counter: $(this).text()
-//         },{
-//             duration: 1500,
-//             easing: 'swing',
-//             step: function (now){
-//                 $(this).text(Math.ceil(now));
-//             }
-//         });
-//     });
-// });
-
-
-// 캘린더
-//목표시간설정-시작일 설정

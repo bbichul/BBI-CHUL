@@ -1,6 +1,8 @@
-import re, bcrypt, jwt, pymongo
-import schedule
-import time
+import re
+import bcrypt
+import jwt
+import pymongo
+
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
@@ -36,13 +38,13 @@ def calender():
 def my_page():
     return render_template('my_page.html')
 
+
 # 체크인
 @app.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
     start_time = request.form['start_time']
     status = request.form['status']
-
 
     user_nickname = request.user['nick_name']
     today = date.today()
@@ -102,9 +104,8 @@ def check_out():
             'study_time':  total_sec,
         }})
 
-
-
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
+
 
 # 명언 랜덤 제공 GET
 @app.route('/wise', methods=['GET'])
@@ -213,20 +214,12 @@ def changedMemo():
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
-# 마이페이지(미완성)
+
+# 마이페이지
 @app.route('/my-info', methods=['GET'])
 @login_required
 def get_my_info():
     user_nickname = request.user['nick_name']
-    today = date.today()
-    # today_study_time = db.time.find_one({
-    #     'nick_name': user_nickname,
-    #     'year': today.year,
-    #     'month': today.month,
-    #     'day': today.day,
-    #     'weekday': today.weekday(),
-    # })['study_time']
-
     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
 
     sum_study_time = 0
@@ -247,11 +240,9 @@ def get_my_info():
     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
 
     return jsonify({
-        # 'today_study_time':today_study_time,
         'avg_study_time': avg_study_time,
-        # 'month_day_study_time': month_day_study_time
-        # 'avg_study_time': today_study_time
     })
+
 
 # 월별 시간그래프
 @app.route('/line-graph', methods=['POST'])
@@ -276,6 +267,7 @@ def post_study_time_graph():
     for day in monthly_user_data:
         day_time_list[day['day']] = day['study_time']
     return jsonify({'day_list': day_list, 'day_time_list': day_time_list})
+
 
 # 요일별평균 공부시간 그래프
 @app.route('/bar-graph', methods=['POST'])
@@ -319,7 +311,8 @@ def post_weekly_avg_graph():
         'sunday': weekday_avg_study_time_list[6],
     })
 
-# 목표시 공부시간
+
+# 공부목표시간 데이터 받기
 @app.route('/goal', methods=['POST'])
 @login_required
 def post_goal_modal():
@@ -327,14 +320,6 @@ def post_goal_modal():
     string_start_date = request.form['string_start_date']
     string_end_date = request.form['string_end_date']
     goal_hour = int(request.form['goal_hour'])
-    # 만약 목표시간을 설정하는게 처음이라면
-    # if db.user.find_one({'nick_name': user_nickname}) is None:
-    #     doc = {
-    #         'nick_name': user_nickname,
-    #         'string_start_date': string_start_date,
-    #         'string_end_date': string_end_date,
-    #     }
-    #     db.goal.insert_one(doc)
 
     db.user.update_one({'nick_name': user_nickname}, {'$set': {
         'string_start_date': string_start_date,
@@ -345,6 +330,7 @@ def post_goal_modal():
     return jsonify({'msg': '성공'})
 
 
+# 공부목표시간 데이터 보내주기
 @app.route('/goal', methods=['GET'])
 @login_required
 def get_goal_modal():
@@ -389,7 +375,3 @@ def get_goal_modal():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-# 스케줄러
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)

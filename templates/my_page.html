@@ -101,7 +101,7 @@
 <div id="my-page">
     <div id="record-container">
         <div class="left">
-            <div id="my-page-menu">공부시간 | 개인정보</div>
+            <div id="my-page-menu">마이페이지</div>
             <div class="during-date-box">
                 <div class="start-date-box"></div>
                 <span class="link-date">~</span>
@@ -109,6 +109,12 @@
             </div>
             <div class="d-day-box"></div>
             <div class="progress-graph">
+                <div class="nickname-info">
+                    <h3 class="present-nickname">닉네임</h3>
+                    <button id='change-nickname' type="button" class="btn btn-secondary btn-sm"
+                            data-bs-target="#exampleModal">수정
+                    </button>
+                </div>
 
                 <div class="row">
                     <div>
@@ -131,12 +137,24 @@
                     <button id='resolution-button' type="button" class="btn btn-secondary btn-sm"
                             data-bs-target="#exampleModal">수정
                     </button>
+                    <div class="resolution-text"></div>
                 </div>
-            </div>
-            <div id="avg-container">
-                <div>하루평균공부시간</div>
-                <div>한달간격 일별 공부시간</div>
-                <div>하루평균공부시간</div>
+                <div class="team">
+                    <h3 class="team-title">소속 팀</h3>
+                    <div class="team-list"></div>
+                </div>
+                <div class="change-password">
+                    <h3 class="password-title">비밀번호 변경</h3>
+                    <button id='password-change-button' type="button" class="btn btn-secondary btn-sm">
+                        수정
+                    </button>
+                </div>
+                <div class="sign-out">
+                    <h3 class="sign-out-title">회원탈퇴</h3>
+                    <button id='sign-out-button' type="button" class="btn btn-secondary btn-sm">
+                        탈퇴
+                    </button>
+                </div>
             </div>
         </div>
         <div class="right">

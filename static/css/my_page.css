@@ -1,10 +1,5 @@
-/** {*/
-/*    color: white;*/
-/*}*/
-
 #my-page {
-    /*background-image: url("../img/background.png");*/
-    /*background-image: url("https://blog.kakaocdn.net/dn/dllYca/btqDQSCEh3w/V9O3EnfrHkZuCepy0oCHn0/img.jpg");*/
+    background-image: url("../img/background.png");
     background-position: center;
     background-size: cover;
     margin-top: 80px;
@@ -21,7 +16,6 @@
     width: 100%;
     display: inline-block;
     vertical-align: middle;
-    /*border: 2px solid red;*/
     background-color: lightgray;
     border-radius: 20px;
     padding: 20px 50px;
@@ -31,7 +25,6 @@
 /* 마이페이지 좌측 박스*/
 #my-page-menu {
     height: 6%;
-    /*border: 2px solid red;*/
     padding: 10px;
 }
 
@@ -51,6 +44,24 @@
     border-right:2px solid gray;
 }
 
+/*닉네임*/
+.present-nickname{
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+#change-nickname {
+    margin-left: 20px;
+    width: 50px;
+    float: right;
+    display: inline;
+    height: 35px;
+    line-height: 25px;
+}
+
 /* 진행바*/
 #progress-button {
     margin-left: 20px;
@@ -62,7 +73,6 @@
 }
 
 .progress-graph {
-    /*border: 2px solid red;*/
     height: 90%;
     background-color: whitesmoke;
     border-radius: 20px;
@@ -82,9 +92,7 @@
     padding: 5px 60px 5px 5px;
     border: 5px solid #bebfbf;
     border-radius: 45px;
-    /*margin-top: 5px;*/
     position: relative;
-    /*height: 500px;*/
 }
 .progress{
     background: #bebfbf;
@@ -93,11 +101,13 @@
     color: #6b7880;
     height: 35px;
 }
+
 .progress .progress-bar{
     border-radius: 20px;
     box-shadow: none;
     animation: animate-positive 2s;
 }
+
 .progress .progress-value{
     font-size: 20px;
     font-weight: 700;
@@ -106,6 +116,7 @@
     top: 3px;
     right: 10px;
 }
+
 @keyframes animate-positive{
     0%{ width: 0; }
 }
@@ -153,6 +164,7 @@
     border-top-right-radius: 20px;
 }
 
+/*각오*/
 .resolution {
     margin-top: 40px;
 }
@@ -161,13 +173,11 @@
     font-size: 18px;
     font-weight: 700;
     color: #000;
-    /*margin: 0 0 10px;*/
     display: inline-block;
 }
 
 #resolution-button {
     margin-left: 20px;
-    line-height: 50px;
     width: 50px;
     float: right;
     display: inline;
@@ -175,11 +185,68 @@
     line-height: 25px;
 }
 
-#avg-container {
-    height: 50%;
-    /*border: 2px solid red;*/
+.resolution-text {
+    height: 50px;
+    width: 100%;
 }
 
+/*소속팀*/
+.team-title{
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.team-list {
+    height: 180px;
+    width: 100%;
+    background-color: #E0E0E0;
+    border-radius: 20px;
+}
+
+/* 바말번호 변경*/
+.change-password {
+    margin-top: 30px;
+}
+
+.password-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    display: inline-block;
+}
+
+#password-change-button {
+    margin-left: 20px;
+    width: 50px;
+    float: right;
+    display: inline;
+    height: 35px;
+    line-height: 25px;
+}
+
+/*회원탈퇴*/
+.sign-out {
+    margin-top: 30px;
+}
+
+.sign-out-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    display: inline-block;
+}
+
+#sign-out-button {
+    margin-left: 20px;
+    width: 50px;
+    float: right;
+    display: inline;
+    height: 35px;
+    line-height: 25px;
+}
 
 /*right*/
 .right {
@@ -192,7 +259,6 @@
 
 /*right*/
 .select-box {
-    /*border: 2px solid red;*/
     display: block;
     height: 6%;
 }
@@ -201,22 +267,16 @@
 /*모달창*/
 /* 요일별 평균 공부시간 그래프*/
 .bar-graph {
-    /*border: 2px solid red;*/
     height: 47%;
-    /*padding: 0 12%;*/
 }
 
 /* 월별 공부시간 그래프*/
 .line-graph {
-    /*border: 2px solid red;*/
     height: 47%;
-    /*padding: 0 12%;*/
 }
 
 canvas {
     background-color: whitesmoke;
     height: 330px;
     border-radius: 10px;
-    /*width: 100px;*/
-    /*margin-right: 0;*/
 }
