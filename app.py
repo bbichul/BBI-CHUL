@@ -259,8 +259,7 @@ def midnight():
 
 # 10초에 한번씩 실행
 # schedule.every(5).seconds.do(job)
-# schedule.every().day.at("15:33").do(midnight)
-# schedule.every().day.at("12:36").do(exit)
+
 
 # 스케줄러
 
