@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -88,124 +91,69 @@
 <div class="body-wrapper">
     <div class="not-exist">
         <p id="team-alert"></p>
-        <button id="team-check-btn" onclick="create_team()">팀 만들기</button>
+        <button id="team-check-btn" onclick="hide_teamname()" href="#" data-toggle="modal"
+                data-target="#create-teamModal">팀 만들기
+        </button>
     </div>
     <div class="team-exist">
         <div class="left-body">
-            <div>실시간 출석 현황</div>
-            <div class="list-box">
-                <h1>To Do List</h1>
-                <div class="write-box">
-                    <input type="text" class="text-basic">
-                    <button type="button" id="btnAdd" onclick="addList()">추가</button>
-                </div>
-                <table class="list-table">
-                    <colgroup>
-                        <col width="10%">
-                        <col width="90%">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>check</th>
-                        <th>To do List</th>
-                    </tr>
-                    </thead>
-                    <tbody id="listBody">
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="btn-chk">
-                        </td>
-                        <td>
-                            청소하기
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="btn-chk">
-                        </td>
-                        <td>
-                            숙제하기
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="btn-area">
-                    <button type="button" id="DeleteSel" onclick="delSelected()">선택 삭제</button>
-                    <button type="button" id="btnDelLast" onclick="delLastEle()">마지막 항목 삭제</button>
-                    <button type="button" id="btnDelAll" onclick="delAllEle()">전체 삭제</button>
-                </div>
+            <h1 id="team"></h1>
+            <div><h3>실시간 출석 현황</h3></div>
+            <table class="table">
+                <th>nickname</th>
+                <th>status</th>
+            </table>
+            <div>팀 게시판</div>
+            <div id="chart-div">
+                <canvas id="pieChartCanvas" style="height: 300px; width: 300px;"></canvas>
             </div>
         </div>
         <div class="right-body">
-            <div>mildstone</div>
-            <div>팀 기여도</div>
-        </div>
-    </div>
-</div>
-
-<!-- Log in Modal -->
-<div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="logInModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">로그인</h5>
-                <button id="login_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">x</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="input-box">
-                    <label>닉네임</label>
-                    <input type="text" id="login_nickname">
-                </div>
-                <div class="input-box">
-                    <label>비밀번호</label>
-                    <input type="password" id="login_password" placeholder="비밀번호를 입력해주세요.">
-                    <button type="button" id="login_password_eye">비밀번호 보기</button>
+            <h3 class="progress-title">체크 리스트 진행상황</h3>
+            <div class="progress-outer">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-danger" style="width:10%;"></div>
+                    <div class="progress-value"></div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal"
-                        onclick="hide_nickname()">회원가입
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="login()">확인</button>
+            <div class="todo-list">
+                <h3>팀 체크 리스트</h3>
+                <input type="text" placeholder="Add A Task" onkeyup="findteam()" class="txt">
+                <div class="notdone">
+                    <h3>To Do List</h3>
+                </div>
+                <div class="done">
+                    <h3>Done</h3>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- sign up Modal -->
-<div class="modal fade" id="signupModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-     aria-labelledby="logInModalLabel"
+<!-- create team Modal -->
+<div class="modal fade" id="create-teamModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-labelledby="create-teamModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="signupModalLabel">회원가입</h5>
-                <button id="signup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="create-teamModalLabel">팀 만들기</h5>
+                <button id="create-team-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">x</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="input-box">
-                    <label>닉네임</label>
-                    <input type="text" id="signup_nickname">
-                    <p id="can-using">사용해도 되는 닉네임 입니다.</p>
-                    <p id="cant-using">이미 사용중인 닉네임 입니다.</p>
-                    <button type="button" onclick="nickname_check()">중복확인</button>
-                </div>
-                <div class="input-box">
-                    <label>비밀번호</label>
-                    <input type="password" id="signup_password" placeholder="비밀번호를 입력해주세요.">
-                    <p>영어 또는 숫자로 6글자 이상으로 작성해주세요</p>
-                    <button type="button" id="signup_password_eye">비밀번호 보기</button>
+                    <label>팀 이름</label>
+                    <input type="text" id="team-name">
+                    <p id="can-using">사용해도 되는 팀 이름 입니다.</p>
+                    <p id="cant-using">이미 사용중인 팀 이름 입니다.</p>
+                    <button type="button" onclick="teamname_check()">중복확인</button>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        onclick="sign_up()">가입완료
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal"
+                        onclick="create_team()">팀 만들기
                 </button>
             </div>
         </div>

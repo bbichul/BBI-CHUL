@@ -1,16 +1,19 @@
 import re, bcrypt, jwt, pymongo
-
+import schedule
+import time
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
-app    = Flask(__name__)
-client = MongoClient('localhost', 27017)
-db     = client.dbnbc
 
-# 시작페이자
+app = Flask(__name__)
+client = MongoClient('localhost', 27017)
+db = client.dbnbc
+
+
+# 시작페이지
 @app.route('/')
 def index():
     return render_template('start_page.html')
@@ -43,14 +46,13 @@ def team_page():
 @login_required
 def check_in():
     start_time = request.form['start_time']
-    status     = request.form['status']
-    # year       = request.form['year']
-    # month      = request.form['month']
-    # day        = request.form['day']
-    # week       = request.form['week']
+    status = request.form['status']
+
 
     user_nickname = request.user['nick_name']
     today = date.today()
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -66,20 +68,12 @@ def check_in():
             'month': today.month,
             'day': today.day,
             'weekday': today.weekday(),
-            'status': status,
+
         }
         db.time.insert_one(doc)
 
-    else:
-        db.time.update_one({
-            'nick_name': user_nickname,
-            'year': today.year,
-            'month': today.month,
-            'day': today.day,
-            'weekday': today.weekday()},
-            {'$set': {
-            'status': status
-        }})
+
+
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -87,30 +81,37 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-    year       = request.form['year']
-    month      = request.form['month']
-    day        = request.form['day']
-    week       = request.form['week']
-    stop_time  = request.form['stop_time']
-    status     = request.form['status']
+
+    status = request.form['status']
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
     today = date.today()
 
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    # study_time.split(':')
+    study_hour = int(study_time.split(':')[0])
+    study_min = int(study_time.split(':')[1])
+    study_sec = int(study_time.split(':')[2])
+    total_sec = study_hour*60*60 + study_min*60 + study_sec
+
     # 만약 time 콜렉션에 값이 없으면
+
     db.time.update_one({
         'nick_name': user_nickname,
         'year': today.year,
         'month': today.month,
         'day': today.day,
         'weekday': today.weekday()},
-        {'$set': {
-            'status': status,
-            'study_time': study_time,
-        }})
-    return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
+        {'$inc': {
 
+            'study_time':  total_sec,
+        }})
+
+
+
+    return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
 # 명언 랜덤 제공 GET
 @app.route('/wise', methods=['GET'])
@@ -122,8 +123,8 @@ def read_wise_sy():
 # 회원가입
 @app.route('/sign-up', methods=['POST'])
 def sign_up():
-    nick_name           = request.form['nick_name']
-    password            = request.form['password']
+    nick_name = request.form['nick_name']
+    password = request.form['password']
     password_validation = re.compile('^[a-zA-Z0-9]{6,}$')
 
     # 닉네임 중복확인
@@ -135,13 +136,14 @@ def sign_up():
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
 
     # 비밀번호 암호화
-    byte_password   = password.encode("utf-8")
+    byte_password = password.encode("utf-8")
     encode_password = bcrypt.hashpw(byte_password, bcrypt.gensalt())
     decode_password = encode_password.decode("utf-8")
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
-        'team': None
+        'team': None,
+        'status': None
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -151,7 +153,7 @@ def sign_up():
 @app.route('/login', methods=['POST'])
 def login():
     nick_name = request.form['nick_name']
-    password  = request.form['password']
+    password = request.form['password']
 
     # 닉네임 확인
     user = db.user.find_one({'nick_name': nick_name})
@@ -182,7 +184,7 @@ def nickname_check():
 @app.route('/click_day', methods=['POST'])
 @login_required
 def clickedDay():
-    user_nickname      = request.user['nick_name']
+    user_nickname = request.user['nick_name']
     receive_click_date = request.form['date_give']
 
     user_data = db.calender.find_one({'nick_name': user_nickname})
@@ -201,8 +203,8 @@ def clickedDay():
 @app.route('/change_memo_text', methods=['POST'])
 @login_required
 def changedMemo():
-    user_nickname     = request.user['nick_name']
-    receive_memo      = request.form['change_memo_give']
+    user_nickname = request.user['nick_name']
+    receive_memo = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
 
     user_data = db.calender.find_one({'nick_name': user_nickname})
@@ -212,12 +214,11 @@ def changedMemo():
         db.calender.update_one({'nick_name': user_nickname}, {
             '$set': {f'date.{receive_key_class}': receive_memo}})
     else:
-        db.calender.update_one({'nick_name': user_nickname},{
+        db.calender.update_one({'nick_name': user_nickname}, {
             '$set': {f'date.{receive_key_class}': receive_memo}})
     return jsonify(receive_key_class)
 
-# 팀페이지
-
+########## 팀페이지
 # 소속 체크
 @app.route('/team', methods=['GET'])
 @login_required
@@ -234,32 +235,91 @@ def team_check():
     #     print('c')
     #     return None
 
-# # 팀 만들기
-# @app.route('/create-team', methods=['POST'])
-# @login_required
-# def create_team():
-#     team_name = request.form['team_name']
-#
-#     # 팀이름 중복확인
-#     if db.team.find_one({'team_name': team_name}) is not None:
-#         return jsonify({'msg': '중복된 팀명'})
-#
-#     doc = {
-#         'team_name': team_name
-#     }
-#     db.team.insert_one(doc)
-#     return jsonify({'msg': '저장완료'})
-#
-# # 팀명 중복체크
-# @app.route('/teamname', methods=['POST'])
-# @login_required
-# def teamname_check():
-#     team_name = request.form['team_name']
-#     team = db.team.find_one({'team_name': team_name})
-#     if team is None:
-#         return jsonify({"msg": "사용할 수 있는 팀명입니다."})
-#     return jsonify({'msg': '중복되는 팀명입니다. 다시 입력해주세요.'})
-#
+# 팀 만들기
+@app.route('/create-team', methods=['POST'])
+@login_required
+def create_team():
+    user_nickname = request.user['nick_name']
+    team_name = request.form['team']
+
+    # 팀이름 중복확인
+    if db.team.find_one({'team': team_name}) is not None:
+        return jsonify({'msg': '중복된 팀이름'})
+
+    doc = {
+        'team': team_name,
+        'members': user_nickname,
+    }
+    db.team.insert_one(doc)
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'team': team_name}})
+
+    return jsonify({'msg': '팀 만들기 완료'})
+
+# 팀명 중복체크
+@app.route('/teamname', methods=['POST'])
+@login_required
+def teamname_check():
+    team_name = request.form['team']
+    team = db.user.find_one({'team': team_name})
+
+    if team is None:
+        return jsonify({"msg": '사용할 수 있는 팀 이름입니다.'})
+
+    return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
+
+@app.route('/team-name', methods=['GET'])
+@login_required
+def team_name():
+    user_nickname = request.user['nick_name']
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+
+@app.route('/team-todo', methods=['POST'])
+@login_required
+def save_task():
+    teamname = request.form['team']
+    task = request.form['task']
+
+    doc = {
+        'team': teamname,
+        'task': task,
+        'done': 'false'
+    }
+
+    db.team_task.insert_one(doc)
+
+    return jsonify({'msg': 'task 저장 완료'})
+
+@app.route('/task-show', methods=['GET'])
+@login_required
+def show_task():
+    teamname = request.user['team']
+    tasks = list(db.team_task.find({'team': teamname}, {'_id': False}))
+    return jsonify({"tasks": tasks})
+
+@app.route('/task-delete', methods=['POST'])
+@login_required
+def delete_task():
+    team = request.form['team']
+    task = request.form['task']
+    db.team_task.delete_one({'team': team, 'task': task})
+    return {"result": "success"}
+
+@app.route('/task-done', methods=['POST'])
+@login_required
+def done_task():
+    team = request.form['team']
+    task = request.form['task']
+    done = request.form['done']
+    db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
+    return {"result": "success"}
+
+@app.route('/check-status', methods=['GET'])
+@login_required
+def check_status():
+    team = request.user['team']
+    user = list(db.user.find({'team': team}, {'_id': False}))
+    return jsonify({'user_data': user})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

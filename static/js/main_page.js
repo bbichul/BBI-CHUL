@@ -7,6 +7,7 @@ $(document).ready(function () {
     Clock()
     buttonEvt();
     // <!--    이미지 클릭할때마다 바뀌는기능-->
+
     $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
     $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
     $('.checkin-img').click(function () {
@@ -61,7 +62,7 @@ function check_in() {
         type: "POST",
         url: "/check-in",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
         data: {
             start_time: present_time,
@@ -78,6 +79,25 @@ function check_in() {
     })
 }
 
+function stopCount() {
+
+}
+
+
+// function removeCheck() {
+//
+//  if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+//
+//      document.removefrm.submit();
+//
+//  }else{   //취소
+//
+//      return false;
+//
+//  }
+//
+// }
+
 
 function check_out() {
     let present_time = $("#Clock").text()
@@ -87,11 +107,12 @@ function check_out() {
     let day = date_list[2]
     let week = date_list[3]
     let study_time = $("#time").text()
+    console.log(year, month, day, week, study_time)
     $.ajax({
         type: "POST",
         url: "/check-out",
         headers: {
-            Authorization:  getCookie('access_token')
+            Authorization: getCookie('access_token')
         },
         data: {
             stop_time: present_time,
@@ -101,7 +122,9 @@ function check_out() {
             month: month,
             day: day,
             week: week,
+
         },
+
         success: function (response) {
             // let present_time =
             // let study_time
@@ -201,6 +224,14 @@ function buttonEvt() {
         }
     });
 
+    $("#pausebtn").click(function () {
+        if (time != 0) {
+            // $(".fa").css("color","#FAED7D")
+            // this.style.color = "#4C4C4C";
+            clearInterval(timer);
+            starFlag = true;
+        }
+    });
     // stop btn
     $("#stopbtn").click(function () {
         if (time != 0) {
@@ -276,7 +307,8 @@ function handleGeoSucc(position) {
 }
 
 function handleGeoErr() {
-    alert('위치정보가서울로설정되었습니다')
+
+
     fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=seoul&appid=8bd97449cfbe6250092e849b78668814&units=metric`
     )
@@ -312,8 +344,21 @@ function handleGeoErr() {
             $('.temp_min').append($temp_min + "°C");
             $('.icon').append('<img src=" ' + $icon + '.png ">');
 
-
+            alert('위치정보가서울로설정되었습니다')
         });
 };
 
 navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
+
+var index = 1;
+$('#play-next').click(function () {
+    index++;
+    if (index > $('#myaudio source').length) index = 2;
+    console.log(index + '번째 소스 재생');
+
+    $('#myaudio source#main').attr('src',
+        $('#myaudio source:nth-child(' + index + ')').attr('src'));
+    $("#myaudio")[0].load();
+    $("#myaudio")[0].play();
+});
+
