@@ -101,6 +101,7 @@ function stopCount() {
 // }
 
 
+
 function check_out() {
     let present_time = $("#Clock").text()
     let date_list = $("#Clockday").text().split(' ')
@@ -110,6 +111,7 @@ function check_out() {
     let week = date_list[3]
     let study_time = $("#time").text()
     console.log(year, month, day, week, study_time)
+
     $.ajax({
         type: "POST",
         url: "/check-out",
@@ -134,6 +136,7 @@ function check_out() {
             // window.location.reload();
         }
     })
+
 }
 
 
