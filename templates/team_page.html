@@ -88,46 +88,50 @@
 
 </header><!-- End Header -->
 
-<div class="body-wrapper">
-    <div class="not-exist">
-        <p id="team-alert"></p>
-        <button id="team-check-btn" onclick="hide_teamname()" href="#" data-toggle="modal"
-                data-target="#create-teamModal">팀 만들기
-        </button>
-    </div>
-    <div class="team-exist">
-        <div class="left-body">
-            <h1 id="team"></h1>
-            <div><h3>실시간 출석 현황</h3></div>
-            <table class="table">
-                <th>nickname</th>
-                <th>status</th>
-            </table>
-            <div>팀 게시판</div>
-            <div id="chart-div">
-                <canvas id="pieChartCanvas" style="height: 300px; width: 300px;"></canvas>
+<div id="team-page">
+    <div id="record-container">
+        <div class="not-exist">
+            <p id="team-alert"></p>
+            <button id="team-check-btn" onclick="hide_teamname()" href="#" data-toggle="modal"
+                    data-target="#create-teamModal">팀 만들기
+            </button>
+        </div>
+        <div class="team-exist">
+            <div class="left-body">
+                <h1 id="team"></h1>
+                <div><h3>실시간 출석 현황</h3></div>
+                <table class="status-table">
+                    <tr>
+                        <th style="border-right: 1px solid;">팀원명</th>
+                        <th>출결 현황</th>
+                    </tr>
+                </table>
+                <div><h3>팀 게시판</h3></div>
+            </div>
+            <div class="right-body">
+                <div class="progress-div">
+                <h3 class="progress-title">체크 리스트 진행상황</h3>
+                <div class="progress-outer">
+                    <div class="progress">
+                        <div id="percent-bar" class="progress-bar progress-bar-striped progress-bar-danger" style="width:10%;"></div>
+                        <div class="progress-value"></div>
+                    </div>
+                </div>
+                </div>
+                <div class="todo-list">
+                    <h3>팀 체크 리스트</h3>
+                    <input type="text" placeholder="Add A Task" onkeyup="findteam()" class="txt">
+                    <div class="notdone">
+                        <h3>To Do List</h3>
+                    </div>
+                    <div class="done">
+                        <h3>Done</h3>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="right-body">
-            <h3 class="progress-title">체크 리스트 진행상황</h3>
-            <div class="progress-outer">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-danger" style="width:10%;"></div>
-                    <div class="progress-value"></div>
-                </div>
-            </div>
-            <div class="todo-list">
-                <h3>팀 체크 리스트</h3>
-                <input type="text" placeholder="Add A Task" onkeyup="findteam()" class="txt">
-                <div class="notdone">
-                    <h3>To Do List</h3>
-                </div>
-                <div class="done">
-                    <h3>Done</h3>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 </div>
 
 <!-- create team Modal -->

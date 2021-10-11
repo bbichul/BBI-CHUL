@@ -244,33 +244,6 @@ function addlist(my_team) {
         }
     });
 
-    // //삭제 버튼
-    // let del = $("<i class='bi bi-trash'></i>").click(function deletetask() {
-    //     let p = $(this).parent();
-    //     console.log(p)
-    //     // let child_element = p[0]
-    //     // console.log(child_element)
-    //     p.fadeOut(function () {
-    //         p.remove();
-    //     })
-    // });
-    // //
-    // //체크 버튼
-    // let check = $("<i class='bi bi-check'></i>").click(function () {
-    //     let p = $(this).parent();
-    //     p.fadeOut(function () {
-    //         $(".done").append(p);
-    //         p.fadeIn();
-    //     })
-    //     $(this).remove();
-    // });
-    //
-    // //Task에 삭제 & 체크 버튼 추가하기
-    // task.append(del, check)
-    //
-    // // //할일 목록에 추가
-    // $('.notdone').append(task);
-
     //입력 창 비우기
     $(".txt").val("");
 }
@@ -335,10 +308,10 @@ function checkstatus(team) {
                 let nick_name = user_data[i]['nick_name']
                 let status = user_data[i]['status']
                 let temphtml = `<tr>
-                                <th>${nick_name}</th>
-                                <th>${status}</th>
+                                <td>${nick_name}</td>
+                                <td>${status}</td>
                                 </tr>`
-                $(".table").append(temphtml);
+                $(".status-table").append(temphtml);
             }
         }
     });
