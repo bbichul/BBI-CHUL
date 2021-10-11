@@ -1,8 +1,6 @@
 const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
 let i = getRandomNumberOf(10);
 
-
-
 $(document).ready(function () {
     getWiseSy();
     Clock()
@@ -32,13 +30,11 @@ function getWiseSy() {
         data: {},
         success: function (response) {
             let wise_sy = response;
-            console.log(wise_sy)
             let name = wise_sy[i]['sy_name']
             let wise = wise_sy[i]['wise_sy']
             let temp_html = `<p>${wise}</p>
                              <p>${name}</p>`
             $('#wise-box').append(temp_html)
-            console.log(temp_html)
         }
     })
 }
@@ -58,7 +54,6 @@ function check_in() {
     // let month = date_list[1]
     // let day = date_list[2]
     // let week = date_list[3]
-    console.log(present_time)
     $.ajax({
         type: "POST",
         url: "/check-in",
@@ -110,7 +105,6 @@ function check_out() {
     let day = date_list[2]
     let week = date_list[3]
     let study_time = $("#time").text()
-    console.log(year, month, day, week, study_time)
 
     $.ajax({
         type: "POST",
@@ -171,12 +165,23 @@ function Clock() {
         let Clock = document.getElementById("Clock");
         Clockday.innerText = YYYY + '년 ' + MM + '월 ' + DD + '일 ' + Week + '요일';
         Clock.innerText = hh + ':' + mm + ':' + ss;
-
     }
 }
 
-setInterval(Clock, 1000);
-//1초(1000)마다 Clock함수를 재실행 한다
+// setInterval(Clock, 1000);
+function record_time() {
+    let date = new Date()
+    if (date.getHours() == 0 && date.getMinutes() == 0 &&date.getSeconds() == 0) {
+        let yesterday_study_time = $('#time').text()
+        setCookie('yesterday_study_time', yesterday_study_time, 1)
+    }
+}
+
+// 1초(1000)마다 Clock함수를 재실행 한다
+setInterval(function () {
+    Clock();
+    record_time();
+}, 1000);
 
 //타이머
 let time = 0;
@@ -227,37 +232,7 @@ function buttonEvt() {
                 }
 
                 let Clock = document.getElementById("Clock");
-
-
-                if (Clock.innerText == "15:41:00") {
-
-                          let study_time = $("#time").text()
-                          console.log(study_time)
-                            $.ajax({
-                                type: "POST",
-                                url: "/mid-night",
-                                headers: {
-                                    Authorization: getCookie('access_token')
-                                },
-                                data: {
-                                   study_time: study_time
-
-                                },
-
-                                success: function (response) {
-                                    alert(response["msg"])
-
-
-                                }
-                            })
-                        }
-
-
-
-
-
                 document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중';
-                // console.log($("#time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중')
             }, 1000);
         }
     });
@@ -295,8 +270,6 @@ function getWeather(lat, lon) {
 
         })
         .then(function (json) {
-
-            console.log(json);
             let $country = json.sys.country;
             let $temp = json.main.temp;  //현재온도
             let $place = json.name;   // 사용자 위치
@@ -308,9 +281,6 @@ function getWeather(lat, lon) {
             let icon = json.weather[0].icon;//날씨아이콘
             let $wId = json.weather[0].id; // 날씨 상태 id 코드
             let $icon = 'http://openweathermap.org/img/w/' + icon
-
-
-            console.log($temp, $place, $humidity, $sky, $wId)
 
             // $('.place').append($country + )
             $('.csky').append($sky);
@@ -334,7 +304,6 @@ let options = {
 };
 
 function handleGeoSucc(position) {
-    console.log(position);
     const latitude = position.coords.latitude;  // 경도
     const longitude = position.coords.longitude;  // 위도
     const coordsObj = {
@@ -356,8 +325,6 @@ function handleGeoErr() {
 
         })
         .then(function (json) {
-
-            console.log(json);
             let $country = json.sys.country;
             let $temp = json.main.temp;  //현재온도
             let $place = json.name;   // 사용자 위치
@@ -369,10 +336,6 @@ function handleGeoErr() {
             let icon = json.weather[0].icon;//날씨아이콘
             let $wId = json.weather[0].id; // 날씨 상태 id 코드
             let $icon = 'http://openweathermap.org/img/w/' + icon
-
-
-            console.log($temp, $place, $humidity, $sky, $wId)
-
 
             $('.csky').append($sky);
             $('.temp').append($temp + "°C");
@@ -400,4 +363,32 @@ $('#play-next').click(function () {
     $("#myaudio")[0].load();
     $("#myaudio")[0].play();
 });
+
+function checkout_choice() {
+    if (getCookie('yesterday_study_time') != undefined) {
+        midnight();
+    } else {
+        check_out();
+    }
+}
+
+function midnight() {
+    let study_time = $("#time").text()
+    $.ajax({
+        type: "POST",
+        url: "/midnight",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        data: {
+            yesterday_study_time: getCookie('yesterday_study_time'),
+            total_study_time: study_time,
+            status: "퇴근",
+        },
+        success: function (response) {
+            alert(response["msg"]);
+            deleteCookie('yesterday_study_time')
+        }
+    })
+}
 
