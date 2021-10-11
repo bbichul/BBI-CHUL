@@ -2,6 +2,7 @@ const getRandomNumberOf = (total) => Math.floor(Math.random() * total);
 let i = getRandomNumberOf(10);
 
 
+
 $(document).ready(function () {
     getWiseSy();
     Clock()
@@ -57,7 +58,7 @@ function check_in() {
     // let month = date_list[1]
     // let day = date_list[2]
     // let week = date_list[3]
-
+    console.log(present_time)
     $.ajax({
         type: "POST",
         url: "/check-in",
@@ -78,6 +79,7 @@ function check_in() {
         }
     })
 }
+
 
 function stopCount() {
 
@@ -166,6 +168,7 @@ function Clock() {
         let Clock = document.getElementById("Clock");
         Clockday.innerText = YYYY + '년 ' + MM + '월 ' + DD + '일 ' + Week + '요일';
         Clock.innerText = hh + ':' + mm + ':' + ss;
+
     }
 }
 
@@ -185,6 +188,7 @@ function buttonEvt() {
     let min = 0;
     let sec = 0;
     let timer;
+
 
     // start btn
     $("#startbtn").click(function () {
@@ -206,9 +210,9 @@ function buttonEvt() {
                 sec = time % 60;
                 min = min % 60;
 
-                let th = hour;
-                let tm = min;
-                let ts = sec;
+                var th = hour;
+                var tm = min;
+                var ts = sec;
                 if (th < 10) {
                     th = "0" + hour;
                 }
@@ -219,10 +223,42 @@ function buttonEvt() {
                     ts = "0" + sec;
                 }
 
+                let Clock = document.getElementById("Clock");
+
+
+                if (Clock.innerText == "15:41:00") {
+
+                          let study_time = $("#time").text()
+                          console.log(study_time)
+                            $.ajax({
+                                type: "POST",
+                                url: "/mid-night",
+                                headers: {
+                                    Authorization: getCookie('access_token')
+                                },
+                                data: {
+                                   study_time: study_time
+
+                                },
+
+                                success: function (response) {
+                                    alert(response["msg"])
+
+
+                                }
+                            })
+                        }
+
+
+
+
+
                 document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중';
+                // console.log($("#time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중')
             }, 1000);
         }
     });
+
 
     $("#pausebtn").click(function () {
         if (time != 0) {

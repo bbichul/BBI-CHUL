@@ -1,11 +1,13 @@
 import re, bcrypt, jwt, pymongo
-import schedule
 import time
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
+import sys
+import schedule
+
 
 
 app = Flask(__name__)
@@ -213,32 +215,52 @@ def changedMemo():
     return jsonify(receive_key_class)
 
 
-# 파이썬 스케줄러 자동 실행
-# today = date.today()
-# @app.route('/check-in', methods=['POST'])
-# @login_required
-#
-# def job():
-#     doc = {
-#         'nick_name': None,
-#         'year': today.year,
-#         'month': today.month,
-#         'day': today.day,
-#         'weekday': today.weekday(),
-#         'study_time': None
-#
-#     }
-#     db.sche.insert_one(doc)
-#     print("I'm working...")
-#
-#
-# # 10초에 한번씩 실행
-# schedule.every(15).seconds.do(job)
+
+# 스케쥴러 종료
+def exit():
+    print("function exit")
+    sys.exit()
+
+
+# 스케줄러
+@app.route('/mid-night', methods=['POST'])
+@login_required
+def midnight():
+    today = date.today()
+    study_time = request.form['study_time'][:8]
+    user_nickname = request.user['nick_name']
+
+    study_hour = int(study_time.split(':')[0])
+    study_min = int(study_time.split(':')[1])
+    study_sec = int(study_time.split(':')[2])
+    total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
+    print(total_sec)
+    # 만약 time 콜렉션에 값이 없으면
+
+    db.time.update_one({
+        'nick_name': user_nickname,
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()},
+        {'$inc': {
+
+            'study_time': total_sec,
+        }})
+    return jsonify({'msg':'success'})
+
+# 10초에 한번씩 실행
+# schedule.every(5).seconds.do(job)
+# schedule.every().day.at("15:33").do(midnight)
+# schedule.every().day.at("12:36").do(exit)
 
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
 # 스케줄러
+
 # while True:
 #     schedule.run_pending()
 #     time.sleep(1)
+
+

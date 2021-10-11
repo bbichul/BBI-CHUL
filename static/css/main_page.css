@@ -441,8 +441,11 @@ figure img {
 
 .timerBox .time {
     font-size: 40pt;
-    color: white;
-    font-family: cursive;;
+    font-family:'Malgun Gothic';
+    text-align: center; color:  #dcdcdc;
+    text-shadow: 5px 5px #282828, 8px 8px #6e6e6e, 11px 11px 	#5a5a5a	, 14px 14px #464646	;
+    margin: 0;
+
 }
 .btn{
             text-decoration: none;
