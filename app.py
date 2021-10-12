@@ -1,10 +1,8 @@
-import re, bcrypt, jwt, pymongo
-import time
-
 import re
 import bcrypt
 import jwt
 import pymongo
+import time
 
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
@@ -41,6 +39,12 @@ def calender():
 @app.route('/my-page')
 def my_page():
     return render_template('my_page.html')
+
+
+# 팀페이지
+@app.route('/team-page')
+def team_page():
+    return render_template('team_page.html')
 
 
 # 체크인
@@ -139,7 +143,8 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
-        'status': None,
+        'team': None,
+        'status': "퇴근",
         'string_start_date': None,
         'string_end_date': None,
         'goal_hour': 0
@@ -464,6 +469,107 @@ def get_goal_modal():
         'goal_hour': goal_hour,
         'done_hour': done_hour
     })
+
+# 팀페이지
+# 소속 체크
+@app.route('/team', methods=['GET'])
+@login_required
+def team_check():
+    user_nickname = request.user['nick_name']
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+
+# 팀 만들기
+@app.route('/create-team', methods=['POST'])
+@login_required
+def create_team():
+    user_nickname = request.user['nick_name']
+    team_name = request.form['team']
+
+    # 팀이름 중복확인
+    if db.team.find_one({'team': team_name}) is not None:
+        return jsonify({'msg': '중복된 팀이름'})
+
+    doc = {
+        'team': team_name,
+        'members': user_nickname,
+    }
+    db.team.insert_one(doc)
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'team': team_name}})
+
+    return jsonify({'msg': '팀 만들기 완료'})
+
+# 팀명 중복체크
+@app.route('/teamname', methods=['POST'])
+@login_required
+def teamname_check():
+    team_name = request.form['team']
+    team = db.user.find_one({'team': team_name})
+
+    if team is None:
+        return jsonify({"msg": '사용할 수 있는 팀 이름입니다.'})
+
+    return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
+
+#유저 소속팀 이름 가져오기
+@app.route('/get-teamname', methods=['GET'])
+@login_required
+def get_teamname():
+    user_nickname = request.user['nick_name']
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+
+#할 일 저장
+@app.route('/team-todo', methods=['POST'])
+@login_required
+def save_task():
+    teamname = request.form['team']
+    task = request.form['task']
+
+    doc = {
+        'team': teamname,
+        'task': task,
+        'done': 'false'
+    }
+
+    db.team_task.insert_one(doc)
+
+    return jsonify({'msg': 'task 저장 완료'})
+
+#할 일 보여주기
+@app.route('/task-show', methods=['GET'])
+@login_required
+def show_task():
+    teamname = request.user['team']
+    tasks = list(db.team_task.find({'team': teamname}, {'_id': False}))
+    return jsonify({"tasks": tasks})
+
+#할 일 삭제
+@app.route('/task-delete', methods=['POST'])
+@login_required
+def delete_task():
+    team = request.form['team']
+    task = request.form['task']
+    db.team_task.delete_one({'team': team, 'task': task})
+    return {"result": "success"}
+
+#할 일 완료
+@app.route('/task-done', methods=['POST'])
+@login_required
+def done_task():
+    team = request.form['team']
+    task = request.form['task']
+    done = request.form['done']
+    db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
+    return {"result": "success"}
+
+#출결 상태 확인
+@app.route('/check-status', methods=['GET'])
+@login_required
+def check_status():
+    team = request.user['team']
+    user = list(db.user.find({'team': team}, {'_id': False}))
+    return jsonify({'user_data': user})
 
 
 if __name__ == '__main__':
