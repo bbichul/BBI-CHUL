@@ -9,8 +9,7 @@ from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
-import sys
-import schedule
+
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -99,7 +98,6 @@ def check_out():
     total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
-
     db.time.update_one({
         'nick_name': user_nickname,
         'year': today.year,
@@ -107,7 +105,6 @@ def check_out():
         'day': today.day,
         'weekday': today.weekday()},
         {'$inc': {
-
             'study_time': total_sec,
         }})
 
@@ -184,44 +181,182 @@ def nickname_check():
     return jsonify({'msg': '중복되는 닉네임입니다. 다시 입력해주세요.'})
 
 
-# 날짜 클릭
-@app.route('/click_day', methods=['POST'])
+# 캘린더 페이지 진입 시 개인정보를 가져옴.
+@app.route('/get-info', methods=['GET'])
 @login_required
-def clickedDay():
-    user_nickname = request.user['nick_name']
+def get_info():
+    login_user = request.user['nick_name']
+
+    find_user_id = db.user.find_one({'nick_name': login_user})
+
+    is_include_team = 0
+    nick_name = find_user_id.get('nick_name')  # 유저 이름을 검색합니다.
+    team_name = find_user_id.get('team')  # 팀 이름을 검색합니다.
+
+    user_info = {
+        'nick_name': nick_name
+    }
+
+    # 유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+    # 개인캘린더가 없을 시 하나 추가
+    if find_cal_private is None:
+        db.calender.insert_one({'nick_name': nick_name, 'calender_count': 1, 'private_cal1': {}})
+
+    # 유저정보에 팀이 없다면 개인 캘린더만 가짐
+    if team_name is None:
+        user_info['is_include_team'] = is_include_team
+    else:
+        # 유저정보에 팀이 있다면 넘겨줄 유저 인포에 팀 이름을 추가함
+        is_include_team = 1
+        user_info['is_include_team'] = is_include_team
+        user_info['team_name'] = team_name
+        # 해당 팀 이름으로 팀 캘린더 목록을 찾아서 없으면 캘린더를 하나 생성함.
+        if find_cal_team is None:
+            db.calenderTeam.insert_one({'team_name': team_name, 'calender_count': 1, 'team_cal1': {}})
+            find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+
+    # 캘린더 DB에 정보가 있는지 검색
+    calender_info = []
+    for index_cal_private in find_cal_private:
+        if 'private_cal' in index_cal_private:
+            calender_info.append(index_cal_private)
+
+    if team_name is not None:
+        for index_cal_team in find_cal_team:
+            if 'team_cal' in index_cal_team:
+                calender_info.append(index_cal_team)
+
+    user_info['calender_info'] = calender_info
+
+    return jsonify(user_info)
+
+
+# 달력 추가하기 함수
+@app.route('/add-calender', methods=['POST'])
+@login_required
+def add_calender():
+    is_private = request.form['isPrivate_give']
+    login_user = request.user['nick_name']
+
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
+
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team']
+
+    # JS로부터 넘겨받은 is_private가 1이면 개인 달력 추가
+    if is_private == '1':
+        find_private = db.calender.find_one({'nick_name': nick_name})
+        calender_count = find_private['calender_count'] + 1
+
+        db.calender.update_one({'nick_name': nick_name}, {
+            '$set': {'calender_count': calender_count, f'private_cal{calender_count}': {}}})
+    elif is_private == '0':
+        # is_private가 0이면 개인 달력 추가
+        find_team = db.calenderTeam.find_one({'team_name': team_name})
+        calender_count = find_team['calender_count'] + 1
+
+        db.calenderTeam.update_one({'team_name': team_name}, {
+            '$set': {'calender_count': calender_count, f'team_cal{calender_count}': {}}})
+
+    return jsonify({'msg': '캘린더가 추가 되었습니다.'})
+
+
+# 메모 가져와서 달력과 메모 연동.
+@app.route('/take-memo', methods=['POST'])
+@login_required
+def get_calender_memo():
+    # 캘린더 타입 받아옴.
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
+
+    login_user = request.user['nick_name']
+
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
+
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team']
+
+    # 유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+
+    content_text = ''
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        content_text = find_cal_team[calender_name]
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        content_text = find_cal_private[calender_name]
+
+    return jsonify({'give_text': content_text})
+
+
+# 날짜 클릭
+@app.route('/click-day', methods=['POST'])
+@login_required
+def clicked_day():
+    # 캘린더 타입 받아옴.
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
     receive_click_date = request.form['date_give']
 
-    user_data = db.calender.find_one({'nick_name': user_nickname})
-    try:
-        date_data = user_data['date'][receive_click_date]
+    login_user = request.user['nick_name']
 
-        resend_date_memo = date_data
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
 
-        return jsonify({'resend_date_memo': resend_date_memo})
-    except KeyError:
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team']
+
+    # 유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        content_text = find_cal_team[calender_name]
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        content_text = find_cal_private[calender_name]
+
+    if receive_click_date not in content_text:
         resend_date_memo = ""
-        return jsonify({'resend_date_memo': resend_date_memo})
+    else:
+        resend_date_memo = content_text.get(receive_click_date)
+    return jsonify({'resend_date_memo': resend_date_memo})
 
 
 # 캘린더 메모 변경
-@app.route('/change_memo_text', methods=['POST'])
+@app.route('/change-memo-text', methods=['POST'])
 @login_required
-def changedMemo():
-    user_nickname = request.user['nick_name']
+def changed_memo():
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
+
     receive_memo = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
+    login_user = request.user['nick_name']
 
-    user_data = db.calender.find_one({'nick_name': user_nickname})
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
 
-    if user_data is None:
-        db.calender.insert_one({'nick_name': user_nickname})
-        db.calender.update_one({'nick_name': user_nickname}, {
-            '$set': {f'date.{receive_key_class}': receive_memo}})
-    else:
-        db.calender.update_one({'nick_name': user_nickname}, {
-            '$set': {f'date.{receive_key_class}': receive_memo}})
-    return jsonify(receive_key_class)
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team']
 
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        db.calenderTeam.update_one({'team_name': team_name}, {
+            '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        db.calender.update_one({'nick_name': nick_name}, {
+            '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
+
+    return jsonify({'msg' : '메모가 저장 되었습니다.'})
 
 # 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
 @app.route('/midnight', methods=['POST'])

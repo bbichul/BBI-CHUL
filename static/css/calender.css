@@ -1,9 +1,13 @@
 /*캘린더 CSS시작*/
-section.calAndText{
-  background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+body{
+  background-image: url("../img/main_backgroung.jpg");
   background-position: center;
   background-size: cover;
   height: 100vw;
+}
+
+section.calAndText{
+
 }
 
 section.calAndText .other {
@@ -28,6 +32,7 @@ section.calAndText .this{
 
 section.calAndText .this:hover{
   background-color: rgba(255,255,255,0.1);
+  /*transition: 0.3s;*/
 }
 
 #calenderNote{
@@ -40,11 +45,12 @@ section.calAndText .container{
 }
 
 section.calAndText .calendar {
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
+
 section.calAndText .noteBox{
-  padding-top: 170px;
+  padding-top: 140px;
 }
 
 section.calAndText .header {
@@ -52,6 +58,12 @@ section.calAndText .header {
   justify-content: space-between;
   align-items: center;
 }
+
+section.calAndText .header .select-calender{
+  flex-grow: 1;
+}
+
+
 
 section.calAndText .year-month {
   font-size: 35px;
@@ -103,6 +115,15 @@ section.calAndText .date {
   text-align: left;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #333333;
+}
+
+section.calAndText .date .date-on-text{
+  font-size: 70%;
+  overflow: scroll;
+}
+
+#btn-memo-save {
+  width: 263px;
 }
 
 section.calAndText .day:nth-child(7n + 1),
