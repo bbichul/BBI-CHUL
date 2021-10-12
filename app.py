@@ -141,7 +141,7 @@ def sign_up():
         'nick_name': nick_name,
         'password': decode_password,
         'team': None,
-        'status': None,
+        'status': "퇴근",
         'string_start_date': None,
         'string_end_date': None,
         'goal_hour': 0
@@ -385,14 +385,6 @@ def team_check():
     user_nickname = request.user['nick_name']
     user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
     return jsonify({'user_data': user})
-        # team = db.user.find({'team': {$exists: false}})
-        # print(team)
-        # if team is not None:
-        #     print('b')
-        #     return jsonify(team)
-        # else:
-        #     print('c')
-        #     return None
 
 # 팀 만들기
 @app.route('/create-team', methods=['POST'])
@@ -426,10 +418,10 @@ def teamname_check():
 
     return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
 
-#팀 이름 확인
-@app.route('/team-name', methods=['GET'])
+#유저 소속팀 이름 가져오기
+@app.route('/get-teamname', methods=['GET'])
 @login_required
-def team_name():
+def get_teamname():
     user_nickname = request.user['nick_name']
     user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
     return jsonify({'user_data': user})

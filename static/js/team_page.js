@@ -17,47 +17,6 @@ $(document).ready(function () {
 
 });
 
-// function chartdata () {
-//     $.ajax({
-//         type: "GET",
-//         url: "/chartdata",
-//         headers: {
-//             Authorization: getCookie('access_token')
-//         },
-//         data: {},
-//         success: function (response) {
-//             let user_data = response['user_data']
-//             my_team = user_data[0]['team']
-//
-//             if (my_team != null) {
-//
-//             } else {
-//
-//             }
-//         }
-//     })
-// }
-//
-// let pieChartData = {
-//     labels: ['foo', 'bar', 'baz', 'fie', 'foe', 'fee'],
-//     datasets: [{
-//         data: [95, 12, 13, 7, 13, 10],
-//         backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)']
-//     }]
-// };
-//
-// let pieChartDraw = function () {
-//     let ctx = document.getElementById('pieChartCanvas').getContext('2d');
-//
-//     window.pieChart=new Chart(ctx, {
-//         type:'pie',
-//         data: pieChartData,
-//         options: {
-//             responsive: false
-//         }
-//     });
-// }
-
 //progress bar
 function get_progressbar(lists) {
     let tasklist = lists
@@ -101,7 +60,7 @@ function team_check() {
                 let team = `${my_team}`
                 $('#team').append(team)
                 show_task(my_team)
-                checkstatus(my_team)
+                checkstatus()
             } else {
                 $('.team-exist').hide()
                 let temp_html = `<p>아직 소속된 팀이 없습니다.</p>`
@@ -178,7 +137,7 @@ function show_task(my_team) {
         headers: {
             Authorization: getCookie('access_token')
         },
-        data: {team: team},
+        data: {},
         success: function (response) {
             let lists = response["tasks"];
             get_progressbar(lists)
@@ -209,7 +168,7 @@ function findteam() {
     if (window.event.keyCode == 13 && $(".txt").val() != "") {
         $.ajax({
             type: "GET",
-            url: "/team-name",
+            url: "/get-teamname",
             headers: {
                 Authorization: getCookie('access_token')
             },
@@ -217,6 +176,7 @@ function findteam() {
             success: function (response) {
                 let user_data = response['user_data']
                 my_team = user_data[0]['team']
+                window.location.reload();
                 addlist(my_team)
             }
         });
@@ -237,7 +197,8 @@ function addlist(my_team) {
             Authorization: getCookie('access_token')
         },
         data: {
-            team: team, task: task
+            team: team,
+            task: task
         },
         success: function (response) {
             alert(response['msg']);
@@ -257,7 +218,8 @@ function deletetask(team, task) {
             Authorization: getCookie('access_token')
         },
         data: {
-            team: team, task: task
+            team: team,
+            task: task
         },
         success: function (response) { // 성공하면
             if (response["result"] == "success") {
@@ -280,9 +242,11 @@ function donetask(team, task) {
             Authorization: getCookie('access_token')
         },
         data: {
-            team: team, task: task, done: done
+            team: team,
+            task: task,
+            done: done
         },
-        success: function (response) { // 성공하면
+        success: function (response) {
             if (response["result"] == "success") {
                 alert("체크 완료!");
                 window.location.reload();
@@ -294,14 +258,14 @@ function donetask(team, task) {
 }
 
 //팀원들의 출결 상태 불러오기
-function checkstatus(team) {
+function checkstatus() {
     $.ajax({
         type: "GET",
         url: "/check-status",
         headers: {
             Authorization: getCookie('access_token')
         },
-        data: {team: team},
+        data: {},
         success: function (response) {
             let user_data = response['user_data']
             for (let i = 0; i < user_data.length; i++) {
