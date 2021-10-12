@@ -1,3 +1,6 @@
+import re, bcrypt, jwt, pymongo
+import time
+
 import re
 import bcrypt
 import jwt
@@ -8,7 +11,8 @@ from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
-
+import sys
+import schedule
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -76,7 +80,6 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-
     status = request.form['status']
     study_time = request.form['study_time'][:8]
 
@@ -89,7 +92,7 @@ def check_out():
     study_hour = int(study_time.split(':')[0])
     study_min = int(study_time.split(':')[1])
     study_sec = int(study_time.split(':')[2])
-    total_sec = study_hour*60*60 + study_min*60 + study_sec
+    total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
 
@@ -101,7 +104,7 @@ def check_out():
         'weekday': today.weekday()},
         {'$inc': {
 
-            'study_time':  total_sec,
+            'study_time': total_sec,
         }})
 
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
@@ -215,6 +218,96 @@ def changedMemo():
     return jsonify(receive_key_class)
 
 
+# 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
+@app.route('/midnight', methods=['POST'])
+@login_required
+def midnight():
+    user_nickname = request.user['nick_name']
+    yesterday_study_time = request.form['yesterday_study_time'][:8]
+    total_study_time = request.form['total_study_time'][:8]
+    status = request.form['status']
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    yesterday_study_time_list = yesterday_study_time.split(':')
+    yesterday_study_time_hour = int(yesterday_study_time_list[0])
+    yesterday_study_time_minute = int(yesterday_study_time_list[1])
+    yesterday_study_time_second = int(yesterday_study_time_list[2])
+
+    total_study_time_list = total_study_time.split(':')
+    today_study_time_hour = int(total_study_time_list[0])
+    today_study_time_minute = int(total_study_time_list[1])
+    today_study_time_second = int(total_study_time_list[2])
+
+    yesterday_second = (yesterday_study_time_hour * 60 * 60) + \
+                       (yesterday_study_time_minute * 60) + yesterday_study_time_second
+    total_second = (today_study_time_hour * 60 * 60) + \
+                   (today_study_time_minute * 60) + today_study_time_second
+    today_second = total_second - yesterday_second
+
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'year': yesterday.year,
+        'month': yesterday.month,
+        'day': yesterday.day,
+        'weekday': yesterday.weekday()
+    }) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'year': yesterday.year,
+            'month': yesterday.month,
+            'day': yesterday.day,
+            'weekday': yesterday.weekday(),
+            'study_time': yesterday_second,
+        }
+        db.time.insert_one(doc)
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'year': yesterday.year,
+            'month': yesterday.month,
+            'day': yesterday.day,
+            'weekday': yesterday.weekday()},
+            {'$inc': {
+                'study_time': yesterday_second,
+            }})
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()
+    }) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday(),
+            'study_time': today_second,
+        }
+        db.time.insert_one(doc)
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday()},
+            {'$inc': {
+                'study_time': today_second,
+            }})
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    return jsonify({'msg': f'success'})
+
+
+
 # 마이페이지
 @app.route('/my-info', methods=['GET'])
 @login_required
@@ -232,9 +325,9 @@ def get_my_info():
 
     ss = (sum_study_time / time_date)
     study_hours = ss // 3600
-    ss = ss - study_hours*3600
+    ss = ss - study_hours * 3600
     study_minutes = ss // 60
-    ss = ss - study_minutes*60
+    ss = ss - study_minutes * 60
     study_seconds = ss
 
     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
@@ -344,7 +437,7 @@ def get_goal_modal():
     # 그사이에 있는 날짜들을 불러와야됨
     start_date = datetime.strptime(string_start_date, "%Y-%m-%d")
     end_date = datetime.strptime(string_end_date, "%Y-%m-%d")
-    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date-start_date).days+1)]
+    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date - start_date).days + 1)]
 
     study_time_sum = 0
     for i in dates:
