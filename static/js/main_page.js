@@ -22,7 +22,7 @@ $(document).ready(function () {
     });
 });
 
-
+// 명언 가져와서 뿌려주기
 function getWiseSy() {
     $.ajax({
         type: "GET",
@@ -39,21 +39,17 @@ function getWiseSy() {
     })
 }
 
-
+// 현재시간 및 날짜
 let date_list = $("#Clockday").text().split(' ')
 let year = date_list[0]
 let month = date_list[1]
 let day = date_list[2]
 let week = date_list[3]
 
-
+// 공부시작 눌렀을시
 function check_in() {
     let present_time = $("#Clock").text()
-    // let date_list = $("#Clockday").text().split(' ')
-    // let year = date_list[0]
-    // let month = date_list[1]
-    // let day = date_list[2]
-    // let week = date_list[3]
+
     $.ajax({
         type: "POST",
         url: "/check-in",
@@ -63,40 +59,16 @@ function check_in() {
         data: {
             start_time: present_time,
             status: "출근",
-            // year: year,
-            // month: month,
-            // day: day,
-            // week: week,
+
         },
         success: function (response) {
-            // alert(response["msg"]);
-            // window.location.reload();
+
+
         }
     })
 }
 
-
-function stopCount() {
-
-}
-
-
-// function removeCheck() {
-//
-//  if (confirm("정말 삭제하시겠습니까??") == true){    //확인
-//
-//      document.removefrm.submit();
-//
-//  }else{   //취소
-//
-//      return false;
-//
-//  }
-//
-// }
-
-
-
+// 공부 종료 눌렀을시
 function check_out() {
     let present_time = $("#Clock").text()
     let date_list = $("#Clockday").text().split(' ')
@@ -124,10 +96,9 @@ function check_out() {
         },
 
         success: function (response) {
-            // let present_time =
-            // let study_time
+
             alert(response["msg"]);
-            // window.location.reload();
+
         }
     })
 
@@ -168,10 +139,11 @@ function Clock() {
     }
 }
 
+// 00시 기준으로 시간 자동저장
 // setInterval(Clock, 1000);
 function record_time() {
     let date = new Date()
-    if (date.getHours() == 0 && date.getMinutes() == 0 &&date.getSeconds() == 0) {
+    if (date.getHours() == 10 && date.getMinutes() == 31 & date.getSeconds() == 0) {
         let yesterday_study_time = $('#time').text()
         setCookie('yesterday_study_time', yesterday_study_time, 1)
     }
@@ -198,12 +170,10 @@ function buttonEvt() {
     let timer;
 
 
-    // start btn
+    // start btn 공부 시작 눌렀을시 시간 재기
     $("#startbtn").click(function () {
 
         if (starFlag) {
-            // $(".fa").css("color", "#FAED7D")
-            // this.style.color = "#4C4C4C";
             starFlag = false;
 
             if (time == 0) {
@@ -237,11 +207,9 @@ function buttonEvt() {
         }
     });
 
-
+    // stop 눌러서 잠시동안 공부 멈추기
     $("#pausebtn").click(function () {
         if (time != 0) {
-            // $(".fa").css("color","#FAED7D")
-            // this.style.color = "#4C4C4C";
             clearInterval(timer);
             starFlag = true;
         }
@@ -249,8 +217,6 @@ function buttonEvt() {
     // stop btn
     $("#stopbtn").click(function () {
         if (time != 0) {
-            // $(".fa").css("color", "#FAED7D")
-            // this.style.color = "#4C4C4C";
             clearInterval(timer);
             starFlag = true;
             time = time
@@ -260,7 +226,7 @@ function buttonEvt() {
     });
 }
 
-
+// 오픈api 현재 위치 날씨 뿌려주기
 function getWeather(lat, lon) {
     fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=8bd97449cfbe6250092e849b78668814&units=metric`
@@ -270,24 +236,22 @@ function getWeather(lat, lon) {
 
         })
         .then(function (json) {
-            let $country = json.sys.country;
+
             let $temp = json.main.temp;  //현재온도
             let $place = json.name;   // 사용자 위치
             let $humidity = json.main.humidity; //강수량
             let $sky = json.weather[0].main;
-
             let $temp_max = json.main.temp_max;//최고온도
             let $temp_min = json.main.temp_min;//최저온도
             let icon = json.weather[0].icon;//날씨아이콘
             let $wId = json.weather[0].id; // 날씨 상태 id 코드
             let $icon = 'http://openweathermap.org/img/w/' + icon
 
-            // $('.place').append($country + )
+
             $('.csky').append($sky);
             $('.temp').append($temp + "°C");
             $('.humidity').append($humidity + "%");
             $('.place').append($place);
-            //  $('.place').append('/'+$country);
             $('.temp_max').append($temp_max + "°C");
             $('.temp_min').append($temp_min + "°C");
             $('.icon').append('<img src=" ' + $icon + '.png ">');
@@ -296,7 +260,7 @@ function getWeather(lat, lon) {
         });
 }
 
-
+// 현위치 좌표 가져오기
 let options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -314,6 +278,7 @@ function handleGeoSucc(position) {
     getWeather(latitude, longitude);
 }
 
+// 위치 정보를 가져오지 못할시 서울로 가져옴
 function handleGeoErr() {
 
 
@@ -330,7 +295,6 @@ function handleGeoErr() {
             let $place = json.name;   // 사용자 위치
             let $humidity = json.main.humidity; //강수량
             let $sky = json.weather[0].main;
-
             let $temp_max = json.main.temp_max;//최고온도
             let $temp_min = json.main.temp_min;//최저온도
             let icon = json.weather[0].icon;//날씨아이콘
@@ -341,7 +305,6 @@ function handleGeoErr() {
             $('.temp').append($temp + "°C");
             $('.humidity').append($humidity + "%");
             $('.place').append($place);
-            //  $('.place').append('/'+$country);
             $('.temp_max').append($temp_max + "°C");
             $('.temp_min').append($temp_min + "°C");
             $('.icon').append('<img src=" ' + $icon + '.png ">');
@@ -352,6 +315,7 @@ function handleGeoErr() {
 
 navigator.geolocation.getCurrentPosition(handleGeoSucc, handleGeoErr, options);
 
+// 페이지 오디오 다음트랙 재생
 var index = 1;
 $('#play-next').click(function () {
     index++;
@@ -364,6 +328,8 @@ $('#play-next').click(function () {
     $("#myaudio")[0].play();
 });
 
+
+// 메인페이지 공부 종료 눌렀을때
 function checkout_choice() {
     if (getCookie('yesterday_study_time') != undefined) {
         midnight();
@@ -372,6 +338,7 @@ function checkout_choice() {
     }
 }
 
+// 00시 기준 공부를 전날에 시작해 다음날 끝날때의 함수
 function midnight() {
     let study_time = $("#time").text()
     $.ajax({

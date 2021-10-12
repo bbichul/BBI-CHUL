@@ -1,4 +1,3 @@
-
 import re, bcrypt, jwt, pymongo
 import time
 
@@ -7,7 +6,6 @@ import bcrypt
 import jwt
 import pymongo
 
-
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
 from decorator import login_required
@@ -15,8 +13,6 @@ from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 import sys
 import schedule
-
-
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
@@ -84,7 +80,6 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-
     status = request.form['status']
     study_time = request.form['study_time'][:8]
 
@@ -97,7 +92,7 @@ def check_out():
     study_hour = int(study_time.split(':')[0])
     study_min = int(study_time.split(':')[1])
     study_sec = int(study_time.split(':')[2])
-    total_sec = study_hour*60*60 + study_min*60 + study_sec
+    total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
 
@@ -109,7 +104,7 @@ def check_out():
         'weekday': today.weekday()},
         {'$inc': {
 
-            'study_time':  total_sec,
+            'study_time': total_sec,
         }})
 
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
@@ -223,13 +218,7 @@ def changedMemo():
     return jsonify(receive_key_class)
 
 
-
-# 스케쥴러 종료
-# def exit():
-#     print("function exit")
-#     sys.exit()
-
-# 00시 기준 시간 자동 저장
+# 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
 @app.route('/midnight', methods=['POST'])
 @login_required
 def midnight():
@@ -317,16 +306,6 @@ def midnight():
 
     return jsonify({'msg': f'success'})
 
-# 10초에 한번씩 실행
-# schedule.every(5).seconds.do(job)
-
-
-# 스케줄러
-
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
-
 
 
 # 마이페이지
@@ -346,9 +325,9 @@ def get_my_info():
 
     ss = (sum_study_time / time_date)
     study_hours = ss // 3600
-    ss = ss - study_hours*3600
+    ss = ss - study_hours * 3600
     study_minutes = ss // 60
-    ss = ss - study_minutes*60
+    ss = ss - study_minutes * 60
     study_seconds = ss
 
     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
@@ -458,7 +437,7 @@ def get_goal_modal():
     # 그사이에 있는 날짜들을 불러와야됨
     start_date = datetime.strptime(string_start_date, "%Y-%m-%d")
     end_date = datetime.strptime(string_end_date, "%Y-%m-%d")
-    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date-start_date).days+1)]
+    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date - start_date).days + 1)]
 
     study_time_sum = 0
     for i in dates:
@@ -489,4 +468,3 @@ def get_goal_modal():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
