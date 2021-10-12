@@ -190,12 +190,12 @@ def get_info():
         'nick_name': nick_name
     }
 
-    #유저 정보로 캘린더 검색
+    # 유저 정보로 캘린더 검색
     find_cal_private = db.calender.find_one({'nick_name': nick_name})
     find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
     # 개인캘린더가 없을 시 하나 추가
     if find_cal_private is None:
-        db.calender.insert_one({'nick_name': nick_name, 'calender_count': 1, 'private_cal1': ''})
+        db.calender.insert_one({'nick_name': nick_name, 'calender_count': 1, 'private_cal1': {}})
 
     # 유저정보에 팀이 없다면 개인 캘린더만 가짐
     if team_name is None:
@@ -207,7 +207,8 @@ def get_info():
         user_info['team_name'] = team_name
         # 해당 팀 이름으로 팀 캘린더 목록을 찾아서 없으면 캘린더를 하나 생성함.
         if find_cal_team is None:
-            db.calenderTeam.insert_one({'team_name': team_name, 'calender_count': 1, 'team_cal1': ''})
+            db.calenderTeam.insert_one({'team_name': team_name, 'calender_count': 1, 'team_cal1': {}})
+            find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
 
     # 캘린더 DB에 정보가 있는지 검색
     calender_info = []
@@ -232,7 +233,6 @@ def add_calender():
     is_private = request.form['isPrivate_give']
     login_user = request.user['nick_name']
 
-
     # 로그인 DB 확인하여 아이디와, 팀명 조회
     find_db_id = db.user.find_one({'nick_name': login_user})
 
@@ -245,32 +245,26 @@ def add_calender():
         calender_count = find_private['calender_count'] + 1
 
         db.calender.update_one({'nick_name': nick_name}, {
-            '$set': {'calender_count': calender_count, f'private_cal{calender_count}': ''}})
+            '$set': {'calender_count': calender_count, f'private_cal{calender_count}': {}}})
     elif is_private == '0':
         # is_private가 0이면 개인 달력 추가
         find_team = db.calenderTeam.find_one({'team_name': team_name})
         calender_count = find_team['calender_count'] + 1
 
         db.calenderTeam.update_one({'team_name': team_name}, {
-            '$set': {'calender_count': calender_count, f'team_cal{calender_count}': ''}})
+            '$set': {'calender_count': calender_count, f'team_cal{calender_count}': {}}})
 
     return jsonify({'msg': '캘린더가 추가 되었습니다.'})
 
-#팀 달력, 개인 달력 선택 버튼
-@app.route('/select-calender', methods=['POST'])
-@login_required
-def select_calender():
-    receive_select_calender =request.form['select_cal_give']
-
-    print(receive_select_calender)
-
-    return jsonify({'msg': '캘린더가 추가 되었습니다.'})
 
 # 메모 가져와서 달력과 메모 연동.
-@app.route('/take-memo', methods=['GET'])
+@app.route('/take-memo', methods=['POST'])
 @login_required
 def get_calender_memo():
-    is_private = request.form['isPrivate_give']
+    # 캘린더 타입 받아옴.
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
+
     login_user = request.user['nick_name']
 
     # 로그인 DB 확인하여 아이디와, 팀명 조회
@@ -279,41 +273,53 @@ def get_calender_memo():
     nick_name = find_db_id['nick_name']
     team_name = find_db_id['team_name']
 
-    if is_private == 'true':
-        find_db_private = db.calender.find_one({'nick_name': nick_name})
-        if find_db_private.get('date') is None:
-            pass
-        else:
-            text_data = find_db_private.get('date')
-    elif is_private == 'false':
-        find_db_team = db.calenderTeam.find_one({'team_name': team_name})
-        if find_db_team.get('date') is None:
-            pass
-        else:
-            text_data = find_db_team.get('date')
+    # 유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
 
+    content_text = ''
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        content_text = find_cal_team[calender_name]
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        content_text = find_cal_private[calender_name]
 
-
-
-    return jsonify({'give_text': text_data})
+    return jsonify({'give_text': content_text})
 
 
 # 날짜 클릭
 @app.route('/click-day', methods=['POST'])
 @login_required
 def clicked_day():
-    user_nickname = request.user['nick_name']
+    # 캘린더 타입 받아옴.
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
     receive_click_date = request.form['date_give']
 
-    user_data = db.calender.find_one({'nick_name': user_nickname})['date']
+    login_user = request.user['nick_name']
 
-    if user_data.get(receive_click_date) is None:
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
 
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team_name']
+
+    # 유저 정보로 캘린더 검색
+    find_cal_private = db.calender.find_one({'nick_name': nick_name})
+    find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        content_text = find_cal_team[calender_name]
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        content_text = find_cal_private[calender_name]
+
+    if receive_click_date not in content_text:
         resend_date_memo = ""
-
     else:
-        resend_date_memo = user_data.get(receive_click_date)
-
+        resend_date_memo = content_text.get(receive_click_date)
     return jsonify({'resend_date_memo': resend_date_memo})
 
 
@@ -321,73 +327,30 @@ def clicked_day():
 @app.route('/change-memo-text', methods=['POST'])
 @login_required
 def changed_memo():
-    user_nickname = request.user['nick_name']
+    calender_type = request.form['select_cal_give'][:1]
+    calender_num = request.form['select_cal_give'][1:2]
+
     receive_memo = request.form['change_memo_give']
     receive_key_class = request.form['key_class_give']
+    login_user = request.user['nick_name']
 
-    find_db_id = db.calender.find_one({'nick_name': user_nickname})
+    # 로그인 DB 확인하여 아이디와, 팀명 조회
+    find_db_id = db.user.find_one({'nick_name': login_user})
 
-    if find_db_id is None:
-        db.calender.insert_one({'nick_name': user_nickname})
-        db.calender.update_one({'nick_name': user_nickname}, {
-            '$set': {f'date.{receive_key_class}': receive_memo}})
-    else:
-        db.calender.update_one({'nick_name': user_nickname}, {
-            '$set': {f'date.{receive_key_class}': receive_memo}})
-    return jsonify(receive_key_class)
+    nick_name = find_db_id['nick_name']
+    team_name = find_db_id['team_name']
 
+    if calender_type == 'T':
+        calender_name = "team_cal" + calender_num
+        db.calenderTeam.update_one({'team_name': team_name}, {
+            '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
+    elif calender_type == 'P':
+        calender_name = "private_cal" + calender_num
+        db.calender.update_one({'nick_name': nick_name}, {
+            '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
 
-# 달력 선택창 선택 버튼
-@app.route('/set-memo', methods=['POST'])
-@login_required
-def set_calender_memo():
-    user_nickname = request.user['nick_name']
-
-    calender_status = request.form['give_calender_status']
-
-    return jsonify({''})
+    return jsonify({'msg' : '메모가 저장 되었습니다.'})
 
 
-# 마이페이지(미완성)
-# @app.route('/my-info', methods=['GET'])
-# @login_required
-# def my_info():
-#     user_nickname = request.user['nick_name']
-#     today = date.today()
-#     today_study_time = db.time.find_one({'nick_name': user_nickname, 'date': f'{today.year}/{today.month}/{today.day}/{today.weekday()}'})['study_time']
-#
-#     user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
-#
-#     sum_study_time = 0
-#     time_date = 0
-#     for user_day_data in user_data:
-#         day_study_time = user_day_data['study_time'].split(':')
-#         day_study_hour = int(day_study_time[0])
-#         day_study_minute = int(day_study_time[1])
-#         day_study_second = int(day_study_time[2])
-#         temp = day_study_hour*60*60 + day_study_minute*60 + day_study_second
-#         sum_study_time += temp
-#         time_date += 1
-#
-#     ss = (sum_study_time / time_date)
-#     study_hours = ss // 3600
-#     ss = ss - study_hours*3600
-#     study_minutes = ss // 60
-#     ss = ss - study_minutes*60
-#     study_seconds = ss
-#
-#     avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
-#
-#     monthly_user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
-#     for i in monthly_user_data:
-#         print(i)
-#
-#     print(today_study_time, avg_study_time)
-#     return jsonify({
-#         'today_study_time':today_study_time,
-#         'avg_study_time': avg_study_time,
-#         # 'month_day_study_time': month_day_study_time
-#         # 'avg_study_time': today_study_time
-#     })
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

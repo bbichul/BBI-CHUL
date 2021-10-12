@@ -1,7 +1,3 @@
-$(document).ready(function () {
-    getInfo()
-});
-
 //달력에 필요한 변수들 선언, 초기화
 let date = new Date();
 let btn_year_month_day = ''; //텍스트 박스와 캘린더 연동 위한 달력 버튼 ID 값 저장
@@ -9,7 +5,13 @@ let btn_year_month_day = ''; //텍스트 박스와 캘린더 연동 위한 달�
 let is_include_team = 0; //소속된 팀이 존재하지 않을 때 0값으로 개인 캘린더 만을 엽니다.
 let nick_name;
 let team_name;
-let selected_cal_now = 'P1';
+let selected_cal_now;
+
+$(document).ready(function () {
+    getInfo()
+    renderCalendar();
+    getMemo()
+});
 
 //캘린더 렌더링 함수
 const renderCalendar = () => {
@@ -81,12 +83,15 @@ const renderCalendar = () => {
 //캘린더 페이지 접속 시 가져오는 정보
 function getInfo() {
 
+    selected_cal_now = 'P1'
+
     $.ajax({
         type: "GET",
         headers: {
             Authorization: getCookie('access_token')
         },
         url: "/get-info",
+        async: false, //전역변수에 값을 저장하기 위해 동기 방식으로 전환,
         data: {},
         success: function (response) {
 
@@ -95,10 +100,11 @@ function getInfo() {
             is_include_team = response['is_include_team']
             let calender_info = response['calender_info']
 
-            if (is_include_team == 1)
+            if (is_include_team == 1) {
                 selected_cal_now = 'T1';
+            }
 
-            let count, team_count ;
+            let count, team_count;
             for (let i = 0; i < calender_info.length; i++) {
 
                 if (calender_info[i].indexOf('team_cal') == 0) {
@@ -106,7 +112,7 @@ function getInfo() {
                     team_count = calender_info[i].split('cal')[1]
 
                     let temp_html = `<li>
-                        <button onclick="setCalender(this)" class="dropdown-item" value="T${team_count}">팀 ${team_name}의 캘린더 ${team_count}</button>
+                        <button onclick="setCalender(this)" class="dropdown-item" value="T${team_count}">팀 ${team_name} 캘린더 ${team_count}</button>
                     </li>`
 
                     $('#team-selected').append(temp_html)
@@ -114,7 +120,7 @@ function getInfo() {
 
                     count = calender_info[i].split('cal')[1]
                     let temp_html = `<li>
-                        <button onclick="setCalender(this)" class="dropdown-item" value="P${count}">${nick_name}의 캘린더 ${count}</button>
+                        <button onclick="setCalender(this)" class="dropdown-item" value="P${count}">${nick_name} 캘린더 ${count}</button>
                     </li>`
                     $('#private-selected').append(temp_html)
                 }
@@ -153,21 +159,27 @@ function addCalender() {
 function setCalender(obj) {
     let select_calender_id = $(obj).attr('value');
 
-    selected_cal_now = select_calender_id;
+    if (selected_cal_now == select_calender_id) {
+        alert("현재 선택 된 달력입니다.")
+    } else {
 
-    $.ajax({
-        type: "POST",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        url: "/select-calender",
-        data: {select_cal_give: selected_cal_now},
-        success: function (response) {
-            alert(response['msg'])
-            window.location.reload();
+        selected_cal_now = select_calender_id;
+
+        alert("캘린더로 변경 되었습니다.")
+
+        let isPrivate = selected_cal_now.substr(0, 1);
+        let calender_num = selected_cal_now.substr(1, 1);
+
+        if (isPrivate == 'T') {
+            $('#dropdownMenuLink').text(team_name + " 캘린더 " + calender_num);
+        } else if (isPrivate == 'P') {
+            $('#dropdownMenuLink').text(nick_name + " 캘린더 " + calender_num);
         }
-    })
 
+        renderCalendar();
+        getMemo();
+
+    }
 }
 
 
@@ -175,12 +187,12 @@ function setCalender(obj) {
 function getMemo() {
 
     $.ajax({
-        type: "GET",
+        type: "POST",
         headers: {
             Authorization: getCookie('access_token')
         },
         url: "/take-memo",
-        data: {},
+        data: {select_cal_give: selected_cal_now},
         success: function (response) {
             let take_text = response['give_text'];
 
@@ -194,13 +206,6 @@ function getMemo() {
         }
     })
 }
-
-
-
-
-
-renderCalendar();
-getMemo();
 
 
 const prevMonth = () => {
@@ -223,18 +228,6 @@ const goToday = () => {
 }
 
 
-//현재 날짜 표시 함수. 고장남.
-// const today = new Date();
-// if (viewMonth === today.getMonth() && viewYear === today.getFullYear()) {
-//   for (let date of document.querySelectorAll('.this')) {
-//     if (+date.innerText === today.getDate()) {
-//       date.classList.add('today');
-//       break;
-//     }
-//   }
-// }
-
-
 function dayClick(obj) {
     btn_year_month_day = $(obj).attr('id'); // 달력 날짜를 클릭 했을 때 받아온 날짜 ID 를 변수에 초기화.
     let memo_text_day = btn_year_month_day.replace("Y", "년 ").replace("M", "월 ") + "일";
@@ -246,7 +239,7 @@ function dayClick(obj) {
             Authorization: getCookie('access_token')
         },
         url: "/click-day",
-        data: {date_give: btn_year_month_day},
+        data: {date_give: btn_year_month_day, select_cal_give: selected_cal_now},
         success: function (response) {
             let receive_date_memo = response['resend_date_memo'];
             $('#calenderNote').text(receive_date_memo);
@@ -266,11 +259,14 @@ function updateText(obj) {
             Authorization: getCookie('access_token')
         },
         url: "/change-memo-text",
-        data: {change_memo_give: varMemoText, key_class_give: btn_year_month_day},
+        data: {change_memo_give: varMemoText, key_class_give: btn_year_month_day, select_cal_give: selected_cal_now},
         success: function (response) {
-            console.log(response)
+            console.log(response['msg'])
         }
     })
 
-    location.reload(); //현재 새로고침 안하면 메모 입력 시 반영 안 되는 버그로 넣어놨습니다.
+    renderCalendar()
+    getMemo()
+    // location.reload();
+    //현재 새로고침 안하면 메모 입력 시 반영 안 되는 버그로 넣어놨습니다
 }

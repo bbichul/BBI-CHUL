@@ -1,9 +1,29 @@
 /*캘린더 CSS시작*/
-section.calAndText{
+body{
   background-image: url("../img/main_backgroung.jpg");
   background-position: center;
   background-size: cover;
   height: 100vw;
+}
+
+section{
+  padding: 0;
+}
+
+section.calAndText{
+
+}
+
+section.calAndText .select-calender {
+  margin-top: 100px;
+  text-align: center;
+
+}
+
+
+section.calAndText .dropdown{
+  display: inline-block;
+
 }
 
 section.calAndText .other {
@@ -41,12 +61,12 @@ section.calAndText .container{
 }
 
 section.calAndText .calendar {
-  padding-top: 100px;
+  padding-top: 50px;
 }
 
 
 section.calAndText .noteBox{
-  padding-top: 170px;
+  padding-top: 110px;
 }
 
 section.calAndText .header {
