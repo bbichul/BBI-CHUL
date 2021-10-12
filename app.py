@@ -1,4 +1,8 @@
-import re, bcrypt, jwt, pymongo
+import re
+import bcrypt
+import jwt
+import pymongo
+import time
 
 from datetime import datetime, date, timedelta
 from my_settings import SECRET
@@ -6,12 +10,13 @@ from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
+
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 db = client.dbnbc
 
 
-# 시작페이자
+# 시작페이지
 @app.route('/')
 def index():
     return render_template('start_page.html')
@@ -35,19 +40,23 @@ def my_page():
     return render_template('my_page.html')
 
 
+# 팀페이지
+@app.route('/team-page')
+def team_page():
+    return render_template('team_page.html')
+
+
 # 체크인
 @app.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
     start_time = request.form['start_time']
     status = request.form['status']
-    year = request.form['year']
-    month = request.form['month']
-    day = request.form['day']
-    week = request.form['week']
 
     user_nickname = request.user['nick_name']
     today = date.today()
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -63,20 +72,10 @@ def check_in():
             'month': today.month,
             'day': today.day,
             'weekday': today.weekday(),
-            'status': status,
+            'study_time': 0
         }
         db.time.insert_one(doc)
 
-    else:
-        db.time.update_one({
-            'nick_name': user_nickname,
-            'year': today.year,
-            'month': today.month,
-            'day': today.day,
-            'weekday': today.weekday()},
-            {'$set': {
-                'status': status
-            }})
     return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
 
 
@@ -84,16 +83,19 @@ def check_in():
 @app.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
-    year = request.form['year']
-    month = request.form['month']
-    day = request.form['day']
-    week = request.form['week']
-    stop_time = request.form['stop_time']
     status = request.form['status']
     study_time = request.form['study_time'][:8]
 
     user_nickname = request.user['nick_name']
     today = date.today()
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    # study_time.split(':')
+    study_hour = int(study_time.split(':')[0])
+    study_min = int(study_time.split(':')[1])
+    study_sec = int(study_time.split(':')[2])
+    total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
     db.time.update_one({
@@ -102,10 +104,10 @@ def check_out():
         'month': today.month,
         'day': today.day,
         'weekday': today.weekday()},
-        {'$set': {
-            'status': status,
-            'study_time': study_time,
+        {'$inc': {
+            'study_time': total_sec,
         }})
+
     return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
 
 
@@ -138,6 +140,11 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
+        'team': None,
+        'status': "퇴근",
+        'string_start_date': None,
+        'string_end_date': None,
+        'goal_hour': 0
     }
     db.user.insert_one(doc)
     return jsonify({'msg': '저장완료'})
@@ -184,7 +191,7 @@ def get_info():
 
     is_include_team = 0
     nick_name = find_user_id.get('nick_name')  # 유저 이름을 검색합니다.
-    team_name = find_user_id.get('team_name')  # 팀 이름을 검색합니다.
+    team_name = find_user_id.get('team')  # 팀 이름을 검색합니다.
 
     user_info = {
         'nick_name': nick_name
@@ -237,7 +244,7 @@ def add_calender():
     find_db_id = db.user.find_one({'nick_name': login_user})
 
     nick_name = find_db_id['nick_name']
-    team_name = find_db_id['team_name']
+    team_name = find_db_id['team']
 
     # JS로부터 넘겨받은 is_private가 1이면 개인 달력 추가
     if is_private == '1':
@@ -271,7 +278,7 @@ def get_calender_memo():
     find_db_id = db.user.find_one({'nick_name': login_user})
 
     nick_name = find_db_id['nick_name']
-    team_name = find_db_id['team_name']
+    team_name = find_db_id['team']
 
     # 유저 정보로 캘린더 검색
     find_cal_private = db.calender.find_one({'nick_name': nick_name})
@@ -303,7 +310,7 @@ def clicked_day():
     find_db_id = db.user.find_one({'nick_name': login_user})
 
     nick_name = find_db_id['nick_name']
-    team_name = find_db_id['team_name']
+    team_name = find_db_id['team']
 
     # 유저 정보로 캘린더 검색
     find_cal_private = db.calender.find_one({'nick_name': nick_name})
@@ -338,7 +345,7 @@ def changed_memo():
     find_db_id = db.user.find_one({'nick_name': login_user})
 
     nick_name = find_db_id['nick_name']
-    team_name = find_db_id['team_name']
+    team_name = find_db_id['team']
 
     if calender_type == 'T':
         calender_name = "team_cal" + calender_num
@@ -350,6 +357,354 @@ def changed_memo():
             '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
 
     return jsonify({'msg' : '메모가 저장 되었습니다.'})
+
+# 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
+@app.route('/midnight', methods=['POST'])
+@login_required
+def midnight():
+    user_nickname = request.user['nick_name']
+    yesterday_study_time = request.form['yesterday_study_time'][:8]
+    total_study_time = request.form['total_study_time'][:8]
+    status = request.form['status']
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    yesterday_study_time_list = yesterday_study_time.split(':')
+    yesterday_study_time_hour = int(yesterday_study_time_list[0])
+    yesterday_study_time_minute = int(yesterday_study_time_list[1])
+    yesterday_study_time_second = int(yesterday_study_time_list[2])
+
+    total_study_time_list = total_study_time.split(':')
+    today_study_time_hour = int(total_study_time_list[0])
+    today_study_time_minute = int(total_study_time_list[1])
+    today_study_time_second = int(total_study_time_list[2])
+
+    yesterday_second = (yesterday_study_time_hour * 60 * 60) + \
+                       (yesterday_study_time_minute * 60) + yesterday_study_time_second
+    total_second = (today_study_time_hour * 60 * 60) + \
+                   (today_study_time_minute * 60) + today_study_time_second
+    today_second = total_second - yesterday_second
+
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'year': yesterday.year,
+        'month': yesterday.month,
+        'day': yesterday.day,
+        'weekday': yesterday.weekday()
+    }) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'year': yesterday.year,
+            'month': yesterday.month,
+            'day': yesterday.day,
+            'weekday': yesterday.weekday(),
+            'study_time': yesterday_second,
+        }
+        db.time.insert_one(doc)
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'year': yesterday.year,
+            'month': yesterday.month,
+            'day': yesterday.day,
+            'weekday': yesterday.weekday()},
+            {'$inc': {
+                'study_time': yesterday_second,
+            }})
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    if db.time.find_one({
+        'nick_name': user_nickname,
+        'year': today.year,
+        'month': today.month,
+        'day': today.day,
+        'weekday': today.weekday()
+    }) is None:
+        doc = {
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday(),
+            'study_time': today_second,
+        }
+        db.time.insert_one(doc)
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+    else:
+        db.time.update_one({
+            'nick_name': user_nickname,
+            'year': today.year,
+            'month': today.month,
+            'day': today.day,
+            'weekday': today.weekday()},
+            {'$inc': {
+                'study_time': today_second,
+            }})
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
+
+    return jsonify({'msg': f'success'})
+
+
+
+# 마이페이지
+@app.route('/my-info', methods=['GET'])
+@login_required
+def get_my_info():
+    user_nickname = request.user['nick_name']
+    user_data = list(db.time.find({'nick_name': user_nickname}, {'_id': False}))
+
+    sum_study_time = 0
+    time_date = 0
+    for user_day_data in user_data:
+        day_study_time = user_day_data['study_time']
+        temp = day_study_time
+        sum_study_time += temp
+        time_date += 1
+
+    ss = (sum_study_time / time_date)
+    study_hours = ss // 3600
+    ss = ss - study_hours * 3600
+    study_minutes = ss // 60
+    ss = ss - study_minutes * 60
+    study_seconds = ss
+
+    avg_study_time = f'{int(study_hours)}시간 {int(study_minutes)}분 {int(study_seconds)}초'
+
+    return jsonify({
+        'avg_study_time': avg_study_time,
+    })
+
+
+# 월별 시간그래프
+@app.route('/line-graph', methods=['POST'])
+@login_required
+def post_study_time_graph():
+    user_nickname = request.user['nick_name']
+    year = int(request.form['year'])
+    month = int(request.form['month'])
+
+    monthly_user_data = list(db.time.find({
+        'nick_name': user_nickname,
+        'year': year,
+        'month': month}, {'_id': False}).sort("day", 1))
+
+    # 만약 데이터가 없는 날짜는 0으로 처리한다.
+    day_list = []
+    day_time_list = []
+    for i in range(31):
+        day_list.append(i)
+        day_time_list.append(0)
+
+    for day in monthly_user_data:
+        day_time_list[day['day']] = day['study_time']
+    return jsonify({'day_list': day_list, 'day_time_list': day_time_list})
+
+
+# 요일별평균 공부시간 그래프
+@app.route('/bar-graph', methods=['POST'])
+@login_required
+def post_weekly_avg_graph():
+    user_nickname = request.user['nick_name']
+    year = int(request.form['year'])
+    month = int(request.form['month'])
+
+    weekday_avg_study_time_list = []
+    for i in range(7):
+        weekday_user_data = list(db.time.find({
+            'nick_name': user_nickname,
+            'year': year,
+            'month': month,
+            'weekday': i}, {'_id': False}))
+
+        # 만약 데이터가 없는 날짜는 0으로 처리한다.
+        weekday_avg_study_time_list.append(0)
+
+        # 평균구하기
+        weekday_sum = 0
+        day_count = 0
+        for day in weekday_user_data:
+            weekday_sum += int(day['study_time'])
+            day_count += 1
+
+        try:
+            weekday_avg_study_time = weekday_sum // day_count
+        except ZeroDivisionError:
+            weekday_avg_study_time = 0
+        weekday_avg_study_time_list[i] = weekday_avg_study_time
+
+    return jsonify({
+        'monday': weekday_avg_study_time_list[0],
+        'tuesday': weekday_avg_study_time_list[1],
+        'wednesday': weekday_avg_study_time_list[2],
+        'thursday': weekday_avg_study_time_list[3],
+        'friday': weekday_avg_study_time_list[4],
+        'saturday': weekday_avg_study_time_list[5],
+        'sunday': weekday_avg_study_time_list[6],
+    })
+
+
+# 공부목표시간 데이터 받기
+@app.route('/goal', methods=['POST'])
+@login_required
+def post_goal_modal():
+    user_nickname = request.user['nick_name']
+    string_start_date = request.form['string_start_date']
+    string_end_date = request.form['string_end_date']
+    goal_hour = int(request.form['goal_hour'])
+
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {
+        'string_start_date': string_start_date,
+        'string_end_date': string_end_date,
+        'goal_hour': goal_hour
+    }})
+
+    return jsonify({'msg': '성공'})
+
+
+# 공부목표시간 데이터 보내주기
+@app.route('/goal', methods=['GET'])
+@login_required
+def get_goal_modal():
+    user_nickname = request.user['nick_name']
+    user_data = db.user.find_one({'nick_name': user_nickname})
+
+    string_start_date = user_data['string_start_date']
+    string_end_date = user_data['string_end_date']
+    goal_hour = user_data['goal_hour']
+
+    # 그사이에 있는 날짜들을 불러와야됨
+    start_date = datetime.strptime(string_start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(string_end_date, "%Y-%m-%d")
+    dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((end_date - start_date).days + 1)]
+
+    study_time_sum = 0
+    for i in dates:
+        data_split_list = i.split('-')
+        year = int(data_split_list[0])
+        month = int(data_split_list[1])
+        day = int(data_split_list[2])
+
+        user_time_data = db.time.find_one({
+            'nick_name': user_nickname,
+            'year': year,
+            'month': month,
+            'day': day})
+
+        if user_time_data is None:
+            continue
+
+        study_time_sum += user_time_data['study_time']
+    done_hour = study_time_sum // 3600
+
+    return jsonify({
+        'string_start_date': string_start_date,
+        'string_end_date': string_end_date,
+        'goal_hour': goal_hour,
+        'done_hour': done_hour
+    })
+
+# 팀페이지
+# 소속 체크
+@app.route('/team', methods=['GET'])
+@login_required
+def team_check():
+    user_nickname = request.user['nick_name']
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+
+# 팀 만들기
+@app.route('/create-team', methods=['POST'])
+@login_required
+def create_team():
+    user_nickname = request.user['nick_name']
+    team_name = request.form['team']
+
+    # 팀이름 중복확인
+    if db.team.find_one({'team': team_name}) is not None:
+        return jsonify({'msg': '중복된 팀이름'})
+
+    doc = {
+        'team': team_name,
+        'members': user_nickname,
+    }
+    db.team.insert_one(doc)
+    db.user.update_one({'nick_name': user_nickname}, {'$set': {'team': team_name}})
+
+    return jsonify({'msg': '팀 만들기 완료'})
+
+# 팀명 중복체크
+@app.route('/teamname', methods=['POST'])
+@login_required
+def teamname_check():
+    team_name = request.form['team']
+    team = db.user.find_one({'team': team_name})
+
+    if team is None:
+        return jsonify({"msg": '사용할 수 있는 팀 이름입니다.'})
+
+    return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
+
+#유저 소속팀 이름 가져오기
+@app.route('/get-teamname', methods=['GET'])
+@login_required
+def get_teamname():
+    user_nickname = request.user['nick_name']
+    user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
+    return jsonify({'user_data': user})
+
+#할 일 저장
+@app.route('/team-todo', methods=['POST'])
+@login_required
+def save_task():
+    teamname = request.form['team']
+    task = request.form['task']
+
+    doc = {
+        'team': teamname,
+        'task': task,
+        'done': 'false'
+    }
+
+    db.team_task.insert_one(doc)
+
+    return jsonify({'msg': 'task 저장 완료'})
+
+#할 일 보여주기
+@app.route('/task-show', methods=['GET'])
+@login_required
+def show_task():
+    teamname = request.user['team']
+    tasks = list(db.team_task.find({'team': teamname}, {'_id': False}))
+    return jsonify({"tasks": tasks})
+
+#할 일 삭제
+@app.route('/task-delete', methods=['POST'])
+@login_required
+def delete_task():
+    team = request.form['team']
+    task = request.form['task']
+    db.team_task.delete_one({'team': team, 'task': task})
+    return {"result": "success"}
+
+#할 일 완료
+@app.route('/task-done', methods=['POST'])
+@login_required
+def done_task():
+    team = request.form['team']
+    task = request.form['task']
+    done = request.form['done']
+    db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
+    return {"result": "success"}
+
+#출결 상태 확인
+@app.route('/check-status', methods=['GET'])
+@login_required
+def check_status():
+    team = request.user['team']
+    user = list(db.user.find({'team': team}, {'_id': False}))
+    return jsonify({'user_data': user})
 
 
 if __name__ == '__main__':

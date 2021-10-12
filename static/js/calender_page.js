@@ -250,8 +250,8 @@ function dayClick(obj) {
 
 
 //텍스트 업데이트 함수
-function updateText(obj) {
-    let varMemoText = $(obj).val();
+function updateText() {
+    let varMemoText = $('#calenderNote').val();
 
     $.ajax({
         type: "POST",
@@ -265,8 +265,11 @@ function updateText(obj) {
         }
     })
 
-    renderCalendar()
-    getMemo()
-    // location.reload();
+    location.reload();
     //현재 새로고침 안하면 메모 입력 시 반영 안 되는 버그로 넣어놨습니다
+
 }
+
+//TODO: 금요일 ~
+//TODO: 캘린더 페이지 입장시 마지막 선택한 달력 이름으로 로드
+//TODO: 메모 타이틀 넣어서 노션 캘린더 비스무리하게 만들기,,

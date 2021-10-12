@@ -6,23 +6,7 @@ body{
   height: 100vw;
 }
 
-section{
-  padding: 0;
-}
-
 section.calAndText{
-
-}
-
-section.calAndText .select-calender {
-  margin-top: 100px;
-  text-align: center;
-
-}
-
-
-section.calAndText .dropdown{
-  display: inline-block;
 
 }
 
@@ -66,7 +50,7 @@ section.calAndText .calendar {
 
 
 section.calAndText .noteBox{
-  padding-top: 110px;
+  padding-top: 140px;
 }
 
 section.calAndText .header {
@@ -74,6 +58,12 @@ section.calAndText .header {
   justify-content: space-between;
   align-items: center;
 }
+
+section.calAndText .header .select-calender{
+  flex-grow: 1;
+}
+
+
 
 section.calAndText .year-month {
   font-size: 35px;
@@ -130,6 +120,10 @@ section.calAndText .date {
 section.calAndText .date .date-on-text{
   font-size: 70%;
   overflow: scroll;
+}
+
+#btn-memo-save {
+  width: 263px;
 }
 
 section.calAndText .day:nth-child(7n + 1),

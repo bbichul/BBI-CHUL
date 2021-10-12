@@ -1,0 +1,141 @@
+#team-page {
+    background-image: url("../img/background.png");
+    background-position: center;
+    background-size: cover;
+    margin-top: 80px;
+    background-color: papayawhip;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: auto;
+    padding: 2%;
+}
+
+#record-container {
+    height: auto;
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: lightgray;
+    border-radius: 20px;
+    padding: 20px 50px;
+}
+
+.left-body {
+    width: 50%;
+    height: 100%;
+    margin: 0;
+    padding-right: 50px;
+    float: left;
+}
+.status-table {
+    height: 100px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.status-table td {
+    border-top: 1px solid;
+}
+
+.status-table td:nth-child(1) {
+  border-right: 1px solid;
+}
+
+/*--------------------------------------------------------------
+# 투두 리스트
+--------------------------------------------------------------*/
+.todo-list{
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.txt{
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #000;
+  background: none;
+  outline: none;
+  font-size: 18px;
+  padding: 0.5%;
+}
+
+h3{
+  margin: 25px 0;
+}
+.task{
+  width:100%;
+  background: rgba(255,255,255,0.5);
+  padding: 10px 15px;
+  margin: 6px 0;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.task i{
+  float: right;
+  margin-left: 20px;
+  cursor: pointer;
+}
+.done .task{
+  background: rgba(0,0,0,0.5);
+  color : #fff;
+}
+
+.right-body{
+    width: 50%;
+    height: 100%;
+    margin: 0;
+    padding-left: 50px;;
+    float: right;
+    border-left:2px solid gray;
+}
+
+/*--------------------------------------------------------------
+# progress bar
+--------------------------------------------------------------*/
+.progress-div{
+    padding: 20px;
+}
+
+.progress-title{
+    font-size: calc(1.3rem + .6vw);
+    font-weight: 500;
+    color: inherit;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.progress-outer{
+    width: 100%;
+    background: #fff;
+    padding: 5px 60px 5px 5px;
+    border: 5px solid #bebfbf;
+    border-radius: 45px;
+    position: relative;
+}
+
+.progress{
+    background: #bebfbf;
+    border-radius: 20px;
+    margin: 0;
+    color: #6b7880;
+    height: 35px;
+}
+
+.progress .progress-bar{
+    border-radius: 20px;
+    box-shadow: none;
+    animation: animate-positive 2s;
+}
+
+.progress .progress-value{
+    font-size: 20px;
+    font-weight: 700;
+    color: #6b7880;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
