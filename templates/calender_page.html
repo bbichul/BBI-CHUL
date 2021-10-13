@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
     </script>
@@ -36,6 +36,8 @@
 
     <!-- Nav Var CSS File, Calender JS -->
     <link href="../static/css/style.css" rel="stylesheet">
+    <link href="../static/css/calender.css" rel="stylesheet">
+
     <script defer src="../static/js/modal.js"></script>
     <script defer src="../static/js/calender_page.js"></script>
     <script defer src="../static/js/start_page.js"></script>
@@ -57,31 +59,12 @@
                 <li><a class="nav-link scrollto active" href="/">Home</a></li>
                 <li><a class="nav-link scrollto" href="/main">main</a></li>
                 <li><a class="nav-link scrollto" href="/#about">About</a></li>
-
-<!--                불필요 라인 주석 처리 추후 사용 가능성 있어서 지우지 않았습니다.-->
-<!--                <li><a href="blog.html">Blog</a></li>-->
-<!--                <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>-->
-<!--                    <ul>-->
-<!--                        <li><a href="#">Drop Down 1</a></li>-->
-<!--                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i-->
-<!--                                class="bi bi-chevron-right"></i></a>-->
-<!--                            <ul>-->
-<!--                                <li><a href="#">Deep Drop Down 1</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 2</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 3</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 4</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 5</a></li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
-<!--                        <li><a href="#">Drop Down 2</a></li>-->
-<!--                        <li><a href="#">Drop Down 3</a></li>-->
-<!--                        <li><a href="#">Drop Down 4</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-<!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
-                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
+                <li><a class="nav-link scrollto" href="/team-page">Team Page</a></li>
+                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal"
+                       data-target="#loginModal">LogIn</a>
                 </li>
-                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogOut</a>
+                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal"
+                       data-target="#loginModal">LogOut</a>
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
@@ -92,12 +75,70 @@
 
 
 <section class="calAndText">
+
     <div class="container">
         <div class="row">
             <div class="col-9">
                 <div class="calendar">
                     <div class="header">
                         <div class="year-month"></div>
+
+                        <div class="select-calender">
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                   id="dropdownMenuLink"
+                                   data-bs-toggle="dropdown" aria-expanded="false">캘린더 선택</a>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <div>
+                                        <div id="team-selected"></div>
+                                        <div id="private-selected"></div>
+                                    </div>
+                                    <li><span class="dropdown-item">-----------</span>
+                                    <li id="append_calender">
+                                        <button class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop">캘린더 추가하기 +
+                                        </button>
+
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                 data-bs-keyboard="false" tabindex="-1"
+                                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="btn-group" role="group"
+                                                 aria-label="Basic radio toggle button group">
+                                                <input type="radio" class="btn-check" name="add-calender-group"
+                                                       id="radio1" value="1" checked>
+                                                <label class="btn btn-outline-primary" for="radio1">팀 캘린더 추가하기</label>
+
+                                                <input type="radio" class="btn-check" name="add-calender-group"
+                                                       id="radio2" value="2">
+                                                <label class="btn btn-outline-primary" for="radio2">개인 캘린더 추가하기</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onclick="addCalender()">추가
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+<!--                        <div style="width: 250px"></div>-->
+
+
                         <div class="nav">
                             <button class="nav-btn go-prev" onclick="prevMonth()">&lt;</button>
                             <button class="nav-btn go-today" onclick="goToday()">Month</button>
@@ -126,7 +167,9 @@
                         <h4>memo</h4>
                         <span class="select-date"></span>
                     </div>
-                    <textarea id="calenderNote" onchange="updateText(this)" cols="30" rows="17" placeholder="일정을 입력하세요."></textarea>
+                    <textarea id="calenderNote" cols="30" rows="14"
+                              placeholder="일정을 입력하세요."></textarea>
+                    <button type="button" id="btn-memo-save" onclick="updateText()" class="btn btn-primary">저장</button>
                 </div>
             </div>
         </div>
