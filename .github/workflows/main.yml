@@ -2,7 +2,7 @@ name: BBI-CHUL
 on:
   push:
     branches:
-      - release/1.1.0
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest

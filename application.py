@@ -5,7 +5,6 @@ import jwt
 
 from flask_cors import CORS
 from datetime import datetime, date, timedelta
-# from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
@@ -93,7 +92,6 @@ def check_out():
 
     db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
-    # study_time.split(':')
     study_hour = int(study_time.split(':')[0])
     study_min = int(study_time.split(':')[1])
     study_sec = int(study_time.split(':')[2])
@@ -360,6 +358,7 @@ def changed_memo():
 
     return jsonify({'msg' : '메모가 저장 되었습니다.'})
 
+
 # 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
 @application.route('/midnight', methods=['POST'])
 @login_required
@@ -447,7 +446,6 @@ def midnight():
         db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
     return jsonify({'msg': f'success'})
-
 
 
 # 마이페이지
@@ -607,6 +605,7 @@ def get_goal_modal():
         'done_hour': done_hour
     })
 
+
 # 팀페이지
 # 소속 체크
 @application.route('/team', methods=['GET'])
@@ -637,10 +636,11 @@ def create_team():
 
     return jsonify({'msg': '팀 만들기 완료'})
 
+
 # 팀명 중복체크
 @application.route('/teamname', methods=['POST'])
 @login_required
-def teamname_check():
+def team_name_check():
     team_name = request.form['team']
     team = db.user.find_one({'team': team_name})
 
@@ -649,23 +649,25 @@ def teamname_check():
 
     return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
 
-#유저 소속팀 이름 가져오기
+
+# 유저 소속팀 이름 가져오기
 @application.route('/get-teamname', methods=['GET'])
 @login_required
-def get_teamname():
+def get_team_name():
     user_nickname = request.user['nick_name']
     user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
     return jsonify({'user_data': user})
 
-#할 일 저장
+
+# 할 일 저장
 @application.route('/team-todo', methods=['POST'])
 @login_required
 def save_task():
-    teamname = request.form['team']
+    team_name = request.form['team']
     task = request.form['task']
 
     doc = {
-        'team': teamname,
+        'team': team_name,
         'task': task,
         'done': 'false'
     }
@@ -674,7 +676,8 @@ def save_task():
 
     return jsonify({'msg': 'task 저장 완료'})
 
-#할 일 보여주기
+
+# 할 일 보여주기
 @application.route('/task-show', methods=['GET'])
 @login_required
 def show_task():
@@ -682,7 +685,8 @@ def show_task():
     tasks = list(db.team_task.find({'team': teamname}, {'_id': False}))
     return jsonify({"tasks": tasks})
 
-#할 일 삭제
+
+# 할 일 삭제
 @application.route('/task-delete', methods=['POST'])
 @login_required
 def delete_task():
@@ -691,7 +695,8 @@ def delete_task():
     db.team_task.delete_one({'team': team, 'task': task})
     return {"result": "success"}
 
-#할 일 완료
+
+# 할 일 완료
 @application.route('/task-done', methods=['POST'])
 @login_required
 def done_task():
@@ -701,7 +706,8 @@ def done_task():
     db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
     return {"result": "success"}
 
-#출결 상태 확인
+
+# 출결 상태 확인
 @application.route('/check-status', methods=['GET'])
 @login_required
 def check_status():
