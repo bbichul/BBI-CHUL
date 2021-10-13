@@ -1,53 +1,54 @@
+import os
 import re
 import bcrypt
 import jwt
-import pymongo
-import time
 
+from flask_cors import CORS
 from datetime import datetime, date, timedelta
-from my_settings import SECRET
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 
+SECRET = (os.environ.get("SECRET"))
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+db = client.bbichulDB
 
-app = Flask(__name__)
-client = MongoClient('localhost', 27017)
-db = client.dbnbc
+application = Flask(__name__)
+cors = CORS(application, resources={r"/*": {"origins": "*"}})
 
 
 # 시작페이지
-@app.route('/')
+@application.route('/')
 def index():
     return render_template('start_page.html')
 
 
 # 메인페이지
-@app.route('/main')
+@application.route('/main')
 def main():
     return render_template('main_page.html')
 
 
 # 캘린더페이지
-@app.route('/calender')
+@application.route('/calender')
 def calender():
     return render_template('calender_page.html')
 
 
 # 마이페이지
-@app.route('/my-page')
+@application.route('/my-page')
 def my_page():
     return render_template('my_page.html')
 
 
 # 팀페이지
-@app.route('/team-page')
+@application.route('/team-page')
 def team_page():
     return render_template('team_page.html')
 
 
 # 체크인
-@app.route('/check-in', methods=['POST'])
+@application.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
     start_time = request.form['start_time']
@@ -80,7 +81,7 @@ def check_in():
 
 
 # 체크아웃
-@app.route('/check-out', methods=['POST'])
+@application.route('/check-out', methods=['POST'])
 @login_required
 def check_out():
     status = request.form['status']
@@ -91,7 +92,6 @@ def check_out():
 
     db.user.update_one({'nick_name': user_nickname}, {'$set': {'status': status}})
 
-    # study_time.split(':')
     study_hour = int(study_time.split(':')[0])
     study_min = int(study_time.split(':')[1])
     study_sec = int(study_time.split(':')[2])
@@ -112,14 +112,14 @@ def check_out():
 
 
 # 명언 랜덤 제공 GET
-@app.route('/wise', methods=['GET'])
+@application.route('/wise', methods=['GET'])
 def read_wise_sy():
     wise = list(db.wise_sy.find({}, {'_id': False}))
     return jsonify(wise)
 
 
 # 회원가입
-@app.route('/sign-up', methods=['POST'])
+@application.route('/sign-up', methods=['POST'])
 def sign_up():
     nick_name = request.form['nick_name']
     password = request.form['password']
@@ -151,7 +151,7 @@ def sign_up():
 
 
 # 로그인
-@app.route('/login', methods=['POST'])
+@application.route('/login', methods=['POST'])
 def login():
     nick_name = request.form['nick_name']
     password = request.form['password']
@@ -171,7 +171,7 @@ def login():
 
 
 # 닉네임 중복체크
-@app.route('/nickname', methods=['POST'])
+@application.route('/nickname', methods=['POST'])
 def nickname_check():
     nick_name = request.form['nick_name']
 
@@ -182,7 +182,7 @@ def nickname_check():
 
 
 # 캘린더 페이지 진입 시 개인정보를 가져옴.
-@app.route('/get-info', methods=['GET'])
+@application.route('/get-info', methods=['GET'])
 @login_required
 def get_info():
     login_user = request.user['nick_name']
@@ -234,7 +234,7 @@ def get_info():
 
 
 # 달력 추가하기 함수
-@app.route('/add-calender', methods=['POST'])
+@application.route('/add-calender', methods=['POST'])
 @login_required
 def add_calender():
     is_private = request.form['isPrivate_give']
@@ -265,7 +265,7 @@ def add_calender():
 
 
 # 메모 가져와서 달력과 메모 연동.
-@app.route('/take-memo', methods=['POST'])
+@application.route('/take-memo', methods=['POST'])
 @login_required
 def get_calender_memo():
     # 캘린더 타입 받아옴.
@@ -296,7 +296,7 @@ def get_calender_memo():
 
 
 # 날짜 클릭
-@app.route('/click-day', methods=['POST'])
+@application.route('/click-day', methods=['POST'])
 @login_required
 def clicked_day():
     # 캘린더 타입 받아옴.
@@ -331,7 +331,7 @@ def clicked_day():
 
 
 # 캘린더 메모 변경
-@app.route('/change-memo-text', methods=['POST'])
+@application.route('/change-memo-text', methods=['POST'])
 @login_required
 def changed_memo():
     calender_type = request.form['select_cal_give'][:1]
@@ -358,8 +358,9 @@ def changed_memo():
 
     return jsonify({'msg' : '메모가 저장 되었습니다.'})
 
+
 # 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
-@app.route('/midnight', methods=['POST'])
+@application.route('/midnight', methods=['POST'])
 @login_required
 def midnight():
     user_nickname = request.user['nick_name']
@@ -447,9 +448,8 @@ def midnight():
     return jsonify({'msg': f'success'})
 
 
-
 # 마이페이지
-@app.route('/my-info', methods=['GET'])
+@application.route('/my-info', methods=['GET'])
 @login_required
 def get_my_info():
     user_nickname = request.user['nick_name']
@@ -478,7 +478,7 @@ def get_my_info():
 
 
 # 월별 시간그래프
-@app.route('/line-graph', methods=['POST'])
+@application.route('/line-graph', methods=['POST'])
 @login_required
 def post_study_time_graph():
     user_nickname = request.user['nick_name']
@@ -503,7 +503,7 @@ def post_study_time_graph():
 
 
 # 요일별평균 공부시간 그래프
-@app.route('/bar-graph', methods=['POST'])
+@application.route('/bar-graph', methods=['POST'])
 @login_required
 def post_weekly_avg_graph():
     user_nickname = request.user['nick_name']
@@ -546,7 +546,7 @@ def post_weekly_avg_graph():
 
 
 # 공부목표시간 데이터 받기
-@app.route('/goal', methods=['POST'])
+@application.route('/goal', methods=['POST'])
 @login_required
 def post_goal_modal():
     user_nickname = request.user['nick_name']
@@ -564,7 +564,7 @@ def post_goal_modal():
 
 
 # 공부목표시간 데이터 보내주기
-@app.route('/goal', methods=['GET'])
+@application.route('/goal', methods=['GET'])
 @login_required
 def get_goal_modal():
     user_nickname = request.user['nick_name']
@@ -605,17 +605,19 @@ def get_goal_modal():
         'done_hour': done_hour
     })
 
+
 # 팀페이지
 # 소속 체크
-@app.route('/team', methods=['GET'])
+@application.route('/team', methods=['GET'])
 @login_required
 def team_check():
     user_nickname = request.user['nick_name']
     user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
     return jsonify({'user_data': user})
 
+
 # 팀 만들기
-@app.route('/create-team', methods=['POST'])
+@application.route('/create-team', methods=['POST'])
 @login_required
 def create_team():
     user_nickname = request.user['nick_name']
@@ -634,10 +636,11 @@ def create_team():
 
     return jsonify({'msg': '팀 만들기 완료'})
 
+
 # 팀명 중복체크
-@app.route('/teamname', methods=['POST'])
+@application.route('/teamname', methods=['POST'])
 @login_required
-def teamname_check():
+def team_name_check():
     team_name = request.form['team']
     team = db.user.find_one({'team': team_name})
 
@@ -646,23 +649,25 @@ def teamname_check():
 
     return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
 
-#유저 소속팀 이름 가져오기
-@app.route('/get-teamname', methods=['GET'])
+
+# 유저 소속팀 이름 가져오기
+@application.route('/get-teamname', methods=['GET'])
 @login_required
-def get_teamname():
+def get_team_name():
     user_nickname = request.user['nick_name']
     user = list(db.user.find({'nick_name': user_nickname}, {'_id': False}))
     return jsonify({'user_data': user})
 
-#할 일 저장
-@app.route('/team-todo', methods=['POST'])
+
+# 할 일 저장
+@application.route('/team-todo', methods=['POST'])
 @login_required
 def save_task():
-    teamname = request.form['team']
+    team_name = request.form['team']
     task = request.form['task']
 
     doc = {
-        'team': teamname,
+        'team': team_name,
         'task': task,
         'done': 'false'
     }
@@ -671,16 +676,18 @@ def save_task():
 
     return jsonify({'msg': 'task 저장 완료'})
 
-#할 일 보여주기
-@app.route('/task-show', methods=['GET'])
+
+# 할 일 보여주기
+@application.route('/task-show', methods=['GET'])
 @login_required
 def show_task():
     teamname = request.user['team']
     tasks = list(db.team_task.find({'team': teamname}, {'_id': False}))
     return jsonify({"tasks": tasks})
 
-#할 일 삭제
-@app.route('/task-delete', methods=['POST'])
+
+# 할 일 삭제
+@application.route('/task-delete', methods=['POST'])
 @login_required
 def delete_task():
     team = request.form['team']
@@ -688,8 +695,9 @@ def delete_task():
     db.team_task.delete_one({'team': team, 'task': task})
     return {"result": "success"}
 
-#할 일 완료
-@app.route('/task-done', methods=['POST'])
+
+# 할 일 완료
+@application.route('/task-done', methods=['POST'])
 @login_required
 def done_task():
     team = request.form['team']
@@ -698,8 +706,9 @@ def done_task():
     db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
     return {"result": "success"}
 
-#출결 상태 확인
-@app.route('/check-status', methods=['GET'])
+
+# 출결 상태 확인
+@application.route('/check-status', methods=['GET'])
 @login_required
 def check_status():
     team = request.user['team']
@@ -708,4 +717,4 @@ def check_status():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    application.run('0.0.0.0', port=5000, debug=True)
