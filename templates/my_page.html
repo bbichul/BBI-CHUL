@@ -135,8 +135,8 @@
                 </div>
                 <div class="resolution">
                     <h3 class="resolution-title">각오</h3>
-                    <button id='resolution-button' type="button" class="btn btn-secondary btn-sm"
-                            data-bs-target="#exampleModal">수정
+                    <button id="resolution-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                      수정
                     </button>
                     <div class="resolution-text"></div>
                 </div>
@@ -288,11 +288,30 @@
                 <p>목표시간:<input name="goal_hour" placeholder="ex) 50">시간</p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="close_goal_time" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="post_goal_modal()" class="btn btn-primary">Save changes</button>
+                <button type="button" id="close_goal_time" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" onclick="post_goal_modal()" class="btn btn-primary">저장</button>
             </div>
         </div>
     </div>
+</div>
+
+<!-- 각오-->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">각오</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <textarea id="resolution-content" type="text" placeholder="올해에는 반드시! 기필코! 합격한다!"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="resolution-close" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="post_resolution_modal()">저장</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>

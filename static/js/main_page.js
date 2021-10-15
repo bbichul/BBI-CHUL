@@ -143,7 +143,7 @@ function Clock() {
 // setInterval(Clock, 1000);
 function record_time() {
     let date = new Date()
-    if (date.getHours() == 10 && date.getMinutes() == 31 & date.getSeconds() == 0) {
+    if (date.getHours() == 0 && date.getMinutes() == 0 & date.getSeconds() == 0) {
         let yesterday_study_time = $('#time').text()
         setCookie('yesterday_study_time', yesterday_study_time, 1)
     }
