@@ -90,8 +90,6 @@ function hide_nickname() {
 function login() {
     let nick_name = $('#login_nickname').val()
     let password = $('#login_password').val()
-    console.log(nick_name, password)
-
     $.ajax({
         type: "POST",
         url: "/login",

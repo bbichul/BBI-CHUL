@@ -22,18 +22,20 @@ function get_progressbar(lists) {
     let tasklist = lists
     let doing_count = 0
     let done_count = 0
-    for (let i = 0; i < tasklist.length; i++){
-        if (tasklist[i]['done'] == "false"){
+    for (let i = 0; i < tasklist.length; i++) {
+        if (tasklist[i]['done'] == "false") {
             doing_count++
         } else {
             done_count++
         }
     }
-    let total = doing_count+done_count
+    let total = doing_count + done_count
+    console.log(done_count,doing_count,total)
     let temp_html = `<p style="float: right">(${done_count}/${total}개 완료)</p>`
     $('.progress-title').append(temp_html)
 
     let percent = Math.round((done_count / total) * 100)
+    console.log(percent)
     $('.progress-value').css('font-size', `25px`);
     $('.progress-value').css('line-height', `44px`);
     $('.progress-value').append(`${percent}%`)
@@ -77,55 +79,100 @@ function hide_teamname() {
 
 // 팀 만들기 기능
 function create_team() {
+    let str_space = /\s/;
     my_team = $('#team-name').val()
 
-    $.ajax({
-        type: "POST",
-        url: "/create-team",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        data: {
-            team: my_team
-        },
-        success: function (response) {
-            if (response["msg"] == '팀 만들기 완료') {
-                alert(response["msg"]);
-                $('#create-team-close').click()
-                $('.not-exist').hide()
-                $('.team-exist').show()
-                let team = `${my_team}`
-                $('#team').append(team)
-            } else if (response["msg"] == '중복된 팀이름') {
-                alert(response["msg"]);
+    if (!my_team||str_space.exec(my_team)) {
+        alert("팀 이름에 공백을 사용할 수 없습니다.")
+        $("#team-name").val(null);
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/create-team",
+            headers: {
+                Authorization: getCookie('access_token')
+            },
+            data: {
+                team: my_team
+            },
+            success: function (response) {
+                if (response["msg"] == '팀 만들기 완료') {
+                    alert(response["msg"]);
+                    $('#create-team-close').click()
+                    $('.not-exist').hide()
+                    $('.team-exist').show()
+                    let team = `${my_team}`
+                    $('#team').append(team)
+                } else if (response["msg"] == '중복된 팀이름입니다.') {
+                    alert(response["msg"]);
+                }
             }
-        }
-    })
+        })
+    }
+}
+
+function invite_team() {
+    let str_space = /\s/;
+    invite_name = $('#invite-name').val()
+
+    if (!invite_name||str_space.exec(invite_name)) {
+        alert("팀 이름에 공백을 사용할 수 없습니다.")
+        $("#invite-name").val(null);
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/invite-team",
+            headers: {
+                Authorization: getCookie('access_token')
+            },
+            data: {
+                team: invite_name
+            },
+            success: function (response) {
+                if (response["msg"] == '초대받은 팀에 가입되었습니다.') {
+                    alert(response["msg"]);
+                    $('#create-team-close').click()
+                    $('.not-exist').hide()
+                    $('.team-exist').show()
+                    let team = `${invite_name}`
+                    $('#team').append(team)
+                } else if (response["msg"] == '존재하지 않는 팀입니다. 팀 이름을 확인해주세요.') {
+                    alert(response["msg"]);
+                }
+            }
+        })
+    }
 }
 
 // 팀 만들기 시 팀명 중복확인 기능
 function teamname_check() {
+    let str_space = /\s/;
     my_team = $('#team-name').val()
 
-    $.ajax({
-        type: "POST",
-        url: "/teamname",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        data: {
-            team: my_team
-        },
-        success: function (response) {
-            if (response['msg'] == "사용할 수 있는 팀 이름입니다.") {
-                $("#cant-using").hide()
-                $("#can-using").show()
-            } else if (response['msg'] == "중복되는 팀 이름입니다. 다시 입력해주세요.") {
-                $("#can-using").hide()
-                $("#cant-using").show()
+    if (!my_team||str_space.exec(my_team)) {
+        alert("팀 이름에 공백을 사용할 수 없습니다.")
+        $("#team-name").val("");
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/teamname",
+            headers: {
+                Authorization: getCookie('access_token')
+            },
+            data: {
+                team: my_team
+            },
+            success: function (response) {
+                if (response['msg'] == "사용할 수 있는 팀 이름입니다.") {
+                    $("#cant-using").hide()
+                    $("#can-using").show()
+                } else if (response['msg'] == "중복되는 팀 이름입니다. 다시 입력해주세요.") {
+                    $("#can-using").hide()
+                    $("#cant-using").show()
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 /*to do list*/
@@ -154,10 +201,10 @@ function show_task(my_team) {
 function makeListTask(team, task, done) {
     //할 일이 아직 완료 상태가 아니면
     if (done == "false") {
-        let tempHtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i><i class='bi bi-check-lg' onclick="donetask('${team}','${task}','${done}')"></i></div>`;
+        let tempHtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i><i class='bi bi-check-lg' onclick="changedone('${team}','${task}','${done}')"></i></div>`;
         $(".notdone").append(tempHtml);
     } else { //할 일이 완료 상태면
-        let tempHtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i></div>`;
+        let tempHtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i><i class='bi bi-check-lg' onclick="changedone('${team}','${task}','${done}')"></i></div>`;
         $(".done").append(tempHtml);
     }
 }
@@ -187,7 +234,7 @@ function findteam() {
 function addlist(my_team) {
     let team = my_team
     let task = $(".txt").val();
-    let temphtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i><i class='bi bi-check-lg' onclick="donetask('${team}','${task}')"></i></div>`
+    let temphtml = `<div class='task'>${task}<i class='bi bi-trash-fill' onclick="deletetask('${team}','${task}')"></i><i class='bi bi-check-lg' onclick="changedone('${team}','${task}')"></i></div>`
     $(".notdone").append(temphtml);
 
     $.ajax({
@@ -201,7 +248,7 @@ function addlist(my_team) {
             task: task
         },
         success: function (response) {
-            alert(response['msg']);
+            //alert(response['msg']);
         }
     });
 
@@ -223,7 +270,7 @@ function deletetask(team, task) {
         },
         success: function (response) { // 성공하면
             if (response["result"] == "success") {
-                alert("삭제 성공!");
+                //alert("삭제 성공!");
                 window.location.reload();
             } else {
                 alert("서버 오류!");
@@ -232,12 +279,12 @@ function deletetask(team, task) {
     })
 }
 
-// 할 일 목록 중 완료 버튼 누른 경우
-function donetask(team, task) {
-    let done = true
+// 할 일을 완료했는지 안 했는지 상태 변경 및 저장
+function changedone(team, task, done) {
+    console.log(team,task, done)
     $.ajax({
         type: "POST",
-        url: `/task-done`,
+        url: `/change-done`,
         headers: {
             Authorization: getCookie('access_token')
         },
@@ -248,7 +295,7 @@ function donetask(team, task) {
         },
         success: function (response) {
             if (response["result"] == "success") {
-                alert("체크 완료!");
+                //alert("체크 완료!");
                 window.location.reload();
             } else {
                 alert("서버 오류!");
@@ -271,12 +318,21 @@ function checkstatus() {
             for (let i = 0; i < user_data.length; i++) {
                 let nick_name = user_data[i]['nick_name']
                 let status = user_data[i]['status']
-                let temphtml = `<tr>
-                                <td>${nick_name}</td>
-                                <td>${status}</td>
-                                </tr>`
-                $(".status-table").append(temphtml);
+                console.log(nick_name,status)
+                makeListStatus(nick_name, status);
+                console.log("end")
             }
         }
     });
 }
+
+// 팀원들 출석 현황 화면에 띄우기
+function makeListStatus(nick_name, status) {
+    let temphtml = `<tr>
+                                <td>${nick_name}</td>
+                                <td>${status}</td>
+                                </tr>`
+                $(".status-table").append(temphtml);
+}
+
+//python에서도 팀 이름 공백 및 특수문자 뺴고 정규표현식으로 거르는거 만들기

@@ -3,18 +3,20 @@ import re
 import bcrypt
 import jwt
 
-from flask_cors import CORS
+# from flask_cors import CORS
 from datetime import datetime, date, timedelta
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
+from my_settings import SECRET
 
-SECRET = (os.environ.get("SECRET"))
-client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# SECRET = (os.environ.get("SECRET"))
+# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+client = MongoClient('localhost', 27017)
 db = client.bbichulDB
 
 application = Flask(__name__)
-cors = CORS(application, resources={r"/*": {"origins": "*"}})
+# cors = CORS(application, resources={r"/*": {"origins": "*"}})
 
 
 # 시작페이지
@@ -140,8 +142,8 @@ def sign_up():
     doc = {
         'nick_name': nick_name,
         'password': decode_password,
-        'team': None,
         'status': "퇴근",
+        'team': None,
         'string_start_date': None,
         'string_end_date': None,
         'goal_hour': 0
@@ -622,20 +624,19 @@ def team_check():
 def create_team():
     user_nickname = request.user['nick_name']
     team_name = request.form['team']
-
     # 팀이름 중복확인
     if db.team.find_one({'team': team_name}) is not None:
-        return jsonify({'msg': '중복된 팀이름'})
+        return jsonify({'msg': '중복된 팀이름입니다.'})
 
     doc = {
         'team': team_name,
-        'members': user_nickname,
+        'user': user_nickname,
+        'position': "팀장"
     }
     db.team.insert_one(doc)
     db.user.update_one({'nick_name': user_nickname}, {'$set': {'team': team_name}})
 
     return jsonify({'msg': '팀 만들기 완료'})
-
 
 # 팀명 중복체크
 @application.route('/teamname', methods=['POST'])
@@ -649,6 +650,24 @@ def team_name_check():
 
     return jsonify({'msg': '중복되는 팀 이름입니다. 다시 입력해주세요.'})
 
+# 팀에 초대됐을 때
+@application.route('/invite-team', methods=['POST'])
+@login_required
+def invite_team():
+    user_nickname = request.user['nick_name']
+    team_name = request.form['team']
+
+    if db.user.find_one({'team': team_name}) is not None:
+        doc = {
+            'team': team_name,
+            'user': user_nickname,
+            'position': "팀원"
+        }
+        db.team.insert_one(doc)
+        db.user.update_one({'nick_name': user_nickname}, {'$set': {'team': team_name}})
+        return jsonify({"msg": '초대받은 팀에 가입되었습니다.'})
+
+    return jsonify({'msg': '존재하지 않는 팀입니다. 팀 이름을 확인해주세요.'})
 
 # 유저 소속팀 이름 가져오기
 @application.route('/get-teamname', methods=['GET'])
@@ -697,13 +716,17 @@ def delete_task():
 
 
 # 할 일 완료
-@application.route('/task-done', methods=['POST'])
+@application.route('/change-done', methods=['POST'])
 @login_required
-def done_task():
+def change_done():
     team = request.form['team']
     task = request.form['task']
     done = request.form['done']
-    db.team_task.update({'team': team, 'task': task}, {'$set': {'done': done}})
+    if done == "false":
+        db.team_task.update({'team': team, 'task': task}, {'$set': {'done': "true"}})
+    else:
+        db.team_task.update({'team': team, 'task': task}, {'$set': {'done': "false"}})
+
     return {"result": "success"}
 
 
