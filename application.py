@@ -56,13 +56,12 @@ def team_page():
 @application.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
-    start_time = request.form['start_time']
     status = request.form['status']
 
     user_id = request.user['_id']
     today = date.today()
 
-    db.user.update_one({'user_id': user_id}, {'$set': {'status': status}})
+    db.user.update_one({'_id': user_id}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -82,7 +81,7 @@ def check_in():
         }
         db.time.insert_one(doc)
 
-    return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
+    return jsonify({"msg": f' {status} 상태입니다.'})
 
 
 # 체크아웃
@@ -525,21 +524,19 @@ def post_weekly_avg_graph():
     weekday_avg_study_time_list = []
     for i in range(7):
         weekday_user_data = list(db.time.find({
-            'nick_id': user_id,
+            'user_id': user_id,
             'year': year,
             'month': month,
             'weekday': i}, {'_id': False}))
 
         # 만약 데이터가 없는 날짜는 0으로 처리한다.
         weekday_avg_study_time_list.append(0)
-
         # 평균구하기
         weekday_sum = 0
         day_count = 0
         for day in weekday_user_data:
             weekday_sum += int(day['study_time'])
             day_count += 1
-
         try:
             weekday_avg_study_time = weekday_sum // day_count
         except ZeroDivisionError:
@@ -565,15 +562,16 @@ def post_goal_modal():
     string_start_date = request.form['string_start_date']
     string_end_date = request.form['string_end_date']
     goal_hour = request.form['goal_hour']
+    goal_hour_validation = re.compile('^[0-9]{1,}$')
 
-    if goal_hour == '':
-        return jsonify({'msg': '목표시간을 입력해주세요'})
+    # 유효성검사
+    if not goal_hour_validation.match(goal_hour):
+        return jsonify({"msg": "목표시간을 다시 입력해주세요"})
 
-    goal_hour = int(goal_hour)
     db.user_info.update_one({'user_id': user_id}, {'$set': {
         'string_start_date': string_start_date,
         'string_end_date': string_end_date,
-        'goal_hour': goal_hour
+        'goal_hour': int(goal_hour)
     }})
 
     return jsonify({'msg': '성공'})
@@ -628,7 +626,7 @@ def get_goal_modal():
     if done_hour == 0:
         percent = 0
     elif done_hour != 0:
-        percent = (goal_hour // done_hour) * 100
+        percent = (done_hour / goal_hour) * 100
 
     return jsonify({
         'string_start_date': string_start_date,
@@ -638,6 +636,30 @@ def get_goal_modal():
         'goal_hour': goal_hour,
         'done_hour': done_hour
     })
+
+# 닉네임 데이터 받기
+@application.route('/nickname-modal', methods=['POST'])
+@login_required
+def post_nickname_modal():
+    user_id = request.user['_id']
+    nick_name = request.form['changed_nickname']
+
+    db.user.update_one({'_id': user_id}, {'$set': {
+        'nick_name': nick_name
+    }})
+
+    return jsonify({'msg': '성공'})
+
+# 닉네임 데이터 주기
+@application.route('/nickname-modal', methods=['GET'])
+@login_required
+def get_nickname_modal():
+    user_id = request.user['_id']
+
+    user_data = db.user.find_one({'_id': user_id})
+    nick_name = user_data['nick_name']
+
+    return jsonify({'nick_name': nick_name})
 
 
 # 각오 데이터 받기

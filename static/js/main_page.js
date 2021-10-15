@@ -5,7 +5,7 @@ $(document).ready(function () {
     getWiseSy();
     Clock()
     buttonEvt();
-    // <!--    이미지 클릭할때마다 바뀌는기능-->
+    <!--    이미지 클릭할때마다 바뀌는기능-->
 
     $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
     $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
@@ -46,10 +46,9 @@ let month = date_list[1]
 let day = date_list[2]
 let week = date_list[3]
 
+
 // 공부시작 눌렀을시
 function check_in() {
-    let present_time = $("#Clock").text()
-
     $.ajax({
         type: "POST",
         url: "/check-in",
@@ -57,19 +56,17 @@ function check_in() {
             Authorization: getCookie('access_token')
         },
         data: {
-            start_time: present_time,
             status: "출근",
 
         },
         success: function (response) {
-
-
         }
     })
 }
 
 // 공부 종료 눌렀을시
 function check_out() {
+    buttonEvt()
     let present_time = $("#Clock").text()
     let date_list = $("#Clockday").text().split(' ')
     let year = date_list[0]
@@ -172,7 +169,6 @@ function buttonEvt() {
 
     // start btn 공부 시작 눌렀을시 시간 재기
     $("#startbtn").click(function () {
-
         if (starFlag) {
             starFlag = false;
 
@@ -202,7 +198,8 @@ function buttonEvt() {
                 }
 
                 let Clock = document.getElementById("Clock");
-                document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중';
+                setCookie('timer' ,th + ":" + tm + ":" + ts + '초 동안 업무중')
+                document.getElementById("time").innerHTML = getCookie('timer');
             }, 1000);
         }
     });

@@ -111,9 +111,9 @@
             <div class="d-day-box"></div>
             <div class="progress-graph">
                 <div class="nickname-info">
-                    <h3 class="present-nickname">닉네임</h3>
-                    <button id='change-nickname' type="button" class="btn btn-secondary btn-sm"
-                            data-bs-target="#exampleModal">수정
+                    <h3 class="present-nickname"></h3>
+                    <button onclick="hide_nickname()" id="nickname-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#nickname-staticBackdrop">
+                      수정
                     </button>
                 </div>
 
@@ -200,7 +200,32 @@
     </div>
 </div>
 
-<!-- Modal -->
+
+<!-- nickname-->
+<div class="modal fade" id="nickname-staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">닉네임 변경하기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="input-box">
+              닉네임: <input id="nickname" type="text">
+              <p id="can-using">사용해도 되는 닉네임 입니다.</p>
+              <p id="cant-using">이미 사용중인 닉네임 입니다.</p>
+              <button type="button" onclick="nickname_check()">중복확인</button>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="nickname-close" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="post_nickname_modal()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 목표 Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

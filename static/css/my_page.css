@@ -16,7 +16,6 @@
     width: 100%;
     display: inline-block;
     vertical-align: middle;
-    background-color: lightgray;
     border-radius: 20px;
     padding: 20px 50px;
 }
@@ -53,7 +52,7 @@
     display: inline-block;
 }
 
-#change-nickname {
+#nickname-button {
     margin-left: 20px;
     width: 50px;
     float: right;
