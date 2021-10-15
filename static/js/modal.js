@@ -142,5 +142,5 @@ function nickname_check() {
             }
         }
     });
-}
+}``
 

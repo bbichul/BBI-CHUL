@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>근태 및 기록 캘린더</title>
-
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous">
-    </script>
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
+    <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script>
-    <!--  chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
-            integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 
     <!-- Vendor CSS Files -->
     <link href="../static/vendor/animate.css/animate.min.css" rel="stylesheet">
@@ -38,59 +27,37 @@
     <link href="../static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="../static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <!-- Nav Var CSS File, Calender JS -->
+    <!-- Template Main CSS File -->
     <link href="../static/css/style.css" rel="stylesheet">
-    <link href="../static/css/my_page.css" rel="stylesheet">
+    <link href="../static/css/main_page.css" rel="stylesheet">
 
+    <script defer src="../static/js/main_page.js"></script>
     <script defer src="../static/js/modal.js"></script>
-    <script defer src="../static/js/my_page.js"></script>
     <script defer src="../static/js/start_page.js"></script>
 
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <title>삐빅! 출석했습니다</title>
 
 </head>
-
 <body>
-
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
 
         <h1 class="logo"><a href="/">BBICHUL</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="start_page.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
         <nav id="navbar" class="navbar">
             <ul>
                 <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto" href="/main">main</a></li>
                 <li><a href="/calender">Schedule</a></li>
+                <li><a class="nav-link scrollto" href="/my-page">My Page</a></li>
                 <li><a class="nav-link scrollto" href="/team-page">Team Page</a></li>
 
-<!--                불필요 라인 주석 처리 추후 사용 가능성 있어서 지우지 않았습니다.-->
-<!--                <li><a href="blog.html">Blog</a></li>-->
-<!--                <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>-->
-<!--                    <ul>-->
-<!--                        <li><a href="#">Drop Down 1</a></li>-->
-<!--                        <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i-->
-<!--                                class="bi bi-chevron-right"></i></a>-->
-<!--                            <ul>-->
-<!--                                <li><a href="#">Deep Drop Down 1</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 2</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 3</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 4</a></li>-->
-<!--                                <li><a href="#">Deep Drop Down 5</a></li>-->
-<!--                            </ul>-->
-<!--                        </li>-->
-<!--                        <li><a href="#">Drop Down 2</a></li>-->
-<!--                        <li><a href="#">Drop Down 3</a></li>-->
-<!--                        <li><a href="#">Drop Down 4</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-<!--                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>-->
-                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogIn</a>
+
+                <li><a id="login-button" class="getstarted scrollto" href="#" data-toggle="modal"
+                       data-target="#loginModal">Log In</a>
                 </li>
-                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal" data-target="#loginModal">LogOut</a>
+                <li><a id="logout-button" onclick="log_out()" class="getstarted scrollto" href="#" data-toggle="modal"
+                       data-target="#loginModal">Log Out</a>
                 </li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
@@ -99,201 +66,148 @@
     </div>
 </header><!-- End Header -->
 
-<div id="my-page">
-    <div id="record-container">
-        <div class="left">
-            <div id="my-page-menu">마이페이지</div>
-            <div class="during-date-box">
-                <div class="start-date-box"></div>
-                <span class="link-date">~</span>
-                <div class="end-date-box"></div>
-            </div>
-            <div class="d-day-box"></div>
-            <div class="progress-graph">
-                <div class="nickname-info">
-                    <h3 class="present-nickname">닉네임</h3>
-                    <button id='change-nickname' type="button" class="btn btn-secondary btn-sm"
-                            data-bs-target="#exampleModal">수정
-                    </button>
-                </div>
+<div class="body_wrapper">
+    <!--    화면 기준 왼쪽-->
+    <div class="left_body">
+        <div id="weather_info">
+            <h1 class="place"></h1>
 
-                <div class="row">
-                    <div>
-                        <h3 class="progress-title">목표 공부시간</h3>
-                        <button id="progress-button" type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">생성
-                        </button>
-                        <div class="progress-outer">
-                            <div class="progress">
-                                <div id="percent-bar" class="progress-bar progress-bar-striped progress-bar-danger"
-                                     style="width:10%;"></div>
+            <section>
+                <p class="csky"></p>
+                <figure class="icon"></figure>
+                <div class="fig">
+                    <p class="temp"></p>
+                    <div class="aa">
 
-                                <div class="progress-value"></div>
-                            </div>
-                        </div>
+                        <p class="temp_max">최고기온:&nbsp</p>
+                        <p class="temp_min">최저기온:&nbsp</p>
+                        <p class="humidity">강수량:&nbsp</p>
                     </div>
                 </div>
-                <div class="resolution">
-                    <h3 class="resolution-title">각오</h3>
-                    <button id='resolution-button' type="button" class="btn btn-secondary btn-sm"
-                            data-bs-target="#exampleModal">수정
-                    </button>
-                    <div class="resolution-text"></div>
+            </section>
+        </div>
+        <div class="wise">
+            <p id="wise-box">
+
+            </p>
+        </div>
+        <!--        오디오 기능-->
+        <div class="audio">
+
+            <audio controls id="myaudio">
+                <source id="main">
+                <source src="../static/audio/fire.mp3">
+                <source src="../static/audio/night.mp3">
+
+
+            </audio>
+            <span id='play-next' class="track">⏭️</span>
+
+        </div>
+    </div>
+</div>
+    <!--    화면 기준 왼쪽 -->
+    <!--    화면 기준 오른쪽 -->
+    <div class="right_body">
+        <div class="day" id="Clockday">00/00/00</div>
+        <div class="Clock" id="Clock">00:00</div>
+
+
+        <div class="checkin-box">
+
+        </div>
+
+
+        <div class="checkin-img">
+            <a class="btn green" href="#green" onclick="check_in()" id="startbtn">START</a>
+        </div>
+        <div class="checkout-box">
+            <div id='box' class="timer">
+
+                <a class="btn green" href="#green" id="pausebtn" onclick='stopCount()'>STOP</a>
+
+                <div class="checkout-img">
+                    <a class="btn green" href="#green" id="stopbtn" onclick="checkout_choice()">END</a>
                 </div>
-                <div class="team">
-                    <h3 class="team-title">소속 팀</h3>
-                    <div class="team-list"></div>
-                </div>
-                <div class="change-password">
-                    <h3 class="password-title">비밀번호 변경</h3>
-                    <button id='password-change-button' type="button" class="btn btn-secondary btn-sm">
-                        수정
-                    </button>
-                </div>
-                <div class="sign-out">
-                    <h3 class="sign-out-title">회원탈퇴</h3>
-                    <button id='sign-out-button' type="button" class="btn btn-secondary btn-sm">
-                        탈퇴
-                    </button>
+
+                <div id='timerBox' class="timerBox">
+                    <div id="time" class="time">00:00:00초 동안 업무중</div>
                 </div>
             </div>
         </div>
-        <div class="right">
-            <div class="select-box">
-                <select name='year' class="form-select" aria-label="Default select example">
-                    <!--            <option selected>Year</option>-->
-                    <option value=2021>2021년</option>
-                </select>
-                <select name='month' id='month' class="form-select" aria-label="Default select example">
-                    <!--            <option selected>Month</option>-->
-                    <option value=1>1월</option>
-                    <option value=2>2월</option>
-                    <option value=3>3월</option>
-                    <option value=4>4월</option>
-                    <option value=5>5월</option>
-                    <option value=6>6월</option>
-                    <option value=7>7월</option>
-                    <option value=8>8월</option>
-                    <option value=9>9월</option>
-                    <option value=10>10월</option>
-                    <option value=11>11월</option>
-                    <option value=12>12월</option>
-                </select>
-            </div>
-            <div class="bar-graph">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!--                <div>-->
-                        <canvas id="weekly_avg_graph"></canvas>
+
+
+    </div>
+    <!--    화면 기준 오른쪽 끝 -->
+    <!-- Log in Modal -->
+    <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="logInModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+                    <button id="login_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-box">
+                        <label>닉네임</label>
+                        <input type="text" id="login_nickname">
+                    </div>
+                    <div class="input-box">
+                        <label>비밀번호</label>
+                        <input type="password" id="login_password" placeholder="비밀번호를 입력해주세요.">
+                        <button type="button" id="login_password_eye">비밀번호 보기</button>
                     </div>
                 </div>
-            </div>
-            <div class="line-graph">
-                <div class="row">
-                    <div class="col-md-12">
-                        <!--                <div>-->
-                        <canvas id="study_time_graph"></canvas>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal"
+                            onclick="hide_nickname()">회원가입
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="login()">확인</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">목표 시간 설정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <label class="nativeDatePicker">시작일:
-                        <input type="date" name="start-date">
-                        <span class="validity"></span>
-                    </label>
-
-                    <fieldset class="fallbackDatePicker" hidden>
-                        <legend class="fallbackLabel">시작일:</legend>
-
-                        <label>
-                            Day:
-                            <select name="calendar-day"></select>
-                        </label>
-
-                        <label>
-                            Month:
-                            <select name="calendar-month">
-                                <option>January</option>
-                                <option>February</option>
-                                <option>March</option>
-                                <option>April</option>
-                                <option>May</option>
-                                <option>June</option>
-                                <option>July</option>
-                                <option>August</option>
-                                <option>September</option>
-                                <option>October</option>
-                                <option>November</option>
-                                <option>December</option>
-                            </select>
-                        </label>
-
-                        <label>
-                            Year:
-                            <select name="calendar-year"></select>
-                        </label>
-                    </fieldset>
-                </form>
-                <form>
-                    <label class="nativeDatePicker">종료일:
-                        <input type="date" name="end-date">
-                        <span class="validity"></span>
-                    </label>
-
-                    <fieldset class="fallbackDatePicker" hidden>
-                        <legend class="fallbackLabel">종료일:</legend>
-
-                        <label>
-                            Day:
-                            <select name="day"></select>
-                        </label>
-
-                        <label>
-                            Month:
-                            <select name="month">
-                                <option>January</option>
-                                <option>February</option>
-                                <option>March</option>
-                                <option>April</option>
-                                <option>May</option>
-                                <option>June</option>
-                                <option>July</option>
-                                <option>August</option>
-                                <option>September</option>
-                                <option>October</option>
-                                <option>November</option>
-                                <option>December</option>
-                            </select>
-                        </label>
-
-                        <label>
-                            Year:
-                            <select name="year"></select>
-                        </label>
-                    </fieldset>
-                </form>
-                <p>목표시간:<input name="goal_hour" placeholder="ex) 50">시간</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="close_goal_time" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="post_goal_modal()" class="btn btn-primary">Save changes</button>
+    <!-- sign up Modal -->
+    <div class="modal fade" id="signupModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+         aria-labelledby="logInModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">회원가입</h5>
+                    <button id="signup_close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-box">
+                        <label>닉네임</label>
+                        <input type="text" id="signup_nickname">
+                        <p id="can-using">사용해도 되는 닉네임 입니다.</p>
+                        <p id="cant-using">이미 사용중인 닉네임 입니다.</p>
+                        <button type="button" onclick="nickname_check()">중복확인</button>
+                    </div>
+                    <div class="input-box">
+                        <label>비밀번호</label>
+                        <input type="password" id="signup_password" placeholder="비밀번호를 입력해주세요.">
+                        <p>영어 또는 숫자로 6글자 이상으로 작성해주세요</p>
+                        <button type="button" id="signup_password_eye">비밀번호 보기</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                            onclick="sign_up()">가입완료
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
 
 </body>
 </html>

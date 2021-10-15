@@ -7,20 +7,8 @@ $(document).ready(function () {
     buttonEvt();
     // <!--    이미지 클릭할때마다 바뀌는기능-->
 
-    $('.checkin-box').show(); //페이지를 로드할 때 표시할 요소
-    $('.checkout-box').hide(); //페이지를 로드할 때 숨길 요소
-    $('.checkin-img').click(function () {
-        $('.checkin-box').hide(); //클릭 시 첫 번째 요소 숨김
-        $('.checkout-box').show(); //클릭 시 두 번째 요소 표시
-        $('.checkout-img').click(function () {
-            $('.checkout-box').hide(); //클릭 시 첫 번째 요소 숨김
-            $('.checkin-box').show(); //클릭 시 두 번째 요소 표시
 
-
-            return false;
-        });
     });
-});
 
 // 명언 가져와서 뿌려주기
 function getWiseSy() {
@@ -160,7 +148,7 @@ let time = 0;
 let starFlag = true;
 
 function init() {
-    document.getElementById("time").innerHTML = "00:00:00초 동안 업무중";
+    document.getElementById("time").innerHTML = "00:00:00";
 }
 
 function buttonEvt() {
@@ -202,7 +190,9 @@ function buttonEvt() {
                 }
 
                 let Clock = document.getElementById("Clock");
-                document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts + '초 동안 업무중';
+                setCookie('study_time',th + ":" + tm + ":" + ts ,24*60*60*1000)
+                document.getElementById("time").innerHTML = getCookie('study_time')
+                console.log(Clock)
             }, 1000);
         }
     });
@@ -331,6 +321,7 @@ $('#play-next').click(function () {
 
 // 메인페이지 공부 종료 눌렀을때
 function checkout_choice() {
+
     if (getCookie('yesterday_study_time') != undefined) {
         midnight();
     } else {

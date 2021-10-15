@@ -116,24 +116,25 @@
 
         </div>
 
+            <div id='timerBox' class="timerBox">
+                    <div id="time" class="time">00:00:00</div>
+                </div>
+
 
         <div class="checkin-img">
-            <a class="btn green" href="#green" onclick="check_in()" id="startbtn">START</a>
+            <a class="btn green start" href="#green" onclick="check_in()" id="startbtn">START</a>
         </div>
-        <div class="checkout-box">
-            <div id='box' class="timer">
 
-                <a class="btn green" href="#green" id="pausebtn" onclick='stopCount()'>STOP</a>
 
-                <div class="checkout-img">
-                    <a class="btn green" href="#green" id="stopbtn" onclick="checkout_choice()">END</a>
-                </div>
+        <a class="btn green stop" href="#green" id="pausebtn" >STOP</a>
 
-                <div id='timerBox' class="timerBox">
-                    <div id="time" class="time">00:00:00초 동안 업무중</div>
-                </div>
-            </div>
+        <div class="checkout-img end">
+                    <a class="btn green end" href="#green" id="stopbtn" onclick="checkout_choice()">END</a>
         </div>
+
+
+
+
 
 
     </div>
@@ -206,7 +207,7 @@
             </div>
         </div>
     </div>
-
+</div>
 
 </body>
 </html>
