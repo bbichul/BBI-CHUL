@@ -149,6 +149,9 @@ function post_nickname_modal() {
             if (response['msg'] == '성공') {
                 get_nickname_modal()
                 $('#nickname-close').click()
+            }else if (response['msg']) {
+                alert(response['msg'])
+                $("#nickname").val('')
             }
         }
     })
@@ -242,6 +245,9 @@ function post_new_password() {
                 $('#new-password-staticBackdrop').modal('hide')
             } else if (response['msg'] == "영어 또는 숫자로 6글자 이상으로 작성해주세요") {
                 alert(response["msg"]);
+                $(".password").val('')
+            } else if (response['msg'] == "NEED_NEW_PASSWORD") {
+                alert("새로운 비밀번호를 입력해주세요");
                 $(".password").val('')
             }
         }

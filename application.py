@@ -134,7 +134,7 @@ def sign_up():
     if db.user.find_one({'nick_name': nick_name}) is not None:
         return jsonify({'msg': '중복된 닉네임'})
 
-    # 비밀번호 중복확인
+    # 비밀번호 유효성검사확인
     if not password_validation.match(password):
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
 
@@ -203,7 +203,7 @@ def post_check_password():
 
     user = db.user.find_one({'_id': user_id})
 
-    # 비밀번호 확인
+    # 비밀번호가 틀리면
     if not bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8")):
         return jsonify({"msg": "INVALID_PASSWORD"})
 
@@ -218,6 +218,8 @@ def post_new_password():
     password = request.form['password']
     password_validation = re.compile('^[a-zA-Z0-9]{6,}$')
 
+    user_data = request.user
+
     # 비밀번호 중복확인
     if not password_validation.match(password):
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
@@ -226,6 +228,10 @@ def post_new_password():
     byte_password = password.encode("utf-8")
     encode_password = bcrypt.hashpw(byte_password, bcrypt.gensalt())
     decode_password = encode_password.decode("utf-8")
+
+    # 비밀번호 확인
+    if bcrypt.checkpw(password.encode("utf-8"), user_data['password'].encode("utf-8")):
+        return jsonify({"msg": "NEED_NEW_PASSWORD"})
 
     db.user.update_one({'_id': user_id}, {'$set': {'password': decode_password}})
 
@@ -237,8 +243,12 @@ def post_new_password():
 @login_required
 def withdrawal():
     user_id = request.user['_id']
+    print(user_id)
 
-    db.user.delete_one({'_id': user_id})
+    db.user.delete_many({'_id': user_id})
+    db.time.delete_many({'user_id': user_id})
+    db.team.delete_many({'members': user_id})
+    db.user_info.delete_many({'user_id': user_id})
 
     return jsonify({'msg': 'SUCCESS'})
 
@@ -692,7 +702,10 @@ def get_goal_modal():
     if done_hour == 0:
         percent = 0
     elif done_hour != 0:
-        percent = (done_hour / goal_hour) * 100
+        print(done_hour)
+        print(goal_hour)
+        percent = round((done_hour / goal_hour) * 100)
+        print(percent)
 
     return jsonify({
         'string_start_date': string_start_date,
@@ -711,6 +724,10 @@ def post_nickname_modal():
     user_id = request.user['_id']
     # nick_name = request.form.get('changed_nickname', False)
     nick_name = request.form['changed_nickname']
+
+    # 닉네임 중복확인
+    if db.user.find_one({'nick_name': nick_name}) is not None:
+        return jsonify({'msg': '중복된 닉네임'})
 
     db.user.update_one({'_id': user_id}, {'$set': {
         'nick_name': nick_name
