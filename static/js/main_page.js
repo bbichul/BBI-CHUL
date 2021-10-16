@@ -231,8 +231,8 @@ function startTimer() {
     minute = (minute < 10 ? "0" + minute : minute)
     seconds = (seconds < 10 ? "0" + seconds : seconds);
 
-    document.getElementById("hour").innerHTML = hour;
-    document.getElementById("minute").innerHTML = minute;
+    document.getElementById("hour").innerHTML = hour + ":";
+    document.getElementById("minute").innerHTML = minute + ":";
     document.getElementById("seconds").innerHTML = seconds;
 }
 
@@ -259,8 +259,8 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     start = null;
     document.cookie = "timer=null";
     if (intervalId) clearInterval(intervalId);
-    document.getElementById("hour").innerHTML = '00';
-    document.getElementById("minute").innerHTML = '00';
+    document.getElementById("hour").innerHTML = '00:';
+    document.getElementById("minute").innerHTML = '00:';
     document.getElementById("seconds").innerHTML = '00';
 
 });
