@@ -1,13 +1,19 @@
 import jwt
+import os
 
-from my_settings   import SECRET
-from functools     import wraps
-from flask 		   import request, jsonify
-from pymongo       import MongoClient
+from my_settings import SECRET
+from functools import wraps
+from flask import request, jsonify
+from pymongo import MongoClient
 from bson.objectid import ObjectId
+
+# SECRET = (os.environ.get("SECRET"))
+# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# db = client.bbichulDB
 
 client = MongoClient('localhost', 27017)
 db = client.dbnbc
+
 
 def login_required(func):
     @wraps(func)
@@ -20,8 +26,8 @@ def login_required(func):
                 token_payload = jwt.decode(access_token, SECRET, algorithms='HS256')
 
                 # request.user 에 로그인한 사용자 정보 생성
-                user_id      = ObjectId(token_payload['id'])
-                user         = db.user.find_one({"_id": user_id})
+                user_id = ObjectId(token_payload['id'])
+                user = db.user.find_one({"_id": user_id})
                 request.user = user
 
                 return func(*args, **kwargs)

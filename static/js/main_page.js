@@ -4,11 +4,9 @@ let i = getRandomNumberOf(10);
 $(document).ready(function () {
     getWiseSy();
     Clock()
-    buttonEvt();
-    // <!--    이미지 클릭할때마다 바뀌는기능-->
 
 
-    });
+});
 
 // 명언 가져와서 뿌려주기
 function getWiseSy() {
@@ -33,64 +31,6 @@ let year = date_list[0]
 let month = date_list[1]
 let day = date_list[2]
 let week = date_list[3]
-
-// 공부시작 눌렀을시
-function check_in() {
-    let present_time = $("#Clock").text()
-
-    $.ajax({
-        type: "POST",
-        url: "/check-in",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        data: {
-            start_time: present_time,
-            status: "출근",
-
-        },
-        success: function (response) {
-
-
-        }
-    })
-}
-
-// 공부 종료 눌렀을시
-function check_out() {
-    let present_time = $("#Clock").text()
-    let date_list = $("#Clockday").text().split(' ')
-    let year = date_list[0]
-    let month = date_list[1]
-    let day = date_list[2]
-    let week = date_list[3]
-    let study_time = $("#time").text()
-
-    $.ajax({
-        type: "POST",
-        url: "/check-out",
-        headers: {
-            Authorization: getCookie('access_token')
-        },
-        data: {
-            stop_time: present_time,
-            status: "퇴근",
-            study_time: study_time,
-            year: year,
-            month: month,
-            day: day,
-            week: week,
-
-        },
-
-        success: function (response) {
-
-            alert(response["msg"]);
-
-        }
-    })
-
-}
 
 
 // 실시간 시계
@@ -131,8 +71,8 @@ function Clock() {
 // setInterval(Clock, 1000);
 function record_time() {
     let date = new Date()
-    if (date.getHours() == 10 && date.getMinutes() == 31 & date.getSeconds() == 0) {
-        let yesterday_study_time = $('#time').text()
+    if (date.getHours() == 0 && date.getMinutes() == 0 & date.getSeconds() == 0) {
+        let yesterday_study_time = (hour + minute + seconds)
         setCookie('yesterday_study_time', yesterday_study_time, 1)
     }
 }
@@ -143,78 +83,6 @@ setInterval(function () {
     record_time();
 }, 1000);
 
-//타이머
-let time = 0;
-let starFlag = true;
-
-function init() {
-    document.getElementById("time").innerHTML = "00:00:00";
-}
-
-function buttonEvt() {
-    let hour = 0;
-    let min = 0;
-    let sec = 0;
-    let timer;
-
-
-    // start btn 공부 시작 눌렀을시 시간 재기
-    $("#startbtn").click(function () {
-
-        if (starFlag) {
-            starFlag = false;
-
-            if (time == 0) {
-                init();
-            }
-
-            timer = setInterval(function () {
-                time++;
-
-                min = Math.floor(time / 60);
-                hour = Math.floor(min / 60);
-                sec = time % 60;
-                min = min % 60;
-
-                var th = hour;
-                var tm = min;
-                var ts = sec;
-                if (th < 10) {
-                    th = "0" + hour;
-                }
-                if (tm < 10) {
-                    tm = "0" + min;
-                }
-                if (ts < 10) {
-                    ts = "0" + sec;
-                }
-
-                let Clock = document.getElementById("Clock");
-                setCookie('study_time',th + ":" + tm + ":" + ts ,24*60*60*1000)
-                document.getElementById("time").innerHTML = getCookie('study_time')
-                console.log(Clock)
-            }, 1000);
-        }
-    });
-
-    // stop 눌러서 잠시동안 공부 멈추기
-    $("#pausebtn").click(function () {
-        if (time != 0) {
-            clearInterval(timer);
-            starFlag = true;
-        }
-    });
-    // stop btn
-    $("#stopbtn").click(function () {
-        if (time != 0) {
-            clearInterval(timer);
-            starFlag = true;
-            time = time
-            time = 0;
-            init();
-        }
-    });
-}
 
 // 오픈api 현재 위치 날씨 뿌려주기
 function getWeather(lat, lon) {
@@ -310,7 +178,7 @@ var index = 1;
 $('#play-next').click(function () {
     index++;
     if (index > $('#myaudio source').length) index = 2;
-    console.log(index + '번째 소스 재생');
+
 
     $('#myaudio source#main').attr('src',
         $('#myaudio source:nth-child(' + index + ')').attr('src'));
@@ -329,9 +197,136 @@ function checkout_choice() {
     }
 }
 
+
+// 내가 끝을 누르기 전까지 공부시간 체크(스톱워치)
+let hour = 0;
+let minute = 0;
+let seconds = 0;
+let pauseTime = null;
+let start = [...document.cookie.matchAll(/([^;=]+)=([^;=]+)(;|$)/g)].filter(x => x[1].trim() == 'timer').map(x => Number(x[2].trim()))[0];
+if (start != null) {
+    if (start > 0) start = new Date(start);
+    else if (start < 0) {
+        pauseTime = -start;
+        start = new Date(Date.now() + start); //+- = -
+    } else start = null;
+} else start = null;
+let intervalId = null;
+
+
+function startTimer() {
+    let totalSeconds;
+    if (pauseTime) {
+        start = new Date(Date.now() - pauseTime);
+        totalSeconds = pauseTime;
+        return;
+    } else {
+        totalSeconds = Math.floor((Date.now() - start.getTime()) / 1000);
+    }
+    hour = Math.floor(totalSeconds / 3600);
+    minute = Math.floor((totalSeconds - hour * 3600) / 60);
+    seconds = totalSeconds - (hour * 3600 + minute * 60);
+
+    hour = (hour < 10 ? "0" + hour : hour)
+    minute = (minute < 10 ? "0" + minute : minute)
+    seconds = (seconds < 10 ? "0" + seconds : seconds);
+
+    document.getElementById("hour").innerHTML = hour;
+    document.getElementById("minute").innerHTML = minute;
+    document.getElementById("seconds").innerHTML = seconds;
+}
+
+if (start) intervalId = setInterval(startTimer, 1000);
+
+document.getElementById('start-btn').addEventListener('click', () => {
+    if (pauseTime) {
+        pauseTime = null;
+    } else {
+        if (start) return;
+        start = new Date();
+        intervalId = setInterval(startTimer, 1000);
+    }
+    document.cookie = "timer=" + String(start.getTime());
+})
+
+document.getElementById('stop-btn').addEventListener('click', () => {
+    pauseTime = Date.now() - start.getTime();
+    document.cookie = "timer=" + String(-pauseTime);
+});
+
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    start = null;
+    document.cookie = "timer=null";
+    if (intervalId) clearInterval(intervalId);
+    document.getElementById("hour").innerHTML = '00';
+    document.getElementById("minute").innerHTML = '00';
+    document.getElementById("seconds").innerHTML = '00';
+
+});
+
+// 공부시작 눌렀을시
+function check_in() {
+    let present_time = $("#Clock").text()
+
+    $.ajax({
+        type: "POST",
+        url: "/check-in",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        data: {
+            start_time: present_time,
+            status: "출근",
+
+        },
+        success: function (response) {
+
+
+        }
+    })
+}
+
+// 공부 종료 눌렀을시
+function check_out() {
+    let present_time = $("#Clock").text()
+    let date_list = $("#Clockday").text().split(' ')
+    let year = date_list[0]
+    let month = date_list[1]
+    let day = date_list[2]
+    let week = date_list[3]
+    let study_time = (hour + minute + seconds)
+
+
+    $.ajax({
+        type: "POST",
+        url: "/check-out",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        data: {
+            stop_time: present_time,
+            status: "퇴근",
+            study_time: study_time,
+            year: year,
+            month: month,
+            day: day,
+            week: week,
+
+        },
+
+        success: function (response) {
+
+            alert(response["msg"]);
+
+        }
+    })
+
+}
+
 // 00시 기준 공부를 전날에 시작해 다음날 끝날때의 함수
 function midnight() {
-    let study_time = $("#time").text()
+    let study_time = (hour + minute + seconds)
     $.ajax({
         type: "POST",
         url: "/midnight",
@@ -349,4 +344,3 @@ function midnight() {
         }
     })
 }
-

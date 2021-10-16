@@ -80,7 +80,7 @@
     left: 0;
     background-color: #5c9f24;
     visibility: hidden;
-    width: 0px;
+
     transition: all 0.3s ease-in-out 0s;
 }
 
@@ -478,11 +478,16 @@ figure img {
 }
 
 .timerBox {
-    width: 80%;
+    width: 50%;
     height: 200px;
-    border: 5px solid lightcyan;
-    border-radius: 8em;
-    margin: 8% 0 0 10%;
+
+    border: 1px solid gray;
+    background-image: url("https://cdn.crowdpic.net/list-thumb/thumb_l_B5EEC6F064B74D726C79E5B4330EC8A8.jpg");
+
+    border-radius: 7em;
+    box-shadow: inset 0 0 8px black;
+
+    margin: 8% 0 0 25%;
     padding-top: 4%;
 
 
@@ -491,7 +496,7 @@ figure img {
 .timerBox .time {
     font-size: 40pt;
     font-family: 'Malgun Gothic';
-
+    padding-top: 2%;
     color: #dcdcdc;
     text-shadow: 5px 5px #282828, 8px 8px #6e6e6e, 11px 11px #5a5a5a, 14px 14px #464646;
     margin: 0;
@@ -500,53 +505,6 @@ figure img {
 
 }
 
-.btn {
-    text-decoration: none;
-    font-size: 2rem;
-    display: inline-block;
-    border-radius: 5px;
-    padding: 5px 3px 10px 4px;
-    transition: all 0.1s;
-    color: white;
-    text-shadow: 0px -2px rgba(0, 0, 0, 0.5);
-    font-family: 'Orbitron', sans-serif;
-
-}
-
-/*.btn.green {*/
-/*    background-color: #D3D3D3;*/
-/*    border-bottom: 5px solid #A9A9A9;*/
-/*    float: left;*/
-/*}*/
-.btn.green.start {
-    background-color: #D3D3D3;
-    border-bottom: 5px solid #A9A9A9;
-    float: left;
-    margin-right: 9%;
-    margin-left: 25%;
-    margin-top: 2%;
-    width: 11%;
-}
-
-.btn.green.stop {
-    background-color: #D3D3D3;
-    border-bottom: 5px solid #A9A9A9;
-    float: left;
-    margin-right: 9%;
-    margin-top: 2%;
-    width: 11%;
-
-}
-
-.btn.green.end {
-    width: 11%;
-    background-color: #D3D3D3;
-    border-bottom: 5px solid #A9A9A9;
-    float: left;
-    margin-right: 9%;
-    margin-top: 2%;
-
-}
 
 .btn:active {
     transform: translateY(3px);

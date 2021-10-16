@@ -107,6 +107,7 @@
     </div>
     <!--    화면 기준 왼쪽 -->
     <!--    화면 기준 오른쪽 -->
+    <!--    현재 날짜 및 시간-->
     <div class="right_body">
         <div class="day" id="Clockday">00/00/00</div>
         <div class="Clock" id="Clock">00:00</div>
@@ -115,26 +116,17 @@
         <div class="checkin-box">
 
         </div>
-
-            <div id='timerBox' class="timerBox">
-                    <div id="time" class="time">00:00:00</div>
-                </div>
-
-
-        <div class="checkin-img">
-            <a class="btn green start" href="#green" onclick="check_in()" id="startbtn">START</a>
-        </div>
+        <!--          공부시간 및 버튼-->
+        <div class="timerBox time stopwatch" style="font-size: 70px"><span id="hour"></span>:<span
+                id="minute"></span>:<span id="seconds"></span></div>
 
 
-        <a class="btn green stop" href="#green" id="pausebtn" >STOP</a>
-
-        <div class="checkout-img end">
-                    <a class="btn green end" href="#green" id="stopbtn" onclick="checkout_choice()">END</a>
-        </div>
+        <button class="start" id="start-btn" onclick="check_in()">Start</button>
 
 
+        <button class="stop" id="stop-btn">Stop</button>
 
-
+        <button onclick="checkout_choice()" class="end" id="reset-btn">End</button>
 
 
     </div>
