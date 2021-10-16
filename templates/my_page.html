@@ -111,7 +111,7 @@
             <div class="d-day-box"></div>
             <div class="progress-graph">
                 <div class="nickname-info">
-                    <h3 class="present-nickname"></h3>
+                    <h3 class="present-nickname"></h3> 님
                     <button onclick="hide_nickname()" id="nickname-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#nickname-staticBackdrop">
                       수정
                     </button>
@@ -142,18 +142,19 @@
                 </div>
                 <div class="team">
                     <h3 class="team-title">소속 팀</h3>
-                    <div class="team-list"></div>
+                    <div class="team-list">
+                    </div>
                 </div>
                 <div class="change-password">
                     <h3 class="password-title">비밀번호 변경</h3>
-                    <button id='password-change-button' type="button" class="btn btn-secondary btn-sm">
-                        수정
+                    <button id="password-change-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#now-password-staticBackdrop">
+                      수정
                     </button>
                 </div>
-                <div class="sign-out">
-                    <h3 class="sign-out-title">회원탈퇴</h3>
-                    <button id='sign-out-button' type="button" class="btn btn-secondary btn-sm">
-                        탈퇴
+                <div class="withdrawal">
+                    <h3 class="withdrawal-title">회원탈퇴</h3>
+                    <button id="withdrawal-button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#withdrawal-modal">
+                      수정
                     </button>
                 </div>
             </div>
@@ -201,17 +202,17 @@
 </div>
 
 
-<!-- nickname-->
+<!-- 닉네임 변경 모달창-->
 <div class="modal fade" id="nickname-staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">닉네임 변경하기</h5>
+        <h5 class="modal-title">닉네임 변경</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
           <div class="input-box">
-              닉네임: <input id="nickname" type="text">
+              닉네임: <input id="nickname" type="text" width="100px">
               <p id="can-using">사용해도 되는 닉네임 입니다.</p>
               <p id="cant-using">이미 사용중인 닉네임 입니다.</p>
               <button type="button" onclick="nickname_check()">중복확인</button>
@@ -225,7 +226,7 @@
   </div>
 </div>
 
-<!-- 목표 Modal -->
+<!-- 목표 설정 모달창 -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -320,7 +321,7 @@
     </div>
 </div>
 
-<!-- 각오-->
+<!-- 각오 설정 모달창-->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -334,6 +335,72 @@
       <div class="modal-footer">
         <button type="button" id="resolution-close" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         <button type="button" class="btn btn-primary" onclick="post_resolution_modal()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 현 비밀번호 변경 모달창-->
+<div class="modal fade" id="now-password-staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">비밀번호 변경</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="input-box">
+              현 비밀번호: <input id="now-password" type="password" class="password">
+              <button type="button" class="password_eye">비밀번호 보기</button>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="now-password-close" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary input-reset" onclick=" post_check_password()">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 새 비밀번호 변경 모달창-->
+<div class="modal fade" id="new-password-staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">비밀번호 변경</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="input-box">
+              새 비밀번호: <input id="new-password" type="password" class="password">
+              <button type="button" class="password_eye">비밀번호 보기</button>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="post_new_password()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 회원탈퇴 모달창-->
+<div class="modal fade" id="withdrawal-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">회원탈퇴</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="input-box">
+              정말정말 탈퇴하시겠습니까?
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary" onclick="withdrawal()">탈퇴</button>
       </div>
     </div>
   </div>

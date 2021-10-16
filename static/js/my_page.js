@@ -10,6 +10,7 @@ $(document).ready(function () {
     get_goal_modal()
     get_resolution_modal()
     get_nickname_modal()
+    get_user_team()
 });
 
 //select-box에서 월이 바뀌면 날짜에 맞는 그래프를 다시불러옴
@@ -133,7 +134,8 @@ function get_resolution_modal() {
 }
 
 function post_nickname_modal() {
-    let changed_nickname = $("#changed-nickname").val()
+    let changed_nickname = $("#nickname").val()
+    console.log(changed_nickname)
     $.ajax({
         type: "POST",
         url: "/nickname-modal",
@@ -167,6 +169,107 @@ function get_nickname_modal() {
         }
     })
 }
+
+function get_user_team() {
+    $.ajax({
+        type: "GET",
+        url: "/user-team",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+        },
+        success: function (response) {
+            let user_team = response['user_team']
+            if (response['msg'] == 'team_exist') {
+                $(".team-list").append(`${user_team}`)
+                console.log(user_team)
+            } else if (response['msg'] == 'no_team') {
+                $(".team-list").append(`아직 팀이 없습니다.`)
+            }
+        }
+    })
+}
+
+
+// 비밀번호 숨기기/보기 기능
+$(".password_eye").on("mousedown", function(){
+    $('.password').attr('type',"text");
+}).on('mouseup mouseleave', function() {
+    $('.password').attr('type',"password");
+});
+
+
+function post_check_password() {
+    let password = $('#now-password').val()
+    $.ajax({
+        type: "POST",
+        url: "/check-password",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                $(".password").val('')
+                $('#now-password-staticBackdrop').modal('hide')
+                $('#new-password-staticBackdrop').modal('show')
+            } else if (response['msg'] == 'INVALID_PASSWORD') {
+                alert('비밀번호가 일치하지 않습니다.')
+                $(".password").val('')
+            }
+        }
+    })
+}
+
+function post_new_password() {
+    let password = $('#new-password').val()
+    $.ajax({
+        type: "POST",
+        url: "/new-password",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                alert('성공적으로 변경되었습니다.')
+                $(".password").val('')
+                $('#new-password-staticBackdrop').modal('hide')
+            } else if (response['msg'] == "영어 또는 숫자로 6글자 이상으로 작성해주세요") {
+                alert(response["msg"]);
+                $(".password").val('')
+            }
+        }
+    })
+}
+
+
+function withdrawal() {
+    let password = $('#new-password').val()
+    $.ajax({
+        type: "DELETE",
+        url: "/withdrawal",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                alert('회원 탈퇴되었습니다.')
+                deleteCookie('access_token')
+            location.href ="/";
+            }
+        }
+    })
+}
+
 
 // 진행바
 $(document).ready(function(){
