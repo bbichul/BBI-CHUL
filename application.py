@@ -58,7 +58,6 @@ def team_page():
 @login_required
 def check_in():
     status = request.form['status']
-
     user_id = request.user['_id']
     today = date.today()
 
@@ -90,16 +89,16 @@ def check_in():
 @login_required
 def check_out():
     status = request.form['status']
-    study_time = request.form['study_time'][:8]
+    study_time = request.form['study_time'][:6]
 
     user_id = request.user['_id']
     today = date.today()
 
-    db.user.update_one({'user_id': user_id}, {'$set': {'status': status}})
+    db.user.update_one({'_id': user_id}, {'$set': {'status': status}})
 
-    study_hour = int(study_time.split(':')[0])
-    study_min = int(study_time.split(':')[1])
-    study_sec = int(study_time.split(':')[2])
+    study_hour = int(study_time[:2])
+    study_min = int(study_time[2:4])
+    study_sec = int(study_time[4:6])
     total_sec = study_hour * 60 * 60 + study_min * 60 + study_sec
 
     # 만약 time 콜렉션에 값이 없으면
@@ -113,7 +112,7 @@ def check_out():
             'study_time': total_sec,
         }})
 
-    return jsonify({"msg": f'오늘 총 {study_time} 동안 업무를 진행하셨습니다.'})
+    return jsonify({"msg": '좋아 당신 오늘도 성장했어...!'})
 
 
 # 명언 랜덤 제공 GET
@@ -442,7 +441,7 @@ def changed_memo():
         db.calender.update_one({'user_id': user_id}, {
             '$set': {f'{calender_name}.{receive_key_class}': receive_memo}})
 
-    return jsonify({'msg' : '메모가 저장 되었습니다.'})
+    return jsonify({'msg': '메모가 저장 되었습니다.'})
 
 
 # 00시 기준 시간 자동 저장 및 전날 공부시간 유무로 db 저장 변경
@@ -450,22 +449,22 @@ def changed_memo():
 @login_required
 def midnight():
     user_id = request.user['_id']
-    yesterday_study_time = request.form['yesterday_study_time'][:8]
-    total_study_time = request.form['total_study_time'][:8]
+    yesterday_study_time = request.form['yesterday_study_time'][:6]
+    total_study_time = request.form['total_study_time'][:6]
     status = request.form['status']
 
     today = date.today()
     yesterday = today - timedelta(days=1)
 
-    yesterday_study_time_list = yesterday_study_time.split(':')
-    yesterday_study_time_hour = int(yesterday_study_time_list[0])
-    yesterday_study_time_minute = int(yesterday_study_time_list[1])
-    yesterday_study_time_second = int(yesterday_study_time_list[2])
+    yesterday_study_time_list = yesterday_study_time
+    yesterday_study_time_hour = int(yesterday_study_time_list[:2])
+    yesterday_study_time_minute = int(yesterday_study_time_list[2:4])
+    yesterday_study_time_second = int(yesterday_study_time_list[4:6])
 
-    total_study_time_list = total_study_time.split(':')
-    today_study_time_hour = int(total_study_time_list[0])
-    today_study_time_minute = int(total_study_time_list[1])
-    today_study_time_second = int(total_study_time_list[2])
+    total_study_time_list = total_study_time
+    today_study_time_hour = int(total_study_time_list[:2])
+    today_study_time_minute = int(total_study_time_list[2:4])
+    today_study_time_second = int(total_study_time_list[4:6])
 
     yesterday_second = (yesterday_study_time_hour * 60 * 60) + \
                        (yesterday_study_time_minute * 60) + yesterday_study_time_second
