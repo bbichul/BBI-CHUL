@@ -220,7 +220,7 @@ def post_new_password():
 
     user_data = request.user
 
-    # 비밀번호 중복확인
+    # 비밀번호 유효성검사
     if not password_validation.match(password):
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
 
@@ -253,7 +253,7 @@ def withdrawal():
     return jsonify({'msg': 'SUCCESS'})
 
 
-# 비빌번호 변경 새로운 비밀번호 유효성검사
+# 해당의 유저의 팀정보 불러오기
 @application.route('/user-team', methods=['GET'])
 @login_required
 def get_user_team():
