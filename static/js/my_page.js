@@ -4,10 +4,11 @@ $("#month").val(10);
 
 
 $(document).ready(function () {
-    my_info()
+    // my_info()
     post_study_time_graph()
     post_weekly_avg_graph()
     get_goal_modal()
+    get_resolution_modal()
 });
 
 //select-box에서 월이 바뀌면 날짜에 맞는 그래프를 다시불러옴
@@ -68,17 +69,17 @@ function get_goal_modal() {
         success: function (response) {
             let string_start_date = response['string_start_date']
             let string_end_date = response['string_end_date']
+            let d_day = response['d_day']
             let goal_hour = response['goal_hour']
             let done_hour = response['done_hour']
+            let percent = response['percent']
 
             let temp_html = `<p style="float: right">(${done_hour}/${goal_hour}시간)</p>`
             $('.progress-title').append(temp_html)
 
-            $('.start-date-box').append(`${string_start_date}`)
-            $('.end-date-box').append(`${string_end_date}`)
-            $('.d-day-box').append(`D-8`)
-
-            let percent = Math.round((done_hour / goal_hour) * 100)
+            $('.start-date-box').append(`${string_start_date}`);
+            $('.end-date-box').append(`${string_end_date}`);
+            $('.d-day-box').append(`D-${d_day}`);
             $('.progress-value').css('font-size', `25px`);
             $('.progress-value').css('line-height', `44px`);
             $('.progress-value').append(`${percent}%`)
@@ -89,6 +90,44 @@ function get_goal_modal() {
         }
     })
 }
+
+function post_resolution_modal() {
+    let content = $("#resolution-content").val()
+    console.log(content)
+    $.ajax({
+        type: "POST",
+        url: "/resolution",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            content: content
+        },
+        success: function (response) {
+            if (response['msg'] == '성공') {
+                get_resolution_modal()
+                $('#resolution-close').click()
+            }
+        }
+    })
+}
+
+function get_resolution_modal() {
+    $.ajax({
+        type: "GET",
+        url: "/resolution",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+        },
+        success: function (response) {
+            let content = response['content']
+            $('.resolution-text').text(`${content}`)
+        }
+    })
+}
+
 
 // 진행바
 $(document).ready(function(){

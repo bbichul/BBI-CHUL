@@ -1,6 +1,7 @@
 let my_team = ""
 $(document).ready(function () {
-    team_check()
+    team_check();
+    $("input[name=checked-team]").val('')
     /*    pieChartDraw();*/
     $('.progress-value > span').each(function () {
         $(this).prop('Counter', 0).animate({
@@ -18,31 +19,27 @@ $(document).ready(function () {
 });
 
 //progress bar
-function get_progressbar(lists) {
-    let tasklist = lists
-    let doing_count = 0
-    let done_count = 0
-    for (let i = 0; i < tasklist.length; i++) {
-        if (tasklist[i]['done'] == "false") {
-            doing_count++
-        } else {
-            done_count++
+function get_progressbar() {
+    $.ajax({
+        type: "POST",
+        url: "/get-progressbar",
+        headers: {
+            Authorization: getCookie('access_token')
+        },
+        data: {},
+        success: function (response) {
+            let percent = response['percent']
+            let done_count = response['done_count']
+
+            $('.progress-value').css('font-size', `25px`);
+            $('.progress-value').css('line-height', `44px`);
+            $('.progress-value').append(`${percent}%`)
+
+            $('#percent-bar').css('width', `${percent}%`);
+            $('#percent-bar').css('font-size', `18px`);
+            $('#percent-bar').append(`${done_count}개`)
         }
-    }
-    let total = doing_count + done_count
-    console.log(done_count,doing_count,total)
-    let temp_html = `<p style="float: right">(${done_count}/${total}개 완료)</p>`
-    $('.progress-title').append(temp_html)
-
-    let percent = Math.round((done_count / total) * 100)
-    console.log(percent)
-    $('.progress-value').css('font-size', `25px`);
-    $('.progress-value').css('line-height', `44px`);
-    $('.progress-value').append(`${percent}%`)
-
-    $('#percent-bar').css('width', `${percent}%`);
-    $('#percent-bar').css('font-size', `18px`);
-    $('#percent-bar').append(`${done_count}개`)
+    })
 }
 
 // 팀 소속 여부 확인
@@ -61,11 +58,11 @@ function team_check() {
                 $('.not-exist').hide()
                 let team = `${my_team}`
                 $('#team').append(team)
+                checkstatus();
                 show_task(my_team)
-                checkstatus()
             } else {
                 $('.team-exist').hide()
-                let temp_html = `<p>아직 소속된 팀이 없습니다.</p>`
+                let temp_html = `<h1>아직 소속된 팀이 없습니다.</h1>`
                 $('#team-alert').append(temp_html)
             }
         }
@@ -75,6 +72,7 @@ function team_check() {
 function hide_teamname() {
     $("#can-using").hide()
     $("#cant-using").hide()
+    $("#cant-using2").hide()
 }
 
 // 팀 만들기 기능
@@ -82,8 +80,9 @@ function create_team() {
     let str_space = /\s/;
     my_team = $('#team-name').val()
 
-    if (!my_team||str_space.exec(my_team)) {
-        alert("팀 이름에 공백을 사용할 수 없습니다.")
+
+    if ($("input[name=checked-team]").val() != 'y') {
+        alert("중복확인을 통과한 경우만 만들 수 있습니다.")
         $("#team-name").val(null);
     } else {
         $.ajax({
@@ -97,14 +96,16 @@ function create_team() {
             },
             success: function (response) {
                 if (response["msg"] == '팀 만들기 완료') {
-                    alert(response["msg"]);
+                    alert(response["팀을 만들었습니다."]);
                     $('#create-team-close').click()
                     $('.not-exist').hide()
                     $('.team-exist').show()
                     let team = `${my_team}`
                     $('#team').append(team)
-                } else if (response["msg"] == '중복된 팀이름입니다.') {
-                    alert(response["msg"]);
+                    checkstatus();
+                    show_task(my_team)
+                } else {
+                    alert(response["서버 오류"]);
                 }
             }
         })
@@ -115,7 +116,7 @@ function invite_team() {
     let str_space = /\s/;
     invite_name = $('#invite-name').val()
 
-    if (!invite_name||str_space.exec(invite_name)) {
+    if (!invite_name || str_space.exec(invite_name)) {
         alert("팀 이름에 공백을 사용할 수 없습니다.")
         $("#invite-name").val(null);
     } else {
@@ -136,6 +137,8 @@ function invite_team() {
                     $('.team-exist').show()
                     let team = `${invite_name}`
                     $('#team').append(team)
+                    checkstatus();
+                    show_task(my_team)
                 } else if (response["msg"] == '존재하지 않는 팀입니다. 팀 이름을 확인해주세요.') {
                     alert(response["msg"]);
                 }
@@ -148,8 +151,7 @@ function invite_team() {
 function teamname_check() {
     let str_space = /\s/;
     my_team = $('#team-name').val()
-
-    if (!my_team||str_space.exec(my_team)) {
+    if (!my_team || str_space.exec(my_team)) {
         alert("팀 이름에 공백을 사용할 수 없습니다.")
         $("#team-name").val("");
     } else {
@@ -164,11 +166,20 @@ function teamname_check() {
             },
             success: function (response) {
                 if (response['msg'] == "사용할 수 있는 팀 이름입니다.") {
+                    $("#cant-using2").hide()
                     $("#cant-using").hide()
                     $("#can-using").show()
+                    $("input[name=checked-team]").val('y');
                 } else if (response['msg'] == "중복되는 팀 이름입니다. 다시 입력해주세요.") {
+                    $("#cant-using2").hide()
                     $("#can-using").hide()
                     $("#cant-using").show()
+                    $("input[name=checked-team]").val('');
+                } else if (response['msg'] == "특수문자를 제외하고 작성해주세요"){
+                    $("#cant-using2").show()
+                    $("#cant-using").hide()
+                    $("#can-using").hide()
+                    $("input[name=checked-team]").val('');
                 }
             }
         });
@@ -187,7 +198,7 @@ function show_task(my_team) {
         data: {},
         success: function (response) {
             let lists = response["tasks"];
-            get_progressbar(lists)
+            get_progressbar()
             for (let i = 0; i < lists.length; i++) {
                 let task = lists[i]['task']
                 let done = lists[i]['done']
@@ -281,7 +292,7 @@ function deletetask(team, task) {
 
 // 할 일을 완료했는지 안 했는지 상태 변경 및 저장
 function changedone(team, task, done) {
-    console.log(team,task, done)
+    console.log(team, task, done)
     $.ajax({
         type: "POST",
         url: `/change-done`,
@@ -315,24 +326,16 @@ function checkstatus() {
         data: {},
         success: function (response) {
             let user_data = response['user_data']
+            console.log(user_data)
             for (let i = 0; i < user_data.length; i++) {
                 let nick_name = user_data[i]['nick_name']
                 let status = user_data[i]['status']
-                console.log(nick_name,status)
-                makeListStatus(nick_name, status);
-                console.log("end")
+                let temphtml = `<tr>
+                                <td>${nick_name}</td>
+                                <td>${status}</td>
+                                </tr>`;
+                $("#status-table").append(temphtml);
             }
         }
     });
 }
-
-// 팀원들 출석 현황 화면에 띄우기
-function makeListStatus(nick_name, status) {
-    let temphtml = `<tr>
-                                <td>${nick_name}</td>
-                                <td>${status}</td>
-                                </tr>`
-                $(".status-table").append(temphtml);
-}
-
-//python에서도 팀 이름 공백 및 특수문자 뺴고 정규표현식으로 거르는거 만들기

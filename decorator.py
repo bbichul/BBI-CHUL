@@ -9,8 +9,10 @@ from bson.objectid import ObjectId
 
 # SECRET = (os.environ.get("SECRET"))
 # client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+# db = client.bbichulDB
+
 client = MongoClient('localhost', 27017)
-db = client.bbichulDB
+db = client.dbnbc
 
 
 def login_required(func):

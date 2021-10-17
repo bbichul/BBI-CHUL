@@ -190,6 +190,13 @@
     width: 100%;
 }
 
+#resolution-content {
+    border: 2px solid gray;
+    height: 100px;
+    width: 90%;
+    resize: none;
+}
+
 /*소속팀*/
 .team-title{
     font-size: 18px;
