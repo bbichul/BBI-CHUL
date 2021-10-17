@@ -3,6 +3,7 @@ import re
 import bcrypt
 import jwt
 
+from calendar import monthrange
 from flask_cors import CORS
 from datetime import datetime, date, timedelta
 from decorator import login_required
@@ -56,13 +57,12 @@ def team_page():
 @application.route('/check-in', methods=['POST'])
 @login_required
 def check_in():
-    start_time = request.form['start_time']
     status = request.form['status']
 
     user_id = request.user['_id']
     today = date.today()
 
-    db.user.update_one({'user_id': user_id}, {'$set': {'status': status}})
+    db.user.update_one({'_id': user_id}, {'$set': {'status': status}})
 
     # 만약 time 콜렉션에 값이 없으면
     if db.time.find_one({
@@ -82,7 +82,7 @@ def check_in():
         }
         db.time.insert_one(doc)
 
-    return jsonify({"msg": f'{start_time}에 {status} 하셨습니다'})
+    return jsonify({"msg": f' {status} 상태입니다.'})
 
 
 # 체크아웃
@@ -134,7 +134,7 @@ def sign_up():
     if db.user.find_one({'nick_name': nick_name}) is not None:
         return jsonify({'msg': '중복된 닉네임'})
 
-    # 비밀번호 중복확인
+    # 비밀번호 유효성검사확인
     if not password_validation.match(password):
         return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
 
@@ -188,9 +188,84 @@ def nickname_check():
     nick_name = request.form['nick_name']
 
     user = db.user.find_one({'nick_name': nick_name})
+
     if user is None:
         return jsonify({"msg": "사용할 수 있는 닉네임입니다."})
     return jsonify({'msg': '중복되는 닉네임입니다. 다시 입력해주세요.'})
+
+
+# 비빌번호 변경 현비밀번호 체크
+@application.route('/check-password', methods=['POST'])
+@login_required
+def post_check_password():
+    user_id = request.user['_id']
+    password = request.form['password']
+
+    user = db.user.find_one({'_id': user_id})
+
+    # 비밀번호가 틀리면
+    if not bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8")):
+        return jsonify({"msg": "INVALID_PASSWORD"})
+
+    return jsonify({'msg': 'SUCCESS'})
+
+
+# 비빌번호 변경 새로운 비밀번호 유효성검사
+@application.route('/new-password', methods=['POST'])
+@login_required
+def post_new_password():
+    user_id = request.user['_id']
+    password = request.form['password']
+    password_validation = re.compile('^[a-zA-Z0-9]{6,}$')
+
+    user_data = request.user
+
+    # 비밀번호 유효성검사
+    if not password_validation.match(password):
+        return jsonify({"msg": "영어 또는 숫자로 6글자 이상으로 작성해주세요"})
+
+    # 비밀번호 암호화
+    byte_password = password.encode("utf-8")
+    encode_password = bcrypt.hashpw(byte_password, bcrypt.gensalt())
+    decode_password = encode_password.decode("utf-8")
+
+    # 비밀번호 확인
+    if bcrypt.checkpw(password.encode("utf-8"), user_data['password'].encode("utf-8")):
+        return jsonify({"msg": "NEED_NEW_PASSWORD"})
+
+    db.user.update_one({'_id': user_id}, {'$set': {'password': decode_password}})
+
+    return jsonify({'msg': 'SUCCESS'})
+
+
+# 회원탈퇴
+@application.route('/withdrawal', methods=['DELETE'])
+@login_required
+def withdrawal():
+    user_id = request.user['_id']
+    print(user_id)
+
+    db.user.delete_many({'_id': user_id})
+    db.time.delete_many({'user_id': user_id})
+    db.team.delete_many({'members': user_id})
+    db.user_info.delete_many({'user_id': user_id})
+
+    return jsonify({'msg': 'SUCCESS'})
+
+
+# 해당의 유저의 팀정보 불러오기
+@application.route('/user-team', methods=['GET'])
+@login_required
+def get_user_team():
+    user_data = request.user
+
+    if user_data['team'] is None:
+        return jsonify({'msg': 'no_team'})
+
+    user_team = user_data['team']
+    # find_user_id = db.user.find_one({'_id': user_id})
+
+    return jsonify({'msg': 'team_exist', 'user_team': user_team})
 
 
 # 캘린더 페이지 진입 시 개인정보를 가져옴.
@@ -198,7 +273,6 @@ def nickname_check():
 @login_required
 def get_info():
     user_id = request.user['_id']
-
     find_user_id = db.user.find_one({'_id': user_id})
 
     is_include_team = 0
@@ -502,10 +576,11 @@ def post_study_time_graph():
         'year': year,
         'month': month}, {'_id': False}).sort("day", 1))
 
+    last_day_of_month = monthrange(year, month)[1]
     # 만약 데이터가 없는 날짜는 0으로 처리한다.
     day_list = []
     day_time_list = []
-    for i in range(31):
+    for i in range(last_day_of_month + 1):
         day_list.append(i)
         day_time_list.append(0)
 
@@ -525,21 +600,19 @@ def post_weekly_avg_graph():
     weekday_avg_study_time_list = []
     for i in range(7):
         weekday_user_data = list(db.time.find({
-            'nick_id': user_id,
+            'user_id': user_id,
             'year': year,
             'month': month,
             'weekday': i}, {'_id': False}))
 
         # 만약 데이터가 없는 날짜는 0으로 처리한다.
         weekday_avg_study_time_list.append(0)
-
         # 평균구하기
         weekday_sum = 0
         day_count = 0
         for day in weekday_user_data:
             weekday_sum += int(day['study_time'])
             day_count += 1
-
         try:
             weekday_avg_study_time = weekday_sum // day_count
         except ZeroDivisionError:
@@ -565,15 +638,16 @@ def post_goal_modal():
     string_start_date = request.form['string_start_date']
     string_end_date = request.form['string_end_date']
     goal_hour = request.form['goal_hour']
+    goal_hour_validation = re.compile('^[0-9]{1,}$')
 
-    if goal_hour == '':
-        return jsonify({'msg': '목표시간을 입력해주세요'})
+    # 유효성검사
+    if not goal_hour_validation.match(goal_hour):
+        return jsonify({"msg": "목표시간을 다시 입력해주세요"})
 
-    goal_hour = int(goal_hour)
     db.user_info.update_one({'user_id': user_id}, {'$set': {
         'string_start_date': string_start_date,
         'string_end_date': string_end_date,
-        'goal_hour': goal_hour
+        'goal_hour': int(goal_hour)
     }})
 
     return jsonify({'msg': '성공'})
@@ -628,7 +702,10 @@ def get_goal_modal():
     if done_hour == 0:
         percent = 0
     elif done_hour != 0:
-        percent = (goal_hour // done_hour) * 100
+        print(done_hour)
+        print(goal_hour)
+        percent = round((done_hour / goal_hour) * 100)
+        print(percent)
 
     return jsonify({
         'string_start_date': string_start_date,
@@ -638,6 +715,36 @@ def get_goal_modal():
         'goal_hour': goal_hour,
         'done_hour': done_hour
     })
+
+
+# 닉네임 데이터 받기
+@application.route('/nickname-modal', methods=['POST'])
+@login_required
+def post_nickname_modal():
+    user_id = request.user['_id']
+    # nick_name = request.form.get('changed_nickname', False)
+    nick_name = request.form['changed_nickname']
+
+    # 닉네임 중복확인
+    if db.user.find_one({'nick_name': nick_name}) is not None:
+        return jsonify({'msg': '중복된 닉네임'})
+
+    db.user.update_one({'_id': user_id}, {'$set': {
+        'nick_name': nick_name
+    }})
+
+    return jsonify({'msg': '성공'})
+
+# 닉네임 데이터 주기
+@application.route('/nickname-modal', methods=['GET'])
+@login_required
+def get_nickname_modal():
+    user_id = request.user['_id']
+
+    user_data = db.user.find_one({'_id': user_id})
+    nick_name = user_data['nick_name']
+
+    return jsonify({'nick_name': nick_name})
 
 
 # 각오 데이터 받기
@@ -660,10 +767,6 @@ def post_resolution_modal():
 def get_resolution_modal():
     user_id = request.user['_id']
 
-    # user_id = request.user['_id']
-    # print(user_id)
-
-    # test = request.user['_id']
     user_data = db.user_info.find_one({'user_id': user_id})
     content = user_data['content']
 
