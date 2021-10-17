@@ -80,7 +80,7 @@
     left: 0;
     background-color: #5c9f24;
     visibility: hidden;
-    width: 0px;
+
     transition: all 0.3s ease-in-out 0s;
 }
 
@@ -329,15 +329,16 @@
 body {
     width: 100%;
     height: auto;
-    background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+    background-image: url("https://images.unsplash.com/photo-1634185612358-b26116c6fcc7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80");
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
     overflow: scroll;
 }
 
-p {
-    margin: 0 0 10px;
+.place {
+    font-weight: bold;
+    font-size: 40px;
 }
 
 h1 {
@@ -361,7 +362,7 @@ h1 {
     margin-top: 5px;
     display: inline-block;
     width: 49.6%;
-    border-right: 6px solid gray;
+    border-right: 2px solid gray;
     overflow: hidden;
 }
 
@@ -407,16 +408,18 @@ figure img {
     overflow: hidden;
     float: left;
     width: fit-content;
-    font-size: 50px;
+    font-size: 60px;
+    font-weight: bolder;
 }
 
-.aa {
+.weather {
     overflow: hidden;
     text-align: right;
     margin-right: 60px;
+    padding-bottom: 20px;
     height: fit-content;
-    position: relative;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .wise {
@@ -449,9 +452,10 @@ figure img {
 /*
 * 날짜, 시간, 출퇴근 화면
 */
-.checkin-img{
+.checkin-img {
     margin-top: 13%;
 }
+
 .right_body {
     text-align: center;
     width: 49.6%;
@@ -463,6 +467,8 @@ figure img {
 
 .day {
     color: white;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .Clock {
@@ -470,6 +476,7 @@ figure img {
     margin-top: 10px;
     font-size: 70px;
     color: white;
+    font-weight: bold;
 }
 
 .checkin-box {
@@ -477,37 +484,42 @@ figure img {
 }
 
 .timerBox {
-    width: 100%;
-    margin-top: 30px;
+    width: 50%;
+    height: 200px;
+
+    border: 1px solid gray;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqT0lwj4vVQCpojqpkBfEbr9m4qU16emsi4Q&usqp=CAU");
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 8px black;
+
+    margin: 8% 0 0 25%;
+    padding-top: 4%;
+
+
 }
 
 .timerBox .time {
-    font-size: 40pt;
-    font-family: 'Malgun Gothic';
-    text-align: center;
-    color: #dcdcdc;
+    font-size: 80px;
+
+
     text-shadow: 5px 5px #282828, 8px 8px #6e6e6e, 11px 11px #5a5a5a, 14px 14px #464646;
     margin: 0;
+    text-align: center;
+
 
 }
 
-.btn {
-    text-decoration: none;
-    font-size: 2rem;
-    display: inline-block;
-    border-radius: 5px;
-    padding: 5px 3px 10px 4px;
-    transition: all 0.1s;
-    color: white;
-    text-shadow: 0px -2px rgba(0, 0, 0, 0.5);
-    font-family: 'Orbitron', sans-serif;
+.timerBox.time.stopwatch {
+    padding-top: 7%;
+    border-radius: 15px 15px 15px 0;
+    font-size: 50px;
+    border: 3px solid #DCDCDC;
+    color: #DCDCDC;
+    font-weight: bold;
 
 }
 
-.btn.green {
-    background-color: #D3D3D3;
-    border-bottom: 5px solid #A9A9A9;
-}
 
 .btn:active {
     transform: translateY(3px);
@@ -515,4 +527,65 @@ figure img {
 
 .btn.green:active {
     border-bottom: 2px solid #696969;
+}
+
+/*@import url(https://fonts.googleapis.com/css?family=BenchNine:700);*/
+.snip1535 {
+    background-color: #778899;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'BenchNine', Arial, sans-serif;
+    font-size: 1em;
+    font-size: 22px;
+    line-height: 1em;
+    margin: 10% 40px;
+    outline: none;
+    padding: 12px 40px 10px;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.snip1535:before,
+.snip1535:after {
+    border-color: transparent;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+    border-style: solid;
+    border-width: 0;
+    content: "";
+    height: 24px;
+    position: absolute;
+    width: 24px;
+}
+
+.snip1535:before {
+    border-color: #778899;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    right: -5px;
+    top: -5px;
+}
+
+.snip1535:after {
+    border-bottom-width: 2px;
+    border-color: #778899;
+    border-left-width: 2px;
+    bottom: -5px;
+    left: -5px;
+}
+
+.snip1535:hover,
+.snip1535.hover {
+    background-color: #D3D3D3;
+}
+
+.snip1535:hover:before,
+.snip1535.hover:before,
+.snip1535:hover:after,
+.snip1535.hover:after {
+    height: 100%;
+    width: 100%;
 }

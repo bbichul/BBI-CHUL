@@ -72,15 +72,14 @@ function team_check() {
 function hide_teamname() {
     $("#can-using").hide()
     $("#cant-using").hide()
-    $("#cant-using2").hide()
+    $("#double-check").hide()
 }
 
 // 팀 만들기 기능
 function create_team() {
-    let str_space = /\s/;
     my_team = $('#team-name').val()
 
-
+        // hidden input의 value로 중복확인 버튼을 눌렀는지 안눌렀는지 확인
     if ($("input[name=checked-team]").val() != 'y') {
         alert("중복확인을 통과한 경우만 만들 수 있습니다.")
         $("#team-name").val(null);
@@ -166,17 +165,17 @@ function teamname_check() {
             },
             success: function (response) {
                 if (response['msg'] == "사용할 수 있는 팀 이름입니다.") {
-                    $("#cant-using2").hide()
+                    $("#double-check").hide()
                     $("#cant-using").hide()
                     $("#can-using").show()
                     $("input[name=checked-team]").val('y');
                 } else if (response['msg'] == "중복되는 팀 이름입니다. 다시 입력해주세요.") {
-                    $("#cant-using2").hide()
+                    $("#double-check").hide()
                     $("#can-using").hide()
                     $("#cant-using").show()
                     $("input[name=checked-team]").val('');
                 } else if (response['msg'] == "특수문자를 제외하고 작성해주세요"){
-                    $("#cant-using2").show()
+                    $("#double-check").show()
                     $("#cant-using").hide()
                     $("#can-using").hide()
                     $("input[name=checked-team]").val('');
@@ -292,7 +291,6 @@ function deletetask(team, task) {
 
 // 할 일을 완료했는지 안 했는지 상태 변경 및 저장
 function changedone(team, task, done) {
-    console.log(team, task, done)
     $.ajax({
         type: "POST",
         url: `/change-done`,
@@ -326,7 +324,6 @@ function checkstatus() {
         data: {},
         success: function (response) {
             let user_data = response['user_data']
-            console.log(user_data)
             for (let i = 0; i < user_data.length; i++) {
                 let nick_name = user_data[i]['nick_name']
                 let status = user_data[i]['status']

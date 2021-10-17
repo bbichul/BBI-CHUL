@@ -1,6 +1,5 @@
 //새로고침마다 로그인 상태에 따라 로그인/아웃이 바뀜
 $(document).ready(function () {
-    console.log(getCookie('access_token'))
     if(getCookie("access_token") == null){
         $('#login-button').show()
         $('#logout-button').hide()
@@ -55,7 +54,7 @@ function main_login_check() {
 
 // 회원가입 기능
 function sign_up() {
-    let nick_name = $('#signup_nickname').val()
+    let nick_name = $('#nickname').val()
     let password = $('#signup_password').val()
 
     $.ajax({
@@ -90,6 +89,7 @@ function hide_nickname() {
 function login() {
     let nick_name = $('#login_nickname').val()
     let password = $('#login_password').val()
+
     $.ajax({
         type: "POST",
         url: "/login",
@@ -122,8 +122,8 @@ function log_out() {
 
 // 회원가입시 닉네임 중복확인 기능
 function nickname_check() {
-    let nick_name = $('#signup_nickname').val()
-
+    let nick_name = $('#nickname').val()
+    console.log(nick_name)
     $.ajax({
         type: "POST",
         url: "/nickname",
