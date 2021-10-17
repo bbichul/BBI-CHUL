@@ -262,8 +262,6 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     document.getElementById("hour").innerHTML = '00:';
     document.getElementById("minute").innerHTML = '00:';
     document.getElementById("seconds").innerHTML = '00';
-    sessionStorage.setItem("time", "timer");
-
 
 });
 
