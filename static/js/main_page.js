@@ -157,7 +157,7 @@ function handleGeoErr() {
             let $temp_min = json.main.temp_min;//최저온도
             let icon = json.weather[0].icon;//날씨아이콘
             let $wId = json.weather[0].id; // 날씨 상태 id 코드
-            let $icon = 'http://openweathermap.org/img/w/' + icon
+            let $icon = 'https://openweathermap.org/img/w/' + icon
 
             $('.csky').append($sky);
             $('.temp').append($temp + "°C");
@@ -262,6 +262,8 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     document.getElementById("hour").innerHTML = '00:';
     document.getElementById("minute").innerHTML = '00:';
     document.getElementById("seconds").innerHTML = '00';
+    sessionStorage.setItem("time", "timer");
+
 
 });
 

@@ -1,5 +1,5 @@
 #my-page {
-    background-image: url("../img/background.png");
+    background-image: url("https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1219&q=80");
     background-position: center;
     background-size: cover;
     margin-top: 80px;
@@ -16,7 +16,6 @@
     width: 100%;
     display: inline-block;
     vertical-align: middle;
-    background-color: lightgray;
     border-radius: 20px;
     padding: 20px 50px;
 }
@@ -53,7 +52,7 @@
     display: inline-block;
 }
 
-#change-nickname {
+#nickname-button {
     margin-left: 20px;
     width: 50px;
     float: right;
@@ -61,6 +60,12 @@
     height: 35px;
     line-height: 25px;
 }
+
+#nickname {
+    display: inline-block;
+    width: 200px;
+}
+
 
 /* 진행바*/
 #progress-button {
@@ -197,20 +202,28 @@
     resize: none;
 }
 
-/*소속팀*/
-.team-title{
-    font-size: 18px;
-    font-weight: 700;
-    color: #000;
-    margin: 10px 0;
+#password-change-button {
+    margin-left: 20px;
+    width: 50px;
+    float: right;
+    display: inline;
+    height: 35px;
+    line-height: 25px;
+}
+
+.password_eye {
     display: inline-block;
 }
 
-.team-list {
-    height: 180px;
-    width: 100%;
-    background-color: #E0E0E0;
-    border-radius: 20px;
+
+#now-password {
+    display: inline-block;
+    width: 200px;
+}
+
+#new-password {
+    display: inline-block;
+    width: 200px;
 }
 
 /* 바말번호 변경*/
@@ -225,28 +238,37 @@
     display: inline-block;
 }
 
-#password-change-button {
-    margin-left: 20px;
-    width: 50px;
-    float: right;
-    display: inline;
-    height: 35px;
-    line-height: 25px;
+
+/*소속팀*/
+.team-title{
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.team-list {
+    height: 180px;
+    width: 100%;
+    background-color: #E0E0E0;
+    border-radius: 20px;
+    padding: 20px;
 }
 
 /*회원탈퇴*/
-.sign-out {
+.withdrawal {
     margin-top: 30px;
 }
 
-.sign-out-title {
+.withdrawal-title {
     font-size: 18px;
     font-weight: 700;
     color: #000;
     display: inline-block;
 }
 
-#sign-out-button {
+#withdrawal-button {
     margin-left: 20px;
     width: 50px;
     float: right;
