@@ -372,6 +372,23 @@ h1 {
     color: #fff;
 }
 
+.weather-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.weather-box .lbox {
+    width: 50%;
+    margin-left: 15%;
+}
+
+.weather-box .rbox {
+    width: 50%;
+    justify-content: center;
+    align-self: center;
+    margin-right: 10%;
+}
+
 section {
     width: 100%;
     padding-top: 20px;
@@ -383,7 +400,7 @@ section {
 }
 
 figure img {
-    width: 80px;
+    width: 100px;
 }
 
 .icon {
@@ -392,15 +409,15 @@ figure img {
 
 .csky {
     font-size: 20px;
-    margin-right: 540px;
+
 }
 
-.fig {
-    width: 100%;
-    height: 100px;
-    overflow: hidden;
-    position: relative;
-}
+/*.fig {*/
+/*    width: 100%;*/
+/*    height: 100px;*/
+/*    !*overflow: hidden;*!*/
+/*    position: relative;*/
+/*}*/
 
 .temp {
     display: inline-block;
@@ -408,7 +425,7 @@ figure img {
     overflow: hidden;
     float: left;
     width: fit-content;
-    font-size: 60px;
+    font-size: 30px;
     font-weight: bolder;
 }
 
@@ -416,7 +433,7 @@ figure img {
     overflow: hidden;
     text-align: right;
     margin-right: 60px;
-    padding-bottom: 20px;
+
     height: fit-content;
     font-size: 16px;
     font-weight: bold;
