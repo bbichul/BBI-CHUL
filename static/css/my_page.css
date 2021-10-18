@@ -1,14 +1,20 @@
-#my-page {
-    background-image: url("https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1219&q=80");
+body {
+    background-image: url("../img/book.jpg");
     background-position: center;
     background-size: cover;
+    height: 1000px;
+    overflow: hidden;
+}
+
+
+#my-page {
     margin-top: 80px;
-    background-color: papayawhip;
     display: inline-block;
     vertical-align: middle;
     width: 100%;
     height: 880px;
     padding: 2%;
+    background-color: rgba(0,0,0,0.5);
 }
 
 #record-container {
@@ -25,6 +31,7 @@
 #my-page-menu {
     height: 6%;
     padding: 10px;
+    color: white;
 }
 
 .form-select {
@@ -40,7 +47,6 @@
     margin: 0;
     padding-right: 50px;
     float: left;
-    border-right:2px solid gray;
 }
 
 /*닉네임*/
@@ -83,6 +89,7 @@
     border-radius: 20px;
     padding: 5% 7%;
 }
+
 
 .progress-title{
     font-size: 18px;

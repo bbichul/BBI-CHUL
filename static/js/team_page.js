@@ -57,6 +57,8 @@ function team_check() {
             if (my_team != null) {
                 $('.not-exist').hide()
                 let team = `${my_team}`
+                $('#team').css('color', `whitesmoke`);
+                $('#team').css('font-size', `40px`);
                 $('#team').append(team)
                 checkstatus();
                 show_task(my_team)
