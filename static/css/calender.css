@@ -4,6 +4,7 @@ body{
   background-position: center;
   background-size: cover;
   height: 100vw;
+  overflow-y: hidden;
 }
 
 section.calAndText{

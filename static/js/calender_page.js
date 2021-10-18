@@ -70,7 +70,7 @@ const renderCalendar = () => {
 
 
         dates[i] = `<div class="date">
-                        <button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date}<span id="${viewYear}Y${getMonth}M${date}text" class="date-on-text"></span></button>
+                        <button id="${viewYear}Y${getMonth}M${date}" onclick="dayClick(this)" class="${condition}">${date} <span id="${viewYear}Y${getMonth}M${date}text" class="date-on-text"></span></button>
                     </div>`;
 
     })
@@ -100,9 +100,14 @@ function getInfo() {
             is_include_team = response['is_include_team']
             let calender_info = response['calender_info']
 
+
             if (is_include_team == 1) {
                 selected_cal_now = 'T1';
+                $("#dropdownMenuLink").text(team_name + " 캘린더 1");
+            } else {
+                $("#dropdownMenuLink").text(nick_name + " 캘린더 1");
             }
+
 
             let count, team_count;
             for (let i = 0; i < calender_info.length; i++) {
@@ -160,20 +165,20 @@ function setCalender(obj) {
     let select_calender_id = $(obj).attr('value');
 
     if (selected_cal_now == select_calender_id) {
-        alert("현재 선택 된 달력입니다.")
+        alert("현재 선택 된 캘린더입니다.")
     } else {
 
         selected_cal_now = select_calender_id;
-
-        alert("캘린더로 변경 되었습니다.")
 
         let isPrivate = selected_cal_now.substr(0, 1);
         let calender_num = selected_cal_now.substr(1, 1);
 
         if (isPrivate == 'T') {
             $('#dropdownMenuLink').text(team_name + " 캘린더 " + calender_num);
+            alert(team_name + calender_num + " 캘린더로 변경 되었습니다.")
         } else if (isPrivate == 'P') {
             $('#dropdownMenuLink').text(nick_name + " 캘린더 " + calender_num);
+            alert(nick_name + calender_num + " 캘린더로 변경 되었습니다.")
         }
 
         renderCalendar();
@@ -198,9 +203,17 @@ function getMemo() {
 
             for (let key in take_text) {
                 let text_id = key + 'text';
-                let load_text = take_text[key];
+                let load_text = take_text[key].substr(0, 5);
 
-                $('#' + text_id).text(load_text);
+                if(load_text.length > 4){
+                 $('#' + text_id).text(load_text + "・・・");
+                }else{
+                 $('#' + text_id).text(load_text);
+                }
+
+                if (load_text == "") {
+                    $('#' + text_id).text('');
+                }
 
             }
         }
@@ -270,6 +283,28 @@ function updateText() {
 
 }
 
-//TODO: 금요일 ~
-//TODO: 캘린더 페이지 입장시 마지막 선택한 달력 이름으로 로드
+// 캘린더 노트 실시간 반영
+let oldVal ='';
+$("#calenderNote").on("propertychange change keyup paste input", function () {
+    let currentVal = $(this).val();
+    if (currentVal == oldVal) {
+        return;
+    }
+    console.log(btn_year_month_day)
+
+
+    oldVal = currentVal;
+
+    if( oldVal.length > 4){
+     $('#' + btn_year_month_day + "text").text(oldVal.substr(0, 5) + '・・・');
+    }else{
+        $('#' + btn_year_month_day + "text").text(oldVal.substr(0, 5));
+    }
+
+    if (currentVal == '') {
+        $('#' + btn_year_month_day + "text").text('');
+    }
+});
+
+
 //TODO: 메모 타이틀 넣어서 노션 캘린더 비스무리하게 만들기,,

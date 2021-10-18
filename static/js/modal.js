@@ -125,7 +125,6 @@ function log_out() {
 // 회원가입시 닉네임 중복확인 기능
 function nickname_check() {
     let nick_name = $('#signup_nickname').val()
-
     $.ajax({
         type: "POST",
         url: "/nickname",
