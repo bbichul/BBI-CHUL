@@ -283,6 +283,7 @@ def get_info():
     # 유저 정보로 캘린더 검색
     find_cal_private = db.calender.find_one({'user_id': user_id})
     find_cal_team = db.calenderTeam.find_one({'team_name': team_name})
+
     # 개인캘린더가 없을 시 하나 추가
     if find_cal_private is None:
         db.calender.insert_one({'user_id': user_id, 'calender_count': 1, 'private_cal1': {}})
