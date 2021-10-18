@@ -400,7 +400,7 @@ function post_weekly_avg_graph() {
                 data: {
                     labels: ['월', '화', '수', '목', '금', '토', '일'],
                     datasets: [{
-                        label: "요일별 평균 공부시간",
+                        label: "초",
                         data: [monday, tuesday, wednesday, thursday, friday, saturday, sunday],
                         backgroundColor: '#3E83FE',
                     }]
