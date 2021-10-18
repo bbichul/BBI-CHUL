@@ -1,6 +1,5 @@
 body {
     height: 1000px;
-    overflow: hidden;
     background-image: url("../img/book.jpg");
     background-position: center;
     background-size: cover;
