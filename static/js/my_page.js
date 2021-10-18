@@ -4,10 +4,13 @@ $("#month").val(10);
 
 
 $(document).ready(function () {
-    my_info()
+    // my_info()
     post_study_time_graph()
     post_weekly_avg_graph()
     get_goal_modal()
+    get_resolution_modal()
+    get_nickname_modal()
+    get_user_team()
 });
 
 //select-box에서 월이 바뀌면 날짜에 맞는 그래프를 다시불러옴
@@ -36,6 +39,8 @@ function post_goal_modal() {
     let string_start_date = start_year + '-' + start_month  + '-' + start_day;
     let string_end_date = end_year + '-' + end_month  + '-' + end_day;
 
+    let goal_hour = $("input[name=goal_hour]").val()
+
     if (days >= 0) {
             $.ajax({
                 type: "POST",
@@ -46,10 +51,12 @@ function post_goal_modal() {
                 data: {
                     string_start_date: string_start_date,
                     string_end_date: string_end_date,
-                    goal_hour: $("input[name=goal_hour]").val()
+                    goal_hour: goal_hour
                 },
                 success: function (response) {
-                    window.location.reload();
+                    if (response['msg'] == "목표시간을 다시 입력해주세요") {
+                        alert(response['msg'])
+                    } else {window.location.reload();}
                 }
             })
     }else{
@@ -68,17 +75,17 @@ function get_goal_modal() {
         success: function (response) {
             let string_start_date = response['string_start_date']
             let string_end_date = response['string_end_date']
+            let d_day = response['d_day']
             let goal_hour = response['goal_hour']
             let done_hour = response['done_hour']
+            let percent = response['percent']
 
             let temp_html = `<p style="float: right">(${done_hour}/${goal_hour}시간)</p>`
             $('.progress-title').append(temp_html)
 
-            $('.start-date-box').append(`${string_start_date}`)
-            $('.end-date-box').append(`${string_end_date}`)
-            $('.d-day-box').append(`D-8`)
-
-            let percent = Math.round((done_hour / goal_hour) * 100)
+            $('.start-date-box').append(`${string_start_date}`);
+            $('.end-date-box').append(`${string_end_date}`);
+            $('.d-day-box').append(`D-${d_day}`);
             $('.progress-value').css('font-size', `25px`);
             $('.progress-value').css('line-height', `44px`);
             $('.progress-value').append(`${percent}%`)
@@ -89,6 +96,186 @@ function get_goal_modal() {
         }
     })
 }
+
+function post_resolution_modal() {
+    let content = $("#resolution-content").val()
+    $.ajax({
+        type: "POST",
+        url: "/resolution",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            content: content
+        },
+        success: function (response) {
+            if (response['msg'] == '성공') {
+                get_resolution_modal()
+                $('#resolution-close').click()
+            }
+        }
+    })
+}
+
+function get_resolution_modal() {
+    $.ajax({
+        type: "GET",
+        url: "/resolution",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+        },
+        success: function (response) {
+            let content = response['content']
+            $('.resolution-text').text(`${content}`)
+        }
+    })
+}
+
+function post_nickname_modal() {
+    let changed_nickname = $("#nickname").val()
+    console.log(changed_nickname)
+    $.ajax({
+        type: "POST",
+        url: "/nickname-modal",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            changed_nickname: changed_nickname
+        },
+        success: function (response) {
+            if (response['msg'] == '성공') {
+                get_nickname_modal()
+                $('#nickname-close').click()
+            }else if (response['msg']) {
+                alert(response['msg'])
+                $("#nickname").val('')
+            }
+        }
+    })
+}
+
+function get_nickname_modal() {
+    $.ajax({
+        type: "GET",
+        url: "/nickname-modal",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+        },
+        success: function (response) {
+            let nickname = response['nick_name']
+            $('.present-nickname').text(`${nickname}`)
+        }
+    })
+}
+
+function get_user_team() {
+    $.ajax({
+        type: "GET",
+        url: "/user-team",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+        },
+        success: function (response) {
+            let user_team = response['user_team']
+            if (response['msg'] == 'team_exist') {
+                $(".team-list").append(`${user_team}`)
+                console.log(user_team)
+            } else if (response['msg'] == 'no_team') {
+                $(".team-list").append(`아직 팀이 없습니다.`)
+            }
+        }
+    })
+}
+
+
+// 비밀번호 숨기기/보기 기능
+$(".password_eye").on("mousedown", function(){
+    $('.password').attr('type',"text");
+}).on('mouseup mouseleave', function() {
+    $('.password').attr('type',"password");
+});
+
+
+function post_check_password() {
+    let password = $('#now-password').val()
+    $.ajax({
+        type: "POST",
+        url: "/check-password",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                $(".password").val('')
+                $('#now-password-staticBackdrop').modal('hide')
+                $('#new-password-staticBackdrop').modal('show')
+            } else if (response['msg'] == 'INVALID_PASSWORD') {
+                alert('비밀번호가 일치하지 않습니다.')
+                $(".password").val('')
+            }
+        }
+    })
+}
+
+function post_new_password() {
+    let password = $('#new-password').val()
+    $.ajax({
+        type: "POST",
+        url: "/new-password",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                alert('성공적으로 변경되었습니다.')
+                $(".password").val('')
+                $('#new-password-staticBackdrop').modal('hide')
+            } else if (response['msg'] == "영어 또는 숫자로 6글자 이상으로 작성해주세요") {
+                alert(response["msg"]);
+                $(".password").val('')
+            } else if (response['msg'] == "NEED_NEW_PASSWORD") {
+                alert("새로운 비밀번호를 입력해주세요");
+                $(".password").val('')
+            }
+        }
+    })
+}
+
+
+function withdrawal() {
+    let password = $('#new-password').val()
+    $.ajax({
+        type: "DELETE",
+        url: "/withdrawal",
+        headers: {
+            Authorization:  getCookie('access_token')
+        },
+        data: {
+            password: password
+        },
+        success: function (response) {
+            if (response['msg'] == 'SUCCESS') {
+                alert('회원 탈퇴되었습니다.')
+                deleteCookie('access_token')
+            location.href ="/";
+            }
+        }
+    })
+}
+
 
 // 진행바
 $(document).ready(function(){
@@ -215,7 +402,7 @@ function post_weekly_avg_graph() {
                     datasets: [{
                         label: "요일별 평균 공부시간",
                         data: [monday, tuesday, wednesday, thursday, friday, saturday, sunday],
-                        backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'],
+                        backgroundColor: '#3E83FE',
                     }]
                 },
                 options: {
