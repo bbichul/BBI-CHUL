@@ -95,7 +95,7 @@ function create_team() {
             },
             success: function (response) {
                 if (response["msg"] == '팀 만들기 완료') {
-                    alert(response["팀을 만들었습니다."]);
+                    alert(response["msg"]);
                     $('#create-team-close').click()
                     $('.not-exist').hide()
                     $('.team-exist').show()

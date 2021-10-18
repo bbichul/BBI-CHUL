@@ -244,7 +244,7 @@ def withdrawal():
 
     db.user.delete_many({'_id': user_id})
     db.time.delete_many({'user_id': user_id})
-    db.team.delete_many({'members': user_id})
+    db.team.delete_many({'user_id': user_id})
     db.user_info.delete_many({'user_id': user_id})
 
     return jsonify({'msg': 'SUCCESS'})
@@ -787,7 +787,7 @@ def create_team():
 
     doc = {
         'team': team_name,
-        'user': user_id,
+        'user_id': user_id,
         'position': "팀장"
     }
     db.team.insert_one(doc)
@@ -824,7 +824,7 @@ def invite_team():
     if db.user.find_one({'team': team_name}) is not None:
         doc = {
             'team': team_name,
-            'user': user_id,
+            'user_id': user_id,
             'position': "팀원"
         }
         db.team.insert_one(doc)
