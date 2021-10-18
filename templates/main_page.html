@@ -72,19 +72,33 @@
         <div id="weather_info">
             <h1 class="place"></h1>
 
-            <section>
-                <p class="csky"></p>
-                <figure class="icon"></figure>
-                <div class="fig">
-                    <p class="temp"></p>
-                    <div class="aa">
 
+            <div class="weather-box" >
+
+
+                <div class="lbox">
+
+                    <p class="csky"></p>
+                    <figure class="icon"></figure>
+                    <div class="fig">
+                        <p class="temp"></p>
+
+                    </div>
+                </div>
+                <div class="rbox">
+
+
+                    <div class="weather">
                         <p class="temp_max">최고기온:&nbsp</p>
                         <p class="temp_min">최저기온:&nbsp</p>
                         <p class="humidity">강수량:&nbsp</p>
                     </div>
                 </div>
-            </section>
+
+
+            </div>
+
+
         </div>
         <div class="wise">
             <p id="wise-box">
@@ -96,8 +110,8 @@
 
             <audio controls id="myaudio">
                 <source id="main">
-                <source src="../static/audio/fire.mp3">
-                <source src="../static/audio/night.mp3">
+                <source src="../static/audio/studymusic.mp3">
+                <source src="../static/audio/studymusic2.mp3">
 
 
             </audio>
@@ -107,6 +121,7 @@
     </div>
     <!--    화면 기준 왼쪽 -->
     <!--    화면 기준 오른쪽 -->
+    <!--    현재 날짜 및 시간-->
     <div class="right_body">
         <div class="day" id="Clockday">00/00/00</div>
         <div class="Clock" id="Clock">00:00</div>
@@ -115,25 +130,18 @@
         <div class="checkin-box">
 
         </div>
+        <!--          공부시간 및 버튼-->
+        <div class="timerBox time stopwatch"><span id="hour"></span><span
+                id="minute"></span><span id="seconds"></span></div>
 
 
-        <div class="checkin-img">
-            <a class="btn green" href="#green" onclick="check_in()" id="startbtn">START</a>
-        </div>
-        <div class="checkout-box">
-            <div id='box' class="timer">
+        <button class="start snip1535" id="start-btn" onclick="check_in()">Start</button>
 
-                <a class="btn green" href="#green" id="pausebtn" onclick='stopCount()'>STOP</a>
 
-                <div class="checkout-img">
-                    <a class="btn green" href="#green" id="stopbtn" onclick="checkout_choice()">END</a>
-                </div>
+        <button class="stop snip1535" id="stop-btn">Pause</button>
 
-                <div id='timerBox' class="timerBox">
-                    <div id="time" class="time">00:00:00초 동안 업무중</div>
-                </div>
-            </div>
-        </div>
+
+        <button onclick="checkout_choice()" class="end snip1535" id="reset-btn">Stop</button>
 
 
     </div>
@@ -206,7 +214,7 @@
             </div>
         </div>
     </div>
-
+</div>
 
 </body>
 </html>

@@ -1,14 +1,33 @@
 /*캘린더 CSS시작*/
 body{
-  background-image: url("../img/main_backgroung.jpg");
+  background-image: url("https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1172&q=80");
   background-position: center;
   background-size: cover;
-  height: 100vw;
+  height: 1000px;
 }
+body:before{
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1000px;
+  position:absolute;
+  top:0;
+  left:0;
+  background-color: rgba(0,0,0,0.3); }
+
+
 
 section.calAndText{
 
 }
+
+section.calAndText .container{
+  background-color: rgba(255,255,255, 0.8);
+  border-radius: 10px;
+  margin-top: 70px;
+  padding: 0px 15px 0px 15px;
+}
+
 
 section.calAndText .other {
   width: 100%;
@@ -36,21 +55,17 @@ section.calAndText .this:hover{
 }
 
 #calenderNote{
+  width: 100%;
   background-color: rgba(255,255,255,0.4);
 }
 
-section.calAndText .container{
-  width:70%;
-  height:auto;
-}
-
 section.calAndText .calendar {
-  padding-top: 50px;
+  margin: 30px 0 30px 0;
 }
 
 
 section.calAndText .noteBox{
-  padding-top: 140px;
+  margin-top: 115px;
 }
 
 section.calAndText .header {
@@ -123,8 +138,33 @@ section.calAndText .date .date-on-text{
 }
 
 #btn-memo-save {
-  width: 263px;
+  width: 100%;
+  border : 2px solid #5c9f24;
+  background-color: rgba(0,0,0, 0.7);
+  transition: 0.3s;
 }
+
+#btn-memo-save:hover{
+  background-color: #5c9f24;
+}
+
+
+.btn-select-link{
+  border : 2px solid #5c9f24;
+  background-color: rgba(0,0,0, 0.7);
+  transition: 0.3s;
+}
+
+.btn-select-link:hover{
+  border : 2px solid #5c9f24;
+  background-color: #5c9f24;
+}
+
+.btn-select-link:focus{
+  border : 2px solid #5c9f24;
+  background-color: #5c9f24;
+}
+
 
 section.calAndText .day:nth-child(7n + 1),
 section.calAndText .date:nth-child(7n + 1) {

@@ -1,326 +1,3 @@
-#header {
-    background: rgba(0, 0, 0, 0.75);
-    transition: all 0.5s;
-    z-index: 997;
-    height: 80px;
-}
-
-#header .logo {
-    font-size: 28px;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-#header .logo a {
-    color: #fff;
-}
-
-#header .logo img {
-    max-height: 40px;
-}
-
-/*--------------------------------------------------------------
-# Navigation Menu
---------------------------------------------------------------*/
-/*
-* Desktop Navigation
-*/
-.navbar {
-    padding: 0;
-}
-
-.navbar ul {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    list-style: none;
-    align-items: center;
-}
-
-.navbar li {
-    position: relative;
-}
-
-.navbar > ul > li {
-    white-space: nowrap;
-    padding: 10px 0 10px 22px;
-}
-
-.navbar a, .navbar a:focus {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 4px;
-    font-family: "Roboto", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
-    white-space: nowrap;
-    transition: 0.3s;
-    text-transform: uppercase;
-    position: relative;
-}
-
-.navbar a i, .navbar a:focus i {
-    font-size: 12px;
-    line-height: 0;
-    margin-left: 5px;
-}
-
-.navbar > ul > li > a:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: -6px;
-    left: 0;
-    background-color: #5c9f24;
-    visibility: hidden;
-    width: 0px;
-    transition: all 0.3s ease-in-out 0s;
-}
-
-.navbar a:hover:before, .navbar li:hover > a:before, .navbar .active:before {
-    visibility: visible;
-    width: 100%;
-}
-
-.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
-    color: #fff;
-}
-
-.navbar .getstarted, .navbar .getstarted:focus {
-    padding: 8px 25px;
-    margin-left: 12px;
-    border-radius: 4px;
-    color: #fff;
-    font-weight: 400;
-    font-family: "Poppins", sans-serif;
-    border: 2px solid #5c9f24;
-}
-
-.navbar .getstarted:hover, .navbar .getstarted:focus:hover {
-    color: #fff;
-    background: #5c9f24;
-}
-
-.navbar .getstarted:hover:before, .navbar li:hover > .getstarted:before {
-    visibility: hidden;
-}
-
-.navbar .dropdown ul {
-    display: block;
-    position: absolute;
-    left: 22px;
-    top: calc(100% + 30px);
-    margin: 0;
-    padding: 10px 0;
-    z-index: 99;
-    opacity: 0;
-    visibility: hidden;
-    background: #fff;
-    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
-    transition: 0.3s;
-}
-
-.navbar .dropdown ul li {
-    min-width: 200px;
-}
-
-.navbar .dropdown ul a {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: none;
-    color: #2a2a2a;
-}
-
-.navbar .dropdown ul a i {
-    font-size: 12px;
-}
-
-.navbar .dropdown ul a:hover, .navbar .dropdown ul .active:hover, .navbar .dropdown ul li:hover > a {
-    color: #5c9f24;
-}
-
-.navbar .dropdown:hover > ul {
-    opacity: 1;
-    top: 100%;
-    visibility: visible;
-}
-
-.navbar .dropdown .dropdown ul {
-    top: 0;
-    left: calc(100% - 30px);
-    visibility: hidden;
-}
-
-.navbar .dropdown .dropdown:hover > ul {
-    opacity: 1;
-    top: 0;
-    left: 100%;
-    visibility: visible;
-}
-
-@media (max-width: 1366px) {
-    .navbar .dropdown .dropdown ul {
-        left: -90%;
-    }
-
-    .navbar .dropdown .dropdown:hover > ul {
-        left: -100%;
-    }
-}
-
-/*
-* Mobile Navigation
-*/
-.mobile-nav-toggle {
-    color: #fff;
-    font-size: 28px;
-    cursor: pointer;
-    display: none;
-    line-height: 0;
-    transition: 0.5s;
-}
-
-.mobile-nav-toggle.bi-x {
-    color: #5c9f24;
-}
-
-@media (max-width: 991px) {
-    .mobile-nav-toggle {
-        display: block;
-    }
-
-    .navbar ul {
-        display: none;
-    }
-}
-
-.navbar-mobile {
-    position: fixed;
-    overflow: hidden;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background: rgba(17, 17, 17, 0.9);
-    transition: 0.3s;
-    z-index: 999;
-}
-
-.navbar-mobile .mobile-nav-toggle {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-}
-
-.navbar-mobile ul {
-    display: block;
-    position: absolute;
-    top: 55px;
-    right: 15px;
-    bottom: 15px;
-    left: 15px;
-    padding: 10px 0;
-    background-color: #fff;
-    overflow-y: auto;
-    transition: 0.3s;
-}
-
-.navbar-mobile a, .navbar-mobile a:focus {
-    padding: 10px 20px;
-    font-size: 15px;
-    color: #2a2a2a;
-}
-
-.navbar-mobile a:hover, .navbar-mobile .active, .navbar-mobile li:hover > a {
-    color: #5c9f24;
-}
-
-.navbar-mobile > ul > li {
-    white-space: nowrap;
-    padding: 0;
-}
-
-.navbar-mobile a:hover:before, .navbar-mobile li:hover > a:before, .navbar-mobile .active:before {
-    visibility: hidden;
-}
-
-.navbar-mobile .getstarted, .navbar-mobile .getstarted:focus {
-    margin: 15px;
-    color: #5c9f24;
-    padding-left: 15px;
-}
-
-.navbar-mobile .dropdown ul {
-    position: static;
-    display: none;
-    margin: 10px 20px;
-    padding: 10px 0;
-    z-index: 99;
-    opacity: 1;
-    visibility: visible;
-    background: #fff;
-    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
-}
-
-.navbar-mobile .dropdown ul li {
-    min-width: 200px;
-}
-
-.navbar-mobile .dropdown ul a {
-    padding: 10px 20px;
-}
-
-.navbar-mobile .dropdown ul a i {
-    font-size: 12px;
-}
-
-.navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover > a {
-    color: #5c9f24;
-}
-
-.navbar-mobile .dropdown > .dropdown-active {
-    display: block;
-}
-
-
-/* -----------------------------------------------------*/
-/*                로그인 모달창                            */
-/*------------------------------------------------------*/
-
-.modal-title {
-    display: inline-block;
-    font-family: inherit;
-    font-weight: 500;
-    height: 44px;
-    line-height: 54px;
-
-}
-
-.input-box {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.input-box input {
-    display: block;
-    width: 100%;
-}
-
-.modal-content {
-    text-align: center;
-}
-
-#cant-using {
-    color: red;
-}
 
 /* -----------------------------------------------------*/
 /*                날씨, 타이머 부분                         */
@@ -328,28 +5,33 @@
 
 body {
     width: 100%;
-    height: auto;
-    background-image: url("https://i.imgur.com/Xh7wwnB.jpg");
+    height:1000px;
+    background-image: url("https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80");
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
-    overflow: scroll;
+    background-repeat:no-repeat ;
 }
 
-p {
-    margin: 0 0 10px;
+
+
+.place {
+    font-weight: bold;
+    font-size: 40px;
 }
 
 h1 {
     padding: 10px;
-    font-size: 1.8em;
+
     text-align: center;
-    opacity: 0.8;
+
 }
 
 .body_wrapper {
     position: relative;
     margin-top: 80px;
+    background-color: rgba(0,0,0,0.5);
+    height: 100%;
 }
 
 /*
@@ -361,7 +43,8 @@ h1 {
     margin-top: 5px;
     display: inline-block;
     width: 49.6%;
-    border-right: 6px solid gray;
+    border-right: 2px solid gray;
+    height: 99%;
     overflow: hidden;
 }
 
@@ -369,6 +52,23 @@ h1 {
     position: relative;
     overflow: hidden;
     color: #fff;
+}
+
+.weather-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.weather-box .lbox {
+    width: 50%;
+    margin-left: 15%;
+}
+
+.weather-box .rbox {
+    width: 50%;
+    justify-content: center;
+    align-self: center;
+    margin-right: 10%;
 }
 
 section {
@@ -382,7 +82,7 @@ section {
 }
 
 figure img {
-    width: 80px;
+    width: 100px;
 }
 
 .icon {
@@ -391,15 +91,15 @@ figure img {
 
 .csky {
     font-size: 20px;
-    margin-right: 540px;
+
 }
 
-.fig {
-    width: 100%;
-    height: 100px;
-    overflow: hidden;
-    position: relative;
-}
+/*.fig {*/
+/*    width: 100%;*/
+/*    height: 100px;*/
+/*    !*overflow: hidden;*!*/
+/*    position: relative;*/
+/*}*/
 
 .temp {
     display: inline-block;
@@ -407,16 +107,18 @@ figure img {
     overflow: hidden;
     float: left;
     width: fit-content;
-    font-size: 50px;
+    font-size: 30px;
+    font-weight: bolder;
 }
 
-.aa {
+.weather {
     overflow: hidden;
     text-align: right;
     margin-right: 60px;
+
     height: fit-content;
-    position: relative;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .wise {
@@ -449,9 +151,10 @@ figure img {
 /*
 * 날짜, 시간, 출퇴근 화면
 */
-.checkin-img{
+.checkin-img {
     margin-top: 13%;
 }
+
 .right_body {
     text-align: center;
     width: 49.6%;
@@ -463,6 +166,8 @@ figure img {
 
 .day {
     color: white;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .Clock {
@@ -470,6 +175,7 @@ figure img {
     margin-top: 10px;
     font-size: 70px;
     color: white;
+    font-weight: bold;
 }
 
 .checkin-box {
@@ -477,37 +183,42 @@ figure img {
 }
 
 .timerBox {
-    width: 100%;
-    margin-top: 30px;
+    width: 50%;
+    height: 200px;
+
+    border: 1px solid gray;
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqT0lwj4vVQCpojqpkBfEbr9m4qU16emsi4Q&usqp=CAU");
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 8px black;
+
+    margin: 8% 0 0 25%;
+    padding-top: 4%;
+
+
 }
 
 .timerBox .time {
-    font-size: 40pt;
-    font-family: 'Malgun Gothic';
-    text-align: center;
-    color: #dcdcdc;
+    font-size: 80px;
+
+
     text-shadow: 5px 5px #282828, 8px 8px #6e6e6e, 11px 11px #5a5a5a, 14px 14px #464646;
     margin: 0;
+    text-align: center;
+
 
 }
 
-.btn {
-    text-decoration: none;
-    font-size: 2rem;
-    display: inline-block;
-    border-radius: 5px;
-    padding: 5px 3px 10px 4px;
-    transition: all 0.1s;
-    color: white;
-    text-shadow: 0px -2px rgba(0, 0, 0, 0.5);
-    font-family: 'Orbitron', sans-serif;
+.timerBox.time.stopwatch {
+    padding-top: 7%;
+    border-radius: 15px 15px 15px 0;
+    font-size: 50px;
+    border: 3px solid #DCDCDC;
+    color: #DCDCDC;
+    font-weight: bold;
 
 }
 
-.btn.green {
-    background-color: #D3D3D3;
-    border-bottom: 5px solid #A9A9A9;
-}
 
 .btn:active {
     transform: translateY(3px);
@@ -515,4 +226,65 @@ figure img {
 
 .btn.green:active {
     border-bottom: 2px solid #696969;
+}
+
+/*@import url(https://fonts.googleapis.com/css?family=BenchNine:700);*/
+.snip1535 {
+    background-color: #778899;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'BenchNine', Arial, sans-serif;
+    font-size: 1em;
+    font-size: 22px;
+    line-height: 1em;
+    margin: 10% 40px;
+    outline: none;
+    padding: 12px 40px 10px;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.snip1535:before,
+.snip1535:after {
+    border-color: transparent;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+    border-style: solid;
+    border-width: 0;
+    content: "";
+    height: 24px;
+    position: absolute;
+    width: 24px;
+}
+
+.snip1535:before {
+    border-color: #778899;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    right: -5px;
+    top: -5px;
+}
+
+.snip1535:after {
+    border-bottom-width: 2px;
+    border-color: #778899;
+    border-left-width: 2px;
+    bottom: -5px;
+    left: -5px;
+}
+
+.snip1535:hover,
+.snip1535.hover {
+    background-color: #D3D3D3;
+}
+
+.snip1535:hover:before,
+.snip1535.hover:before,
+.snip1535:hover:after,
+.snip1535.hover:after {
+    height: 100%;
+    width: 100%;
 }

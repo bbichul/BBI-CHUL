@@ -1,106 +1,199 @@
-#team-page {
-    background-image: url("../img/background.png");
+body {
+    height: 1000px;
+    background-image: url("../img/book.jpg");
     background-position: center;
     background-size: cover;
+}
+
+#team-alert h1{
+    color: whitesmoke;
+}
+
+#team-page {
     margin-top: 80px;
-    background-color: papayawhip;
+    /*background-color: papayawhip;*/
     display: inline-block;
     vertical-align: middle;
     width: 100%;
-    height: auto;
+    height: 100%;
     padding: 2%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+
+#cant-using2 {
+    color: red;
 }
 
 #record-container {
-    height: auto;
+    height: 100%;
     width: 100%;
     display: inline-block;
     vertical-align: middle;
-    background-color: lightgray;
-    border-radius: 20px;
+    /*background-color: lightgray;*/
+    /*border-radius: 20px;*/
     padding: 20px 50px;
 }
 
-.left-body {
-    width: 50%;
-    height: 100%;
-    margin: 0;
-    padding-right: 50px;
-    float: left;
+.not-exist {
+    display: flex;
+    flex-direction: column;
+    padding: 200px 0 200px;
 }
-.status-table {
-    height: 100px;
-    width: 100%;
+
+#team-check-btn {
+    text-align: center;
+    width: 200px;
+    display: block;
+    margin: auto;
+    font-size: 25px;
+    padding: 8px 25px;
+    background: transparent;
+    border: 4px solid;
+    border-radius: 5px;
+    transition: all .5s ease;
+    transform: translate(0, 0);
+}
+
+#team-check-btn .a:hover {
+    border: 3px solid #81d33d;
+    cursor: pointer;
+}
+
+#name-check {
+    width: 88px;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.1s;
+    font-family: 'Orbitron', sans-serif;
+    margin: .5rem 0;
+}
+
+#invite-team {
+    width: 88px;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.1s;
+    font-family: 'Orbitron', sans-serif;
+    margin: .5rem 0;
+}
+
+#create-team {
+    width: 88px;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.1s;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.left-body {
+    width: 48%;
+    margin-right: 2%;
+    height: 650px;
+    float: left;
     background-color: whitesmoke;
+    border-radius: 20px;
+    padding: 5% 7%;
+
+}
+
+
+.table {
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
     border-radius: 20px;
     text-align: center;
 }
 
-.status-table td {
-    border-top: 1px solid;
+.table th:nth-child(1) {
+    border-bottom: none;
+    border-top: none;
 }
 
-.status-table td:nth-child(1) {
-  border-right: 1px solid;
+.table th:nth-child(2) {
+    border-bottom: none;
+    border-top: none;
+}
+
+.table td:nth-child(1) {
+    border-top: 1px solid;
+    border-right: 1px solid;
+    border-bottom: none;
+}
+
+.table td:nth-child(2) {
+    border-top: 1px solid;
+    border-bottom: none;
 }
 
 /*--------------------------------------------------------------
 # 투두 리스트
 --------------------------------------------------------------*/
-.todo-list{
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
+.todo-list {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
 }
 
-.txt{
-  width: 100%;
-  border: none;
-  border-bottom: 2px solid #000;
-  background: none;
-  outline: none;
-  font-size: 18px;
-  padding: 0.5%;
+.txt {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #000;
+    background: none;
+    outline: none;
+    font-size: 18px;
+    padding: 0.5%;
 }
 
-h3{
-  margin: 25px 0;
-}
-.task{
-  width:100%;
-  background: rgba(255,255,255,0.5);
-  padding: 10px 15px;
-  margin: 6px 0;
-  overflow: hidden;
-  border-radius: 3px;
-}
-.task i{
-  float: right;
-  margin-left: 20px;
-  cursor: pointer;
-}
-.done .task{
-  background: rgba(0,0,0,0.5);
-  color : #fff;
+h3 {
+    margin: 25px 0;
 }
 
-.right-body{
-    width: 50%;
-    height: 100%;
-    margin: 0;
-    padding-left: 50px;;
+.task {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 10px 15px;
+    margin: 6px 0;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.task i {
     float: right;
-    border-left:2px solid gray;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.done .task {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.right-body {
+    width: 48%;
+    height: 650px;
+    margin-left: 2%;
+    float: right;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    padding: 5% 7%;
+
 }
 
 /*--------------------------------------------------------------
 # progress bar
 --------------------------------------------------------------*/
-.progress-div{
-    padding: 20px;
-}
-
-.progress-title{
+.progress-title {
     font-size: calc(1.3rem + .6vw);
     font-weight: 500;
     color: inherit;
@@ -108,7 +201,7 @@ h3{
     display: inline-block;
 }
 
-.progress-outer{
+.progress-outer {
     width: 100%;
     background: #fff;
     padding: 5px 60px 5px 5px;
@@ -117,7 +210,7 @@ h3{
     position: relative;
 }
 
-.progress{
+.progress {
     background: #bebfbf;
     border-radius: 20px;
     margin: 0;
@@ -125,13 +218,13 @@ h3{
     height: 35px;
 }
 
-.progress .progress-bar{
+.progress .progress-bar {
     border-radius: 20px;
     box-shadow: none;
     animation: animate-positive 2s;
 }
 
-.progress .progress-value{
+.progress .progress-value {
     font-size: 20px;
     font-weight: 700;
     color: #6b7880;
