@@ -1,18 +1,18 @@
 import jwt
 import os
 
-from my_settings import SECRET
+# from my_settings import SECRET
 from functools import wraps
 from flask import request, jsonify
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-# SECRET = (os.environ.get("SECRET"))
-# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-# db = client.bbichulDB
+SECRET = (os.environ.get("SECRET"))
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+db = client.bbichulDB
 
-client = MongoClient('localhost', 27017)
-db = client.dbnbc
+# client = MongoClient('localhost', 27017)
+# db = client.dbnbc
 
 
 def login_required(func):

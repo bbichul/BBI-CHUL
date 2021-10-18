@@ -9,14 +9,14 @@ from datetime import datetime, date, timedelta
 from decorator import login_required
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
-from my_settings import SECRET
+# from my_settings import SECRET
 
-# SECRET = (os.environ.get("SECRET"))
-# client = MongoClient(os.environ.get("MONGO_DB_PATH"))
-# db = client.bbichulDB
+SECRET = (os.environ.get("SECRET"))
+client = MongoClient(os.environ.get("MONGO_DB_PATH"))
+db = client.bbichulDB
 
-client = MongoClient('localhost', 27017)
-db = client.dbnbc
+# client = MongoClient('localhost', 27017)
+# db = client.dbnbc
 
 application = Flask(__name__)
 cors = CORS(application, resources={r"/*": {"origins": "*"}})
