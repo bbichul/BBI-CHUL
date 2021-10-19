@@ -165,7 +165,7 @@ function setCalender(obj) {
     let select_calender_id = $(obj).attr('value');
 
     if (selected_cal_now == select_calender_id) {
-        alert("현재 선택 된 캘린더입니다.")
+        alert("현재 선택된 캘린더입니다.")
     } else {
 
         selected_cal_now = select_calender_id;

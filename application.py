@@ -325,7 +325,9 @@ def add_calender():
     user_id = request.user['_id']
 
     # 로그인 DB 확인하여 아이디와, 팀명 조회
-    find_db_id = db.user.find_one({'nick_name': user_id})
+    find_db_id = db.user.find_one({'_id': user_id})
+
+    print(find_db_id)
 
     user_id = find_db_id['_id']
     team_name = find_db_id['team']
